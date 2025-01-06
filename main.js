@@ -3,8 +3,6 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-
-
 // Scene setup
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color( 'white' );
@@ -239,9 +237,6 @@ camera.position.set(0, 2, 2000);
 // holeShape2.absarc(0, -220, 20, 0, Math.PI * 2, true);
 // figure.holes.push(holeShape2);
 
-
-
-
 // const extrudefigSetting = {
 //   steps: 77,
 //   depth: 20,
@@ -263,7 +258,6 @@ camera.position.set(0, 2, 2000);
 //#endregion
 
 //#endregion
-
 
 //#region Bonus Task
 // const tShape = new THREE.Shape();
@@ -321,7 +315,7 @@ camera.position.set(0, 2, 2000);
 // hollowT.lineTo(100,-300);
 // hollowT.lineTo(-100,-300);
 // hollowT.lineTo(-100,0);
- 
+
 // const subT = new THREE.Path();
 // subT.moveTo(-100,10);
 // subT.lineTo(-330,10)
@@ -336,10 +330,9 @@ camera.position.set(0, 2, 2000);
 // subT.lineTo(90,-290);
 // subT.lineTo(-90,-290);
 // subT.lineTo(-90,10);
- 
+
 // hollowT.holes.push(subT);
 
- 
 // const extrudeSettings = {
 // steps: 200,
 // depth: 70,
@@ -349,11 +342,10 @@ camera.position.set(0, 2, 2000);
 // bevelOffset: 10,
 // bevelSegments: 100
 // };
- 
+
 // const extrudeHollowT = new THREE.ExtrudeGeometry(hollowT, extrudeSettings);
 // const hollowTMaterial = new THREE.MeshStandardMaterial({color: 'red', side: THREE.DoubleSide, metalness: 0.2, roughness: 5, wireframe: false});
 // const hollowTMesh = new THREE.Mesh(extrudeHollowT, hollowTMaterial);
- 
 
 // const edges = new THREE.EdgesGeometry(extrudeHollowT);
 // const edgesMaterial = new THREE.LineBasicMaterial({color: "white"});
@@ -362,7 +354,7 @@ camera.position.set(0, 2, 2000);
 // scene.add(line);
 
 // scene.add(hollowTMesh);
- 
+
 //#endregion
 
 //#region Task - 4
@@ -384,7 +376,6 @@ camera.position.set(0, 2, 2000);
 // ParentRectangleShape.bezierCurveTo((widthParent/2), 10, (widthParent/2), 0, (widthParent/2 -10), 0);
 // ParentRectangleShape.lineTo(0,0)
 
-
 // const ChildRectangleShape = new THREE.Shape();
 // ChildRectangleShape.moveTo(0,0);
 // ChildRectangleShape.lineTo(-(widthChild/2 - 10), 0);
@@ -397,7 +388,6 @@ camera.position.set(0, 2, 2000);
 // ChildRectangleShape.bezierCurveTo((widthChild/2), 10, (widthChild/2), 0, (widthChild/2 -10), 0);
 // ChildRectangleShape.lineTo(0,0);
 
-
 // const parentHoleShape = new THREE.Path();
 // parentHoleShape.absarc(-(widthParent/2 - 100),hightParent/2,hightChild/3,0,Math.PI * 2, true);
 
@@ -407,9 +397,6 @@ camera.position.set(0, 2, 2000);
 // ParentRectangleShape.holes.push(parentHoleShape);
 
 // ChildRectangleShape.holes.push(childHoleShape);
-
-
-
 
 // const extrudeSettings = {
 //   steps: 400,
@@ -421,16 +408,12 @@ camera.position.set(0, 2, 2000);
 //   bevelSegments: 1
 //   };
 
-
-  
-
 //   const extrudeParentShape = new THREE.ExtrudeGeometry(ParentRectangleShape, extrudeSettings);
 //   const extrudeChildShape = new THREE.ExtrudeGeometry(ChildRectangleShape, extrudeSettings);
 
 //   const parentShapeMaterial = new THREE.MeshBasicMaterial({color: "red", side: THREE.DoubleSide, wireframe: false});
 //   const childShapeMaterial = new THREE.MeshBasicMaterial({color: "Yellow", side: THREE.DoubleSide, wireframe: false});
 
-  
 //   const parentShapeMesh = new THREE.Mesh(extrudeParentShape, parentShapeMaterial);
 //   const childShapeMesh = new THREE.Mesh(extrudeChildShape, childShapeMaterial);
 
@@ -440,7 +423,7 @@ camera.position.set(0, 2, 2000);
 //     (hightParent / 2 - hightChild / 2),
 //     extrudeSettings.depth + 20
 //   );
-  
+
 //   parentShapeMesh.position.z += 1;
 //   // parentShapeMesh.rotation.z += Math.PI;
 //   childShapeMesh.position.z +=  parentShapeMesh.position.z;
@@ -452,59 +435,91 @@ camera.position.set(0, 2, 2000);
 //   parentShapeMesh.position.set(0,-200)
 //   scene.add(parentShapeMesh);
 
-
 //#endregion
 
 //#region Task - 5
-const widthUp = 400;
-const heightUp = 600;
-const widthDown = widthUp/2;
-const heightDown = 400;
+const widthUp = 300;
+const heightUp = 500;
+const widthDown = widthUp / 2;
+const heightDown = 1200;
 const depth = 80;
 
 const figShape = new THREE.Shape();
-figShape.moveTo(widthUp,0);
+figShape.moveTo(widthUp, 0);
 figShape.lineTo(widthUp, heightUp);
-figShape.quadraticCurveTo(0,(heightUp - heightUp/5),0,(heightUp - heightUp/3));
-figShape.lineTo(0,heightUp/3);
-figShape.quadraticCurveTo(0,heightUp/5, widthUp/2,10);
-figShape.lineTo(widthDown,10);
-figShape.quadraticCurveTo(widthDown,10,widthDown,-20)
-figShape.lineTo(widthDown, -(heightDown - 10));
-figShape.bezierCurveTo(widthDown, -(heightDown - 10),widthDown, -heightDown,widthDown+10, -heightDown);
-figShape.lineTo(widthUp - 10,-heightDown);
+figShape.quadraticCurveTo(
+  10,
+  heightUp - heightUp / 5,
+  0,
+  heightUp - heightUp / 3
+);
+figShape.lineTo(0, heightUp / 3);
+figShape.quadraticCurveTo(0, heightUp / 4, 20, heightUp/5);
+// figShape.lineTo(widthDown, 10);
+figShape.quadraticCurveTo(widthUp/2, 50, widthUp/2, 0);
+figShape.lineTo(widthUp/3, heightUp/6)
 
-figShape.bezierCurveTo(widthUp - 10, -heightDown, widthUp,-heightDown, widthUp, -(heightDown - 10));
+// figShape.quadraticCurveTo(widthUp/2 - 20, heightUp/4, widthUp/2,heightUp/4)
+figShape.bezierCurveTo(widthUp/3, heightUp/6,widthUp/2, heightUp/4, widthUp/2, 0)
+figShape.lineTo(widthDown, -(heightDown - 10));
+figShape.bezierCurveTo(
+  widthDown,
+  -(heightDown - 10),
+  widthDown,
+  -heightDown,
+  widthDown + 10,
+  -heightDown
+);
+figShape.lineTo(widthUp - 10, -heightDown);
+
+figShape.bezierCurveTo(
+  widthUp - 10,
+  -heightDown,
+  widthUp,
+  -heightDown,
+  widthUp,
+  -(heightDown - 10)
+);
 
 const figHole = new THREE.Path();
-figHole.absarc(widthUp/2,(heightUp - heightUp/3),heightUp/6,0,Math.PI * 2, true);
+figHole.absarc(
+  widthUp / 2,
+  heightUp - heightUp / 3,
+  widthUp / 4,
+  0,
+  Math.PI * 2,
+  true
+);
 
 figShape.holes.push(figHole);
 
 const extrudeSettings = {
-    steps: 200,
-    depth: depth,
-    bevelEnabled: true,
-    bevelThickness: 15,
-    bevelSize: 20,
-    bevelOffset: 10,
-    bevelSegments: 10
-    };
+  steps: 200,
+  depth: depth,
+  bevelEnabled: true,
+  bevelThickness: 15,
+  bevelSize: 20,
+  bevelOffset: 10,
+  bevelSegments: 10,
+};
 
-    const extrudeFigure = new THREE.ExtrudeGeometry(figShape, extrudeSettings);
-    const figureMaterial = new THREE.MeshBasicMaterial({color: 'red',wireframe: 0, side: THREE.DoubleSide});
-    const figMesh = new THREE.Mesh(extrudeFigure, figureMaterial);
-    figMesh.position.x -= widthUp/2
-    const edges = new THREE.EdgesGeometry(extrudeFigure);
-    const linesMaterial = new THREE.LineBasicMaterial({color: "white"});
-    const lines = new THREE.LineSegments(edges, linesMaterial);
-    lines.position.x = figMesh.position.x;
-    scene.add(lines);
-    scene.add(figMesh);
+const extrudeFigure = new THREE.ExtrudeGeometry(figShape, extrudeSettings);
+const figureMaterial = new THREE.MeshBasicMaterial({
+  color: "red",
+  wireframe: 0,
+  side: THREE.DoubleSide,
+});
+const figMesh = new THREE.Mesh(extrudeFigure, figureMaterial);
+figMesh.position.x -= widthUp / 2;
+const edges = new THREE.EdgesGeometry(extrudeFigure);
+const linesMaterial = new THREE.LineBasicMaterial({ color: "white" });
+const lines = new THREE.LineSegments(edges, linesMaterial);
+lines.position.x = figMesh.position.x;
+scene.add(lines);
+scene.add(figMesh);
 //#endregion
 
 //#endregion
-
 
 //#region  Renderer setup
 const canvas = document.querySelector("canvas");
