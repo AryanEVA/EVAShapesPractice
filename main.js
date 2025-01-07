@@ -20,18 +20,18 @@ const camera = new THREE.OrthographicCamera(
   1,
   1200
 );
-camera.position.set(0, 2, 120);
-
-// const axesHelper = new THREE.AxesHelper( 500 );
-// scene.add( axesHelper );
+camera.lookAt(0,0,0);
+const axesHelper = new THREE.AxesHelper( 500 );
+scene.add( axesHelper );
 
 // const camera = new THREE.PerspectiveCamera(
 //   495,
 //   window.innerWidth / window.innerHeight,
-//   0.5,
-//   10000
+//   1,
+//   1000
 // );
-// camera.position.z = 10;
+// camera.position.z = 400;
+camera.position.set(0, 2, 400);
 
 //#endregion
 //#region DAY-1 of Task based Training (3/1/25)
@@ -525,7 +525,7 @@ camera.position.set(0, 2, 120);
 
 //#region Handles
 
-// // Define a custom 3D curve
+// 
 // class HandleCurve extends THREE.Curve {
 //   constructor() {
 //     super();
@@ -577,30 +577,120 @@ camera.position.set(0, 2, 120);
 // // Add the tube to the scene
 // scene.add(tubeMesh);
 
-class CustomSinCurve extends THREE.Curve {
+// class CustomSinCurve extends THREE.Curve {
 
-	constructor( scale = 1 ) {
-		super();
-		this.scale = scale;
-	}
+// 	constructor( scale = 1 ) {
+// 		super();
+// 		this.scale = scale;
+// 	}
 
-	getPoint( t, optionalTarget = new THREE.Vector3() ) {
+// 	getPoint( t, optionalTarget = new THREE.Vector3() ) {
 
-		const tx = this.scale * Math.cos(Math.PI * t);
-		const ty = this.scale * Math.sin( Math.PI * t );
-		const tz = 0;
-    // alert(t); 
-		return optionalTarget.set( tx, ty, tz ).multiplyScalar( this.scale );
-	}
-}
+// 		const tx = this.scale * Math.cos(Math.PI * t);
+// 		const ty = this.scale * Math.sin( Math.PI * t );
+// 		const tz = 0;
+//     // alert(t); 
+// 		return optionalTarget.set( tx, ty, tz ).multiplyScalar( this.scale );
+// 	}
+// }
 
-const path = new CustomSinCurve( 10 );
-const geometry = new THREE.TubeGeometry( path, 20, 20, 8, false );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const mesh = new THREE.Mesh( geometry, material );
-scene.add( mesh );
+// const path = new CustomSinCurve( 10 );
+// const geometry = new THREE.TubeGeometry( path, 20, 20, 8, false );
+// const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+// const mesh = new THREE.Mesh( geometry, material );
+// scene.add( mesh );
 
 //#endregion
+//#endregion
+
+//#region Handle by Shape geometry and Extrude Geometry
+
+const widthHandle = 50;
+const heightHandle = 100;
+const radius = 10;
+const handleShapeButtom = new THREE.Shape();
+// handleShape.moveTo(0,0);
+// handleShape.lineTo(widthHandle-10,0);
+// handleShape.bezierCurveTo(widthHandle-10,0,widthHandle,0,widthHandle,10);
+// handleShape.lineTo(widthHandle,heightHandle-10);
+// handleShape.bezierCurveTo(widthHandle,heightHandle-10, widthHandle, heightHandle, widthHandle-10, heightHandle);
+// handleShape.lineTo(0,heightHandle);
+
+// handleShape.lineTo(0,heightHandle-(radius*2));
+// handleShape.lineTo(widthHandle-(radius*2)-10,heightHandle-(radius*2));
+// handleShape.bezierCurveTo(widthHandle- (radius*2)-10, heightHandle-(radius*2),widthHandle -(radius*2),heightHandle-(radius*2), widthHandle - (radius*2), heightHandle - (radius*2)-10)
+// handleShape.lineTo(widthHandle-(radius * 2), radius * 2 + 10);
+// handleShape.bezierCurveTo(widthHandle-(radius * 2), radius * 2 + 10, widthHandle-(radius * 2), radius*2, widthHandle-(radius*2)-10, radius*2);
+// handleShape.lineTo(0,radius*2);
+
+handleShapeButtom.absarc(0, 0, radius, 0, Math.PI * 2, false);
+
+const handleShapeUp = new THREE.Shape();
+handleShapeUp.absarc(0, 0, radius, 0, Math.PI * 2, false);
+
+const handleShapeRight = new THREE.Shape();
+handleShapeRight.absarc(0, 0, radius, 0, Math.PI * 2, false);
+
+const handleShapeButtomCurve = new THREE.Shape();
+handleShapeButtomCurve.absarc(0, 0, radius, 0, Math.PI * 2, false);
+
+const handleShapeTopCurve = new THREE.Shape();
+handleShapeTopCurve.absarc(0, 0, radius, 0, Math.PI * 2, false);
+
+const path = new THREE.Path();
+path.absarc(0, 0, radius, 0, Math.PI * 2, false);
+const curve = new THREE.CubicBezierCurve(
+	new THREE.Vector3( 0, 0, 5 ),
+	new THREE.Vector3( 0, 0, 10 ),
+	new THREE.Vector3( 0, 5, 10 ),
+	
+);
+
+const extrudeSettings = {
+  steps: 10,
+  depth:100,
+  bevelEnabled: false,
+  // extrudePath: curve
+}
+const extrudeHandleButtom = new THREE.ExtrudeGeometry(handleShapeButtom,{...extrudeSettings, depth: widthHandle});
+const handleMaterial = new THREE.MeshBasicMaterial({color: 'red',side: THREE.DoubleSide, wireframe: true});
+const handleMeshButtom = new THREE.Mesh(extrudeHandleButtom, handleMaterial);
+
+
+const extrudeHandleTop = new THREE.ExtrudeGeometry(handleShapeUp, {...extrudeSettings, depth: widthHandle});
+const handleMeshTop = new THREE.Mesh(extrudeHandleTop, handleMaterial);
+
+const extrudeHandleRight = new THREE.ExtrudeGeometry(handleShapeUp, {...extrudeSettings, depth: heightHandle});
+const handleMeshRight = new THREE.Mesh(extrudeHandleRight, handleMaterial);
+
+const extrudeButtomCurve = new THREE.ExtrudeGeometry(handleShapeButtomCurve, {...extrudeSettings, extrudePath: curve});
+const handleMeshButtomCurve = new THREE.Mesh(extrudeButtomCurve, handleMaterial);
+
+const extrudeTopCurve = new THREE.ExtrudeGeometry(handleShapeTopCurve, {...extrudeSettings, extrudePath: curve});
+const handleMeshTopCurve = new THREE.Mesh(extrudeTopCurve, handleMaterial);
+
+const groupMesh = new THREE.Group();
+groupMesh.add(handleMeshButtom);
+groupMesh.add(handleMeshTop);
+groupMesh.add(handleMeshRight);
+groupMesh.add(handleMeshButtomCurve);
+groupMesh.add(handleMeshTopCurve);
+
+
+handleMeshButtom.rotation.y += Math.PI/2;
+
+handleMeshRight.rotation.x += Math.PI/2;
+handleMeshRight.position.set(50,100,0);
+
+handleMeshTop.rotation.y += Math.PI/2;
+handleMeshTop.position.set(0,100,0)
+
+handleMeshButtomCurve.position.set(0,200,0);
+
+scene.add(groupMesh);
+
+
+
 //#endregion
 //#region  Renderer setup
 const canvas = document.querySelector("canvas");
