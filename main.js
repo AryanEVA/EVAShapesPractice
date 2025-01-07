@@ -17,10 +17,10 @@ const camera = new THREE.OrthographicCamera(
   window.innerWidth / 2,
   window.innerHeight / 2,
   window.innerHeight / -2,
-  0.01,
-  12000
+  1,
+  1200
 );
-camera.position.set(0, 2, 2000);
+camera.position.set(0, 2, 120);
 
 // const axesHelper = new THREE.AxesHelper( 500 );
 // scene.add( axesHelper );
@@ -438,89 +438,170 @@ camera.position.set(0, 2, 2000);
 //#endregion
 
 //#region Task - 5
-const widthUp = 300;
-const heightUp = 500;
-const widthDown = widthUp / 2;
-const heightDown = 1200;
-const depth = 80;
+// const widthUp = 300;
+// const heightUp = 500;
+// const widthDown = widthUp / 2;
+// const heightDown = 1200;
+// const depth = 80;
 
-const figShape = new THREE.Shape();
-figShape.moveTo(widthUp, 0);
-figShape.lineTo(widthUp, heightUp);
-figShape.quadraticCurveTo(
-  10,
-  heightUp - heightUp / 5,
-  0,
-  heightUp - heightUp / 3
-);
-figShape.lineTo(0, heightUp / 3);
-figShape.quadraticCurveTo(0, heightUp / 4, 20, heightUp/5);
-// figShape.lineTo(widthDown, 10);
-figShape.quadraticCurveTo(widthUp/2, 50, widthUp/2, 0);
-figShape.lineTo(widthUp/3, heightUp/6)
+// const figShape = new THREE.Shape();
+// figShape.moveTo(widthUp, 0);
+// figShape.lineTo(widthUp, heightUp);
+// figShape.quadraticCurveTo(
+//   10,
+//   heightUp - heightUp / 5,
+//   0,
+//   heightUp - heightUp / 3
+// );
+// figShape.lineTo(0, heightUp / 3);
+// figShape.quadraticCurveTo(0, heightUp / 4, 20, heightUp/5);
+// // figShape.lineTo(widthDown, 10);
+// figShape.quadraticCurveTo(widthUp/2, 50, widthUp/2, 0);
+// figShape.lineTo(widthUp/3, heightUp/6)
 
-// figShape.quadraticCurveTo(widthUp/2 - 20, heightUp/4, widthUp/2,heightUp/4)
-figShape.bezierCurveTo(widthUp/3, heightUp/6,widthUp/2, heightUp/4, widthUp/2, 0)
-figShape.lineTo(widthDown, -(heightDown - 10));
-figShape.bezierCurveTo(
-  widthDown,
-  -(heightDown - 10),
-  widthDown,
-  -heightDown,
-  widthDown + 10,
-  -heightDown
-);
-figShape.lineTo(widthUp - 10, -heightDown);
+// // figShape.quadraticCurveTo(widthUp/2 - 20, heightUp/4, widthUp/2,heightUp/4)
+// figShape.bezierCurveTo(widthUp/3, heightUp/6,widthUp/2, heightUp/4, widthUp/2, 0)
+// figShape.lineTo(widthDown, -(heightDown - 10));
+// figShape.bezierCurveTo(
+//   widthDown,
+//   -(heightDown - 10),
+//   widthDown,
+//   -heightDown,
+//   widthDown + 10,
+//   -heightDown
+// );
+// figShape.lineTo(widthUp - 10, -heightDown);
 
-figShape.bezierCurveTo(
-  widthUp - 10,
-  -heightDown,
-  widthUp,
-  -heightDown,
-  widthUp,
-  -(heightDown - 10)
-);
+// figShape.bezierCurveTo(
+//   widthUp - 10,
+//   -heightDown,
+//   widthUp,
+//   -heightDown,
+//   widthUp,
+//   -(heightDown - 10)
+// );
 
-const figHole = new THREE.Path();
-figHole.absarc(
-  widthUp / 2,
-  heightUp - heightUp / 3,
-  widthUp / 4,
-  0,
-  Math.PI * 2,
-  true
-);
+// const figHole = new THREE.Path();
+// figHole.absarc(
+//   widthUp / 2,
+//   heightUp - heightUp / 3,
+//   widthUp / 4,
+//   0,
+//   Math.PI * 2,
+//   true
+// );
 
-figShape.holes.push(figHole);
+// figShape.holes.push(figHole);
 
-const extrudeSettings = {
-  steps: 200,
-  depth: depth,
-  bevelEnabled: true,
-  bevelThickness: 15,
-  bevelSize: 20,
-  bevelOffset: 10,
-  bevelSegments: 10,
-};
+// const extrudeSettings = {
+//   steps: 200,
+//   depth: depth,
+//   bevelEnabled: true,
+//   bevelThickness: 15,
+//   bevelSize: 20,
+//   bevelOffset: 10,
+//   bevelSegments: 10,
+// };
 
-const extrudeFigure = new THREE.ExtrudeGeometry(figShape, extrudeSettings);
-const figureMaterial = new THREE.MeshBasicMaterial({
-  color: "red",
-  wireframe: 0,
-  side: THREE.DoubleSide,
-});
-const figMesh = new THREE.Mesh(extrudeFigure, figureMaterial);
-figMesh.position.x -= widthUp / 2;
-const edges = new THREE.EdgesGeometry(extrudeFigure);
-const linesMaterial = new THREE.LineBasicMaterial({ color: "white" });
-const lines = new THREE.LineSegments(edges, linesMaterial);
-lines.position.x = figMesh.position.x;
-scene.add(lines);
-scene.add(figMesh);
+// const extrudeFigure = new THREE.ExtrudeGeometry(figShape, extrudeSettings);
+// const figureMaterial = new THREE.MeshBasicMaterial({
+//   color: "red",
+//   wireframe: 0,
+//   side: THREE.DoubleSide,
+// });
+// const figMesh = new THREE.Mesh(extrudeFigure, figureMaterial);
+// figMesh.position.x -= widthUp / 2;
+// const edges = new THREE.EdgesGeometry(extrudeFigure);
+// const linesMaterial = new THREE.LineBasicMaterial({ color: "white" });
+// const lines = new THREE.LineSegments(edges, linesMaterial);
+// lines.position.x = figMesh.position.x;
+// scene.add(lines);
+// scene.add(figMesh);
 //#endregion
 
 //#endregion
 
+//#region DAY-3 of Task based Training
+
+//#region Handles
+
+// // Define a custom 3D curve
+// class HandleCurve extends THREE.Curve {
+//   constructor() {
+//     super();
+//   }
+
+//   getPoint(t) {
+//     // Define control points for the tube path with handles
+//     const radius = 2; // Radius of the handle
+//     const length = 10; // Length of the tube
+//     const handleOffset = 5; // Offset for the handles
+
+//     let angle = t * Math.PI * 2; // For handles (loops)
+
+//     if (t < 0.25) {
+//       // Straight part leading to the first handle
+//       return new THREE.Vector3(-length / 2 + t * length, 0, 0);
+//     } else if (t < 0.5) {
+//       // First handle (circular arc)
+//       t = (t - 0.25) * 4; // Normalize
+//       return new THREE.Vector3(
+//         -length / 2 + handleOffset * Math.cos(t * Math.PI),
+//         handleOffset * Math.sin(t * Math.PI),
+//         0
+//       );
+//     } else if (t < 0.75) {
+//       // Straight part between handles
+//       t = t - 0.5;
+//       return new THREE.Vector3(length / 2 - (1 - t) * length, 0, 0);
+//     } else {
+//       // Second handle (circular arc)
+//       t = (t - 0.75) * 4; // Normalize
+//       return new THREE.Vector3(
+//         length / 2 + handleOffset * Math.cos(t * Math.PI),
+//         handleOffset * Math.sin(t * Math.PI),
+//         0
+//       );
+//     }
+//   }
+// }
+
+// // Create the tube geometry
+// const handleCurve = new HandleCurve();
+// const tubeGeometry = new THREE.TubeGeometry(handleCurve, 100, 0.5, 8, false);
+
+// // Create material and mesh
+// const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
+// const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
+
+// // Add the tube to the scene
+// scene.add(tubeMesh);
+
+class CustomSinCurve extends THREE.Curve {
+
+	constructor( scale = 1 ) {
+		super();
+		this.scale = scale;
+	}
+
+	getPoint( t, optionalTarget = new THREE.Vector3() ) {
+
+		const tx = this.scale * Math.cos(Math.PI * t);
+		const ty = this.scale * Math.sin( Math.PI * t );
+		const tz = 0;
+    // alert(t); 
+		return optionalTarget.set( tx, ty, tz ).multiplyScalar( this.scale );
+	}
+}
+
+const path = new CustomSinCurve( 10 );
+const geometry = new THREE.TubeGeometry( path, 20, 20, 8, false );
+const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+const mesh = new THREE.Mesh( geometry, material );
+scene.add( mesh );
+
+//#endregion
+//#endregion
 //#region  Renderer setup
 const canvas = document.querySelector("canvas");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
