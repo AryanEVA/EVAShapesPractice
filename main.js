@@ -660,8 +660,16 @@ const handleMeshButtom = new THREE.Mesh(extrudeHandleButtom, handleMaterial);
 const extrudeHandleTop = new THREE.ExtrudeGeometry(handleShapeUp, {...extrudeSettings, depth: widthHandle});
 const handleMeshTop = new THREE.Mesh(extrudeHandleTop, handleMaterial);
 
-const extrudeHandleRight = new THREE.ExtrudeGeometry(handleShapeUp, {...extrudeSettings, depth: heightHandle});
+const extrudeHandleRight = new THREE.ExtrudeGeometry(handleShapeUp, {...extrudeSettings, depth: heightHandle-(radius*2)});
 const handleMeshRight = new THREE.Mesh(extrudeHandleRight, handleMaterial);
+
+const handleTorusButtom = new THREE.TorusGeometry(radius, radius, 20, 10,Math.PI/2 );
+const handleTorusButtomMesh = new THREE.Mesh(handleTorusButtom,handleMaterial);
+
+
+const handleTorusTop = new THREE.TorusGeometry(radius, radius, 20, 10,Math.PI/2 );
+const handleTorusTopMesh = new THREE.Mesh(handleTorusTop,handleMaterial);
+
 
 const extrudeButtomCurve = new THREE.ExtrudeGeometry(handleShapeButtomCurve, {...extrudeSettings, extrudePath: curve});
 const handleMeshButtomCurve = new THREE.Mesh(extrudeButtomCurve, handleMaterial);
@@ -673,19 +681,27 @@ const groupMesh = new THREE.Group();
 groupMesh.add(handleMeshButtom);
 groupMesh.add(handleMeshTop);
 groupMesh.add(handleMeshRight);
-groupMesh.add(handleMeshButtomCurve);
-groupMesh.add(handleMeshTopCurve);
+groupMesh.add(handleTorusButtomMesh);
+groupMesh.add(handleTorusTopMesh);
+// groupMesh.add(handleMeshButtomCurve);
+// groupMesh.add(handleMeshTopCurve);
 
 
 handleMeshButtom.rotation.y += Math.PI/2;
 
 handleMeshRight.rotation.x += Math.PI/2;
-handleMeshRight.position.set(50,100,0);
+handleMeshRight.position.set(50+radius,100-radius,0);
 
 handleMeshTop.rotation.y += Math.PI/2;
 handleMeshTop.position.set(0,100,0)
 
-handleMeshButtomCurve.position.set(0,200,0);
+handleTorusButtomMesh.rotation.z -= Math.PI/2;
+handleTorusButtomMesh.position.set(50,radius);
+
+handleTorusTopMesh.position.set(50,100-radius);
+
+
+// handleMeshButtomCurve.position.set(0,200,0);
 
 scene.add(groupMesh);
 
