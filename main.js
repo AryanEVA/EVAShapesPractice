@@ -21,8 +21,8 @@ const camera = new THREE.OrthographicCamera(
   1200
 );
 camera.lookAt(0,0,0);
-const axesHelper = new THREE.AxesHelper( 500 );
-scene.add( axesHelper );
+// const axesHelper = new THREE.AxesHelper( 500 );
+// scene.add( axesHelper );
 
 // const camera = new THREE.PerspectiveCamera(
 //   495,
@@ -605,10 +605,7 @@ camera.position.set(0, 2, 400);
 
 //#region Handle by Shape geometry and Extrude Geometry
 
-const widthHandle = 50;
-const heightHandle = 100;
-const radius = 10;
-const handleShapeButtom = new THREE.Shape();
+
 // handleShape.moveTo(0,0);
 // handleShape.lineTo(widthHandle-10,0);
 // handleShape.bezierCurveTo(widthHandle-10,0,widthHandle,0,widthHandle,10);
@@ -622,89 +619,69 @@ const handleShapeButtom = new THREE.Shape();
 // handleShape.lineTo(widthHandle-(radius * 2), radius * 2 + 10);
 // handleShape.bezierCurveTo(widthHandle-(radius * 2), radius * 2 + 10, widthHandle-(radius * 2), radius*2, widthHandle-(radius*2)-10, radius*2);
 // handleShape.lineTo(0,radius*2);
+function createHandle(width, height, radius, color, steps = 10) {
+  // Material
+  const handleMaterial = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
 
-handleShapeButtom.absarc(0, 0, radius, 0, Math.PI * 2, false);
+  // Shapes for extrusion
+  const circleShape = new THREE.Shape();
+  circleShape.absarc(0, 0, radius, 0, Math.PI * 2, false);
 
-const handleShapeUp = new THREE.Shape();
-handleShapeUp.absarc(0, 0, radius, 0, Math.PI * 2, false);
+  // Extrusion settings
+  const extrudeSettings = {
+    steps: steps,
+    bevelEnabled: false,
+  };
 
-const handleShapeRight = new THREE.Shape();
-handleShapeRight.absarc(0, 0, radius, 0, Math.PI * 2, false);
+  // Bottom connector
+  const bottomConnectorGeometry = new THREE.ExtrudeGeometry(circleShape, { ...extrudeSettings, depth: width });
+  const bottomConnectorMesh = new THREE.Mesh(bottomConnectorGeometry, handleMaterial);
+  bottomConnectorMesh.rotation.y = Math.PI / 2;
 
-const handleShapeButtomCurve = new THREE.Shape();
-handleShapeButtomCurve.absarc(0, 0, radius, 0, Math.PI * 2, false);
+  // Right connector
+  const rightConnectorGeometry = new THREE.ExtrudeGeometry(circleShape, { ...extrudeSettings, depth: height - radius * 2 });
+  const rightConnectorMesh = new THREE.Mesh(rightConnectorGeometry, handleMaterial);
+  rightConnectorMesh.rotation.x = Math.PI / 2;
+  rightConnectorMesh.position.set(width + radius, height - radius, 0);
 
-const handleShapeTopCurve = new THREE.Shape();
-handleShapeTopCurve.absarc(0, 0, radius, 0, Math.PI * 2, false);
+  // Top connector
+  const topConnectorGeometry = new THREE.ExtrudeGeometry(circleShape, { ...extrudeSettings, depth: width });
+  const topConnectorMesh = new THREE.Mesh(topConnectorGeometry, handleMaterial);
+  topConnectorMesh.rotation.y = Math.PI / 2;
+  topConnectorMesh.position.set(0, height, 0);
 
-const path = new THREE.Path();
-path.absarc(0, 0, radius, 0, Math.PI * 2, false);
-const curve = new THREE.CubicBezierCurve(
-	new THREE.Vector3( 0, 0, 5 ),
-	new THREE.Vector3( 0, 0, 10 ),
-	new THREE.Vector3( 0, 5, 10 ),
-	
-);
+  // Bottom torus (curve)
+  const bottomCurveConnectorGeometry = new THREE.TorusGeometry(radius, radius, 20, 10, Math.PI / 2);
+  const bottomCurveConnectorMesh = new THREE.Mesh(bottomCurveConnectorGeometry, handleMaterial);
+  bottomCurveConnectorMesh.rotation.z = -Math.PI / 2;
+  bottomCurveConnectorMesh.position.set(width, radius);
 
-const extrudeSettings = {
-  steps: 10,
-  depth:100,
-  bevelEnabled: false,
-  // extrudePath: curve
+  // Top torus (curve)
+  const topCurveConnectorGeometry = new THREE.TorusGeometry(radius, radius, 20, 10, Math.PI / 2);
+  const topCurveConnectorMesh = new THREE.Mesh(topCurveConnectorGeometry, handleMaterial);
+  topCurveConnectorMesh.position.set(width, height - radius);
+  
+  // all parts added to the parent object
+
+  const parentObject = new THREE.Object3D();
+
+  parentObject.add(bottomConnectorMesh);
+  parentObject.add(rightConnectorMesh);
+  parentObject.add(topConnectorMesh);
+  parentObject.add(bottomCurveConnectorMesh);
+  parentObject.add(topCurveConnectorMesh);
+
+  return parentObject;
 }
-const extrudeHandleButtom = new THREE.ExtrudeGeometry(handleShapeButtom,{...extrudeSettings, depth: widthHandle});
-const handleMaterial = new THREE.MeshBasicMaterial({color: 'red',side: THREE.DoubleSide, wireframe: true});
-const handleMeshButtom = new THREE.Mesh(extrudeHandleButtom, handleMaterial);
 
+const handleWidth = 25;
+const handleHeight = 50;
+const handleRadius = 5;
+const handleColor = 'red';
+const steps = 1;
 
-const extrudeHandleTop = new THREE.ExtrudeGeometry(handleShapeUp, {...extrudeSettings, depth: widthHandle});
-const handleMeshTop = new THREE.Mesh(extrudeHandleTop, handleMaterial);
-
-const extrudeHandleRight = new THREE.ExtrudeGeometry(handleShapeUp, {...extrudeSettings, depth: heightHandle-(radius*2)});
-const handleMeshRight = new THREE.Mesh(extrudeHandleRight, handleMaterial);
-
-const handleTorusButtom = new THREE.TorusGeometry(radius, radius, 20, 10,Math.PI/2 );
-const handleTorusButtomMesh = new THREE.Mesh(handleTorusButtom,handleMaterial);
-
-
-const handleTorusTop = new THREE.TorusGeometry(radius, radius, 20, 10,Math.PI/2 );
-const handleTorusTopMesh = new THREE.Mesh(handleTorusTop,handleMaterial);
-
-
-const extrudeButtomCurve = new THREE.ExtrudeGeometry(handleShapeButtomCurve, {...extrudeSettings, extrudePath: curve});
-const handleMeshButtomCurve = new THREE.Mesh(extrudeButtomCurve, handleMaterial);
-
-const extrudeTopCurve = new THREE.ExtrudeGeometry(handleShapeTopCurve, {...extrudeSettings, extrudePath: curve});
-const handleMeshTopCurve = new THREE.Mesh(extrudeTopCurve, handleMaterial);
-
-const groupMesh = new THREE.Group();
-groupMesh.add(handleMeshButtom);
-groupMesh.add(handleMeshTop);
-groupMesh.add(handleMeshRight);
-groupMesh.add(handleTorusButtomMesh);
-groupMesh.add(handleTorusTopMesh);
-// groupMesh.add(handleMeshButtomCurve);
-// groupMesh.add(handleMeshTopCurve);
-
-
-handleMeshButtom.rotation.y += Math.PI/2;
-
-handleMeshRight.rotation.x += Math.PI/2;
-handleMeshRight.position.set(50+radius,100-radius,0);
-
-handleMeshTop.rotation.y += Math.PI/2;
-handleMeshTop.position.set(0,100,0)
-
-handleTorusButtomMesh.rotation.z -= Math.PI/2;
-handleTorusButtomMesh.position.set(50,radius);
-
-handleTorusTopMesh.position.set(50,100-radius);
-
-
-// handleMeshButtomCurve.position.set(0,200,0);
-
-scene.add(groupMesh);
-
+const handle = createHandle(handleWidth, handleHeight, handleRadius, handleColor, steps);
+scene.add(handle);
 
 
 //#endregion
