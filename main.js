@@ -1038,92 +1038,244 @@ camera.position.set(0, 2, 500);
 
 //#region handle- VivoShot handle
 
-function handleBar(widthHandleBar, heightHandleBar, handleBarDepth) {
-  const handleBarWidth = widthHandleBar;
-  const handleBarHeight = heightHandleBar;
-  const handleBarShape = new THREE.Shape();
-  handleBarShape.moveTo(10, 10);
-  handleBarShape.lineTo(0, handleBarHeight - 10);
-  handleBarShape.bezierCurveTo(
-    0,
-    handleBarHeight - 10,
-    handleBarWidth / 2,
-    handleBarHeight,
-    handleBarWidth,
-    handleBarHeight - 10
-  );
-  handleBarShape.lineTo(handleBarWidth - 10, 10);
-  handleBarShape.bezierCurveTo(
-    handleBarWidth - 10,
-    10,
-    handleBarWidth / 2,
-    0,
-    10,
-    10
-  );
+// function handleBar(widthHandleBar, heightHandleBar, handleBarDepth) {
+//   const handleBarWidth = widthHandleBar;
+//   const handleBarHeight = heightHandleBar;
+//   const handleBarShape = new THREE.Shape();
+//   handleBarShape.moveTo(10, 10);
+//   handleBarShape.lineTo(0, handleBarHeight - 10);
+//   handleBarShape.bezierCurveTo(
+//     0,
+//     handleBarHeight - 10,
+//     handleBarWidth / 2,
+//     handleBarHeight,
+//     handleBarWidth,
+//     handleBarHeight - 10
+//   );
+//   handleBarShape.lineTo(handleBarWidth - 10, 10);
+//   handleBarShape.bezierCurveTo(
+//     handleBarWidth - 10,
+//     10,
+//     handleBarWidth / 2,
+//     0,
+//     10,
+//     10
+//   );
 
-  const extrudeHandleBarSettings = {
-    steps: 20,
-    depth: handleBarDepth,
-    bevelEnabled: true,
-    bevelThickness: 4,
-    bevelSize: 1,
-    bevelOffset: 10,
-    bevelSegments: 20,
-  };
+//   const extrudeHandleBarSettings = {
+//     steps: 20,
+//     depth: handleBarDepth,
+//     bevelEnabled: true,
+//     bevelThickness: 4,
+//     bevelSize: 1,
+//     bevelOffset: 10,
+//     bevelSegments: 20,
+//   };
 
-  const extrudeHandleBar = new THREE.ExtrudeGeometry(
-    handleBarShape,
-    extrudeHandleBarSettings
-  );
-  const handleBarMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
-  const handleBarMesh = new THREE.Mesh(extrudeHandleBar, handleBarMaterial);
+//   const extrudeHandleBar = new THREE.ExtrudeGeometry(
+//     handleBarShape,
+//     extrudeHandleBarSettings
+//   );
+//   const handleBarMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
+//   const handleBarMesh = new THREE.Mesh(extrudeHandleBar, handleBarMaterial);
 
-  return handleBarMesh;
-}
+//   return handleBarMesh;
+// }
+
+// function handleBackPlate(
+//   widthBackPlate,
+//   heightBackPlate,
+//   holeRadius,
+//   backPlateDepth,
+//   isKeyAvailable
+// ) {
+//   const handleBackPlateShape = new THREE.Shape();
+//   handleBackPlateShape.moveTo(0, 10);
+//   handleBackPlateShape.bezierCurveTo(
+//     0,
+//     10,
+//     widthBackPlate / 2,
+//     0,
+//     widthBackPlate,
+//     10
+//   );
+//   if (isKeyAvailable) {
+//     handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate * 2 - 10);
+//     handleBackPlateShape.bezierCurveTo(
+//       widthBackPlate,
+//       heightBackPlate * 2 - 10,
+//       widthBackPlate / 2,
+//       heightBackPlate * 2,
+//       0,
+//       heightBackPlate * 2 - 10
+//     );
+//   } else {
+//     handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - 10);
+//     handleBackPlateShape.bezierCurveTo(
+//       widthBackPlate,
+//       heightBackPlate - 10,
+//       widthBackPlate / 2,
+//       heightBackPlate,
+//       0,
+//       heightBackPlate - 10
+//     );
+//   }
+
+//   handleBackPlateShape.lineTo(0, 10);
+
+//   if (isKeyAvailable) {
+//     const keyHole = new THREE.Path();
+//     keyHole.moveTo(
+//       widthBackPlate / 2,
+//       heightBackPlate * 2 - heightBackPlate / 5
+//     );
+//     keyHole.absarc(
+//       widthBackPlate / 2,
+//       heightBackPlate * 2 - heightBackPlate / 5,
+//       holeRadius,
+//       Math.PI + Math.PI / 3,
+//       0 - Math.PI / 3,
+//       true
+//     );
+//     keyHole.lineTo(
+//       widthBackPlate / 2 + holeRadius / 2,
+//       heightBackPlate * 2 - heightBackPlate / 3
+//     );
+
+//     keyHole.absarc(
+//       widthBackPlate / 2,
+//       heightBackPlate + heightBackPlate / 2,
+//       holeRadius / 2,
+//       0,
+//       Math.PI,
+//       true
+//     );
+//     keyHole.lineTo(
+//       widthBackPlate / 2 - holeRadius / 2,
+//       heightBackPlate + heightBackPlate / 2
+//     );
+
+//     handleBackPlateShape.holes.push(keyHole);
+//   }
+
+//   const backPlateHole = new THREE.Path();
+
+//   backPlateHole.moveTo(0, 0);
+//   backPlateHole.absarc(
+//     widthBackPlate / 2,
+//     heightBackPlate - heightBackPlate / 6,
+//     holeRadius,
+//     0,
+//     Math.PI * 2,
+//     true
+//   );
+
+//   handleBackPlateShape.holes.push(backPlateHole);
+
+//   const extrudeBackPlateSettings = {
+//     steps: 20,
+//     depth: backPlateDepth,
+//     bevelEnabled: true,
+//     bevelThickness: 4,
+//     bevelSize: 1,
+//     bevelOffset: 10,
+//     bevelSegments: 20,
+//   };
+//   const extrudeHandleBackPlate = new THREE.ExtrudeGeometry(
+//     handleBackPlateShape,
+//     extrudeBackPlateSettings
+//   );
+//   const backPlateMaterial = new THREE.MeshBasicMaterial({ color: "red" });
+//   const backPlateMesh = new THREE.Mesh(
+//     extrudeHandleBackPlate,
+//     backPlateMaterial
+//   );
+//   return backPlateMesh;
+// }
+
+// function createVivoShotHandle(
+//   heightHandleBar,
+//   widthBackPlate,
+//   heightBackPlate,
+//   holeRadius,
+//   backPlateDepth,
+//   isKeyAvailable
+// ) {
+//   const parentObject = new THREE.Object3D();
+
+//   const backPlate = handleBackPlate(
+//     widthBackPlate,
+//     heightBackPlate,
+//     holeRadius,
+//     backPlateDepth,
+//     isKeyAvailable
+//   );
+//   parentObject.add(backPlate);
+//   const widthHandleBar = widthBackPlate;
+
+//   const handleBarMesh = handleBar(
+//     widthHandleBar,
+//     heightHandleBar,
+//     handleBarDepth
+//   );
+//   handleBarMesh.position.set(0, -(heightHandleBar - heightBackPlate / 2), 20);
+//   parentObject.add(handleBarMesh);
+
+//   scene.add(parentObject);
+// }
+// const handleBarHeight = 500;
+// const backPlateWidth = 100;
+// const backPlateHeight = 280;
+// const holeRadius = 40;
+// const backPlateDepth = 10;
+// const handleBarDepth = 30;
+// const isKeyAvailable = true;
+
+// createVivoShotHandle(
+//   handleBarHeight,
+//   backPlateWidth,
+//   backPlateHeight,
+//   holeRadius,
+//   backPlateDepth,
+//   handleBarDepth,
+//   isKeyAvailable
+// );
 
 function handleBackPlate(
   widthBackPlate,
   heightBackPlate,
   holeRadius,
   backPlateDepth,
-  isKeyAvailable
+  KeyHoleHeight
 ) {
   const handleBackPlateShape = new THREE.Shape();
-  handleBackPlateShape.moveTo(0, 10);
-  handleBackPlateShape.bezierCurveTo(
-    0,
-    10,
-    widthBackPlate / 2,
-    0,
-    widthBackPlate,
-    10
-  );
-  if (isKeyAvailable) {
-    handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate * 2 - 10);
-    handleBackPlateShape.bezierCurveTo(
-      widthBackPlate,
-      heightBackPlate * 2 - 10,
-      widthBackPlate / 2,
-      heightBackPlate * 2,
-      0,
-      heightBackPlate * 2 - 10
-    );
-  } else {
-    handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - 10);
-    handleBackPlateShape.bezierCurveTo(
-      widthBackPlate,
-      heightBackPlate - 10,
-      widthBackPlate / 2,
-      heightBackPlate,
-      0,
-      heightBackPlate - 10
-    );
-  }
+  const radius = heightBackPlate/10;
+  handleBackPlateShape.moveTo(widthBackPlate/2,radius);
+  // handleBackPlateShape.bezierCurveTo(
+  //   0,
+  //   40,
+  //   widthBackPlate / 2,
+  //   0,
+  //   widthBackPlate,
+  //   40
+  // );
+   handleBackPlateShape.absarc(widthBackPlate/2,radius, radius,  Math.PI,0, false )
+    handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - radius);
+   handleBackPlateShape.absarc(widthBackPlate/2,heightBackPlate-radius, radius,  0, Math.PI, false )
 
-  handleBackPlateShape.lineTo(0, 10);
+    // handleBackPlateShape.bezierCurveTo(
+    //   widthBackPlate,
+    //   heightBackPlate - 40,
+    //   widthBackPlate / 2,
+    //   heightBackPlate,
+    //   0,
+    //   heightBackPlate - 40
+    // );
+  
 
-  if (isKeyAvailable) {
+  handleBackPlateShape.lineTo(-0.1, radius);
+
+  
     const keyHole = new THREE.Path();
     keyHole.moveTo(
       widthBackPlate / 2,
@@ -1131,7 +1283,7 @@ function handleBackPlate(
     );
     keyHole.absarc(
       widthBackPlate / 2,
-      heightBackPlate * 2 - heightBackPlate / 5,
+      KeyHoleHeight-holeRadius,
       holeRadius,
       Math.PI + Math.PI / 3,
       0 - Math.PI / 3,
@@ -1155,22 +1307,8 @@ function handleBackPlate(
       heightBackPlate + heightBackPlate / 2
     );
 
-    handleBackPlateShape.holes.push(keyHole);
-  }
-
-  const backPlateHole = new THREE.Path();
-
-  backPlateHole.moveTo(0, 0);
-  backPlateHole.absarc(
-    widthBackPlate / 2,
-    heightBackPlate - heightBackPlate / 6,
-    holeRadius,
-    0,
-    Math.PI * 2,
-    true
-  );
-
-  handleBackPlateShape.holes.push(backPlateHole);
+    // handleBackPlateShape.holes.push(keyHole);
+  
 
   const extrudeBackPlateSettings = {
     steps: 20,
@@ -1193,53 +1331,36 @@ function handleBackPlate(
   return backPlateMesh;
 }
 
-function createVivoShotHandle(
-  heightHandleBar,
-  widthBackPlate,
+function createSweetHandle(widthBackPlate,
   heightBackPlate,
   holeRadius,
   backPlateDepth,
-  isKeyAvailable
-) {
-  const parentObject = new THREE.Object3D();
+  KeyHoleHeight){
 
-  const backPlate = handleBackPlate(
-    widthBackPlate,
+  const parentObject = new THREE.Object3D();
+  const sweetBackPlate = handleBackPlate(widthBackPlate,
     heightBackPlate,
     holeRadius,
     backPlateDepth,
-    isKeyAvailable
-  );
-  parentObject.add(backPlate);
-  const widthHandleBar = widthBackPlate;
+    KeyHoleHeight)
+  parentObject.add(sweetBackPlate);
+  scene.add(sweetBackPlate);
+  }
 
-  const handleBarMesh = handleBar(
-    widthHandleBar,
-    heightHandleBar,
-    handleBarDepth
-  );
-  handleBarMesh.position.set(0, -(heightHandleBar - heightBackPlate / 2), 20);
-  parentObject.add(handleBarMesh);
-
-  scene.add(parentObject);
-}
-const handleBarHeight = 500;
+ 
 const backPlateWidth = 100;
-const backPlateHeight = 280;
+const backPlateHeight = 500;
 const holeRadius = 40;
 const backPlateDepth = 10;
-const handleBarDepth = 30;
-const isKeyAvailable = true;
 
-createVivoShotHandle(
-  handleBarHeight,
-  backPlateWidth,
+const KeyHoleHeight = 50;
+
+
+createSweetHandle(backPlateWidth,
   backPlateHeight,
   holeRadius,
   backPlateDepth,
-  handleBarDepth,
-  isKeyAvailable
-);
+  KeyHoleHeight);
 //#endregion
 
 //#region  Renderer setup
