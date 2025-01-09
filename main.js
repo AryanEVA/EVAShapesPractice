@@ -2,6 +2,8 @@ import "./style.css";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
+import { hue } from "three/tsl";
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -20,9 +22,9 @@ const camera = new THREE.OrthographicCamera(
   1,
   1200
 );
-camera.lookAt(0,0,0);
-const axesHelper = new THREE.AxesHelper( 500 );
-scene.add( axesHelper );
+camera.lookAt(0, 0, 0);
+const axesHelper = new THREE.AxesHelper(500);
+scene.add(axesHelper);
 
 // const camera = new THREE.PerspectiveCamera(
 //   495,
@@ -31,7 +33,7 @@ scene.add( axesHelper );
 //   1000
 // );
 // camera.position.z = 400;
-camera.position.set(0, 2, 400);
+camera.position.set(0, 2, 500);
 
 //#endregion
 //#region DAY-1 of Task based Training (3/1/25)
@@ -525,7 +527,7 @@ camera.position.set(0, 2, 400);
 
 //#region Handles
 
-// 
+//
 // class HandleCurve extends THREE.Curve {
 //   constructor() {
 //     super();
@@ -589,7 +591,7 @@ camera.position.set(0, 2, 400);
 // 		const tx = this.scale * Math.cos(Math.PI * t);
 // 		const ty = this.scale * Math.sin( Math.PI * t );
 // 		const tz = 0;
-//     // alert(t); 
+//     // alert(t);
 // 		return optionalTarget.set( tx, ty, tz ).multiplyScalar( this.scale );
 // 	}
 // }
@@ -604,9 +606,7 @@ camera.position.set(0, 2, 400);
 
 //#region Handle by Shape geometry and Extrude Geometry
 
-
 //#endregion
-
 
 // function createHandle(width, height, radius, color, steps = 10) {
 //   // Material
@@ -649,7 +649,7 @@ camera.position.set(0, 2, 400);
 //   const topCurveConnectorGeometry = new THREE.TorusGeometry(radius, radius, 20, 10, Math.PI / 2);
 //   const topCurveConnectorMesh = new THREE.Mesh(topCurveConnectorGeometry, handleMaterial);
 //   topCurveConnectorMesh.position.set(width, height - radius);
-  
+
 //   // all parts added to the parent object
 
 //   const parentObject = new THREE.Object3D();
@@ -672,194 +672,574 @@ camera.position.set(0, 2, 400);
 // const handle = createHandle(handleWidth, handleHeight, handleRadius, handleColor, steps);
 // scene.add(handle);
 
-
 //#endregion
 
 //#region DAY-4 of Task based Training
 
 //#region handle-1
-const widthUp = 100;
-const heightUp = 300;
-const widthDown = widthUp / 2;
-const heightDown = 200;
-const holeRadius = 26;
-const depth = 25;
 
+// function createHandle1(widthUp, heightUp, heightDown, depth, isKeyAvailable){
 
-// handle base Shape
-const handleBase = new THREE.Shape();
-handleBase.moveTo(widthUp, 0);
-handleBase.lineTo(widthUp, heightUp-10);
+//   // handle base Shape
+// const holeRadius = 26;
+// const widthDown = widthUp / 2;
 
-handleBase.quadraticCurveTo(
-  0,
-  heightUp - 20,
-  0,
-  heightUp - 40
-);
-handleBase.lineTo(0, heightUp / 3);
-// handleBase.quadraticCurveTo(0, heightUp / 4, 20, heightUp/5);
+//   const handleBase = new THREE.Shape();
+// handleBase.moveTo(widthUp, 0);
 
-handleBase.quadraticCurveTo(widthUp/2, heightUp/3, widthUp/2, heightUp/3 - heightUp/4);
-// handleBase.bezierCurveTo(widthUp/2 -10,heightUp/3, widthUp/2, heightUp/3,widthUp/2,heightUp/3-10);
+// if(isKeyAvailable){
+//   handleBase.lineTo(widthUp, (heightUp)*2);
 
-handleBase.lineTo(widthDown, -(heightDown - 10));
-handleBase.bezierCurveTo(
-  widthDown,
-  -(heightDown - 10),
-  widthDown,
-  -heightDown,
-  widthDown + 10,
-  -heightDown
-);
-handleBase.lineTo(widthUp - 10, -heightDown);
+// handleBase.quadraticCurveTo(
+//   0,
+//   (heightUp - 20)*2,
+//   0,
 
-handleBase.bezierCurveTo(
-  widthUp - 10,
-  -heightDown,
-  widthUp,
-  -heightDown,
-  widthUp,
-  -(heightDown - 10)
-);
+//   (heightUp - 40)*2
+// );
+// }
 
-const handleBaseHole = new THREE.Path();
-handleBaseHole.absarc(
-  widthUp / 2,
-  heightUp - (heightUp / 7)-10,
-  holeRadius,
-  0,
-  Math.PI * 2,
-  true
-);
+// else{
+//   handleBase.lineTo(widthUp, (heightUp-10));
 
-handleBase.holes.push(handleBaseHole);
+// handleBase.quadraticCurveTo(
+//   0,
+//   (heightUp - 20),
+//   0,
+//   (heightUp - 40)
+// );
+// }
 
-const extrudeSettings = {
-  steps: 20,
-  depth: depth,
-  bevelEnabled: true,
-  bevelThickness: 5,
-  bevelSize: 3,
-  bevelOffset: 10,
-  bevelSegments: 10,
-};
+// handleBase.lineTo(0, heightUp / 3);
 
-const extrudeHandleBase = new THREE.ExtrudeGeometry(handleBase, extrudeSettings);
-const figureMaterial = new THREE.MeshBasicMaterial({
-  color: "red",
-  wireframe: 0,
-  side: THREE.DoubleSide,
-});
-const handleBaseMesh = new THREE.Mesh(extrudeHandleBase, figureMaterial);
-handleBaseMesh.position.x -= widthUp / 2;
-// scene.add(handleBaseMesh);
+// handleBase.quadraticCurveTo(widthUp/2, heightUp/3, widthUp/2, heightUp/3 - heightUp/4);
 
-const handdleBaseEdges = new THREE.EdgesGeometry(extrudeHandleBase);
-const linesMaterial = new THREE.LineBasicMaterial({ color: "white" });
-const handleBaseLines = new THREE.LineSegments(handdleBaseEdges, linesMaterial);
-handleBaseLines.position.x = handleBaseMesh.position.x;
-// scene.add(lines);
+// handleBase.lineTo(widthDown, -(heightDown - 10));
+// handleBase.bezierCurveTo(
+//   widthDown,
+//   -(heightDown - 10),
+//   widthDown,
+//   -heightDown,
+//   widthDown + 10,
+//   -heightDown
+// );
+// handleBase.lineTo(widthUp - 10, -heightDown);
 
+// handleBase.bezierCurveTo(
+//   widthUp - 10,
+//   -heightDown,
+//   widthUp,
+//   -heightDown,
+//   widthUp,
+//   -(heightDown - 10)
+// );
 
-// handle Top Connector 
-const heightTopConnector = heightUp/2;
-const handleTopConnector = new THREE.Shape();
-handleTopConnector.moveTo(0,0);
-handleTopConnector.quadraticCurveTo(widthUp/3,heightTopConnector/5,widthUp,heightTopConnector/4);
-handleTopConnector.lineTo(widthUp,heightTopConnector/2+heightUp/9);
-handleTopConnector.quadraticCurveTo(0,(heightUp/5+heightTopConnector/3),0,heightTopConnector/3+heightTopConnector/10);
-handleTopConnector.lineTo(0,0);
+// const handleBaseHole = new THREE.Path();
+// handleBaseHole.absarc(
+//   widthUp / 2,
+//   heightUp - (heightUp / 7)-10,
+//   holeRadius,
+//   0,
+//   Math.PI * 2,
+//   true
+// );
 
-const handleTopHole = new THREE.Path();
-handleTopHole.absarc(
-  widthUp / 2,
-  heightTopConnector - (heightUp / 4) - 9,
-  holeRadius,
-  0,
-  Math.PI * 2,
-  true
-);
+// const handleBaseLowerHole = new THREE.Path();
+// handleBaseLowerHole.absarc(
+//   widthUp/2,
+//   heightUp/2,
+//   holeRadius/2 + holeRadius/5,
+//   0,
+//   Math.PI * 2,
+//   true
+// );
+// handleBase.holes.push(handleBaseHole);
 
-handleTopConnector.holes.push(handleTopHole);
-const extrudeHandleTopConnector = new THREE.ExtrudeGeometry(handleTopConnector,{...extrudeSettings});
-const topConnectorMaterial = new THREE.MeshBasicMaterial({
-  color: "Yellow",
-  wireframe: 0,
-  side: THREE.DoubleSide,
-  // wireframe: true
-});
-const handleTopConnectorMesh = new THREE.Mesh(extrudeHandleTopConnector ,topConnectorMaterial);
-handleTopConnectorMesh.position.set(-(widthUp/2),heightTopConnector+heightUp/10,depth + 10);
+// handleBase.holes.push(handleBaseLowerHole);
 
+// const extrudeSettings = {
+//   steps: 20,
+//   depth: depth,
+//   bevelEnabled: true,
+//   bevelThickness: 4,
+//   bevelSize: 1,
+//   bevelOffset: 10,
+//   bevelSegments: 20,
+// };
 
-const handleTopConnectorEdges = new THREE.EdgesGeometry(extrudeHandleTopConnector);
-const handleTopConnectorLines = new THREE.LineSegments(handleTopConnectorEdges, linesMaterial);
-handleTopConnectorLines.position.x = handleTopConnectorMesh.position.x;
-handleTopConnectorLines.position.y = handleTopConnectorMesh.position.y;
-handleTopConnectorLines.position.z = handleTopConnectorMesh.position.z;
+// const extrudeHandleBase = new THREE.ExtrudeGeometry(handleBase, extrudeSettings);
+// const figureMaterial = new THREE.MeshBasicMaterial({
+//   color: "red",
+//   wireframe: 0,
+//   side: THREE.DoubleSide,
+// });
+// const handleBaseMesh = new THREE.Mesh(extrudeHandleBase, figureMaterial);
+// handleBaseMesh.position.x -= widthUp / 2;
 
-// Handle Bottom Connector
+// const handdleBaseEdges = new THREE.EdgesGeometry(extrudeHandleBase);
+// const linesMaterial = new THREE.LineBasicMaterial({ color: "white" });
+// const handleBaseLines = new THREE.LineSegments(handdleBaseEdges, linesMaterial);
+// handleBaseLines.position.x = handleBaseMesh.position.x;
 
-const handleBottomConnector = new THREE.Shape();
-handleBottomConnector.moveTo(0,0);
-handleBottomConnector.lineTo(0, -(heightDown - 10));
-handleBottomConnector.bezierCurveTo(
-  0,
-  -(heightDown - 10),
-  0,
-  -heightDown,
-  10,
-  -heightDown
-);
-handleBottomConnector.lineTo(widthDown - 10, -heightDown);
+// // handle Top Connector
+// const heightTopConnector = heightUp/2;
+// const handleTopConnector = new THREE.Shape();
+// handleTopConnector.moveTo(0,0);
+// handleTopConnector.quadraticCurveTo(widthUp/3,heightTopConnector/5,widthUp,heightTopConnector/4);
+// if(isKeyAvailable){
+//   handleTopConnector.lineTo(widthUp,(heightTopConnector/2+heightUp/12)*3);
+//   handleTopConnector.quadraticCurveTo(0-widthUp/6,(heightUp/5+heightTopConnector/4)*3,0,(heightTopConnector/3+heightTopConnector/12)*3);
+// }
 
-handleBottomConnector.bezierCurveTo(
-  widthDown - 10,
-  -heightDown,
-  widthDown,
-  -heightDown,
-  widthDown,
-  -(heightDown - 10)
-);
-handleBottomConnector.lineTo(widthDown,0);
-handleBottomConnector.lineTo(widthDown,heightUp/2+heightTopConnector/4);
-handleBottomConnector.quadraticCurveTo(-widthDown,heightUp/2+heightTopConnector/5, -widthDown/2, heightUp/3);
-handleBottomConnector.quadraticCurveTo(0,heightUp/4,0,heightUp/5);
-handleBottomConnector.lineTo(0,0);
+// else{
+// handleTopConnector.lineTo(widthUp,heightTopConnector/2+heightUp/9);
+//   handleTopConnector.quadraticCurveTo(0-widthUp/8,(heightUp/5+heightTopConnector/4),0,heightTopConnector/3+heightTopConnector/10);
+// }
 
+// handleTopConnector.lineTo(0,0);
 
-const extrudeHandleBottomConnector = new THREE.ExtrudeGeometry(handleBottomConnector, extrudeSettings);
-const bottomConnectorMaterial = new THREE.MeshBasicMaterial({
-  color: "green",
-  wireframe: 0,
-  side: THREE.DoubleSide,
-  // wireframe: true
-});
-const handleBottomConnectorMesh = new THREE.Mesh(extrudeHandleBottomConnector, bottomConnectorMaterial );
-handleBottomConnectorMesh.position.set(0,0,depth+10)
+// const handleTopHole = new THREE.Path();
+// handleTopHole.absarc(
+//   widthUp / 2,
+//   heightTopConnector - (heightUp / 4) - 9,
+//   holeRadius,
+//   0,
+//   Math.PI * 2,
+//   true
+// );
 
-handleBottomConnectorMesh.rotation.x = Math.PI/25;
+// handleTopConnector.holes.push(handleTopHole);
 
-const handleBottomConnectorEdges = new THREE.EdgesGeometry(extrudeHandleBottomConnector);
-const handleBottomConnetorLines = new THREE.LineSegments(handleBottomConnectorEdges, linesMaterial);
-handleBottomConnetorLines.position.x = handleBottomConnectorMesh.position.x;
-handleBottomConnetorLines.position.y = handleBottomConnectorMesh.position.y;
-handleBottomConnetorLines.position.z = handleBottomConnectorMesh.position.z;
-handleBottomConnetorLines.rotation.x = handleBottomConnectorMesh.rotation.x;
-const parentObject = new THREE.Object3D();
-parentObject.add(handleBaseMesh);
-parentObject.add(handleBaseLines);
-parentObject.add(handleTopConnectorMesh);
-parentObject.add(handleBottomConnectorMesh);
-parentObject.add(handleTopConnectorLines);
-parentObject.add(handleBottomConnetorLines);
+// const keyRadius = holeRadius*1.2;
+// const keyHeight = heightUp;
+// const keyWidth = widthUp/2;
 
-// parentObject.rotation.z += Math.PI/2;
-// parentObject.rotation.x -= Math.PI/4;
-scene.add(parentObject);
+// const KeyHole = new THREE.Path();
+// KeyHole.absarc(keyWidth,keyHeight, keyRadius,0,Math.PI , false);
+
+// KeyHole.lineTo(keyWidth-keyWidth/4,heightTopConnector);
+// KeyHole.bezierCurveTo(keyWidth-(keyWidth+keyWidth/2), heightTopConnector+keyRadius, keyWidth, heightTopConnector-keyRadius/2,keyWidth+keyWidth/2, heightTopConnector+keyRadius)
+// // KeyHole.quadraticCurveTo(keyWidth-keyRadius/3, keyHeight-(keyHeight-keyRadius/2),keyWidth-keyRadius/3, keyHeight-(keyHeight-keyRadius))
+
+// // handleTopConnector.holes.push(KeyHole);
+
+// const extrudeHandleTopConnector = new THREE.ExtrudeGeometry(handleTopConnector,{...extrudeSettings});
+// const topConnectorMaterial = new THREE.MeshBasicMaterial({
+//   color: "Yellow",
+//   wireframe: 0,
+//   side: THREE.DoubleSide,
+
+// });
+// const handleTopConnectorMesh = new THREE.Mesh(extrudeHandleTopConnector ,topConnectorMaterial);
+// handleTopConnectorMesh.position.set(-(widthUp/2),heightTopConnector+heightUp/10,depth + 10);
+
+// const handleTopConnectorEdges = new THREE.EdgesGeometry(extrudeHandleTopConnector);
+// const handleTopConnectorLines = new THREE.LineSegments(handleTopConnectorEdges, linesMaterial);
+// handleTopConnectorLines.position.x = handleTopConnectorMesh.position.x;
+// handleTopConnectorLines.position.y = handleTopConnectorMesh.position.y;
+// handleTopConnectorLines.position.z = handleTopConnectorMesh.position.z;
+
+// // Handle Bottom Connector
+
+// const handleBottomConnector = new THREE.Shape();
+// handleBottomConnector.moveTo(0, -(heightDown - 10));
+// handleBottomConnector.lineTo(0, -(heightDown - 10));
+// handleBottomConnector.bezierCurveTo(
+//   0,
+//   -(heightDown - 10),
+//   0,
+//   -heightDown,
+//   10,
+//   -heightDown
+// );
+// handleBottomConnector.lineTo(widthDown - 10, -heightDown);
+
+// handleBottomConnector.bezierCurveTo(
+//   widthDown - 10,
+//   -heightDown,
+//   widthDown,
+//   -heightDown,
+//   widthDown,
+//   -(heightDown - 10)
+// );
+
+// handleBottomConnector.lineTo(widthDown,heightUp/2+heightTopConnector/4);
+// handleBottomConnector.quadraticCurveTo(-(widthDown - widthDown/3),heightUp/2+heightTopConnector/5, -widthDown/3, heightUp/3);
+
+// handleBottomConnector.lineTo(0, -(heightDown - 10));
+
+// const extrudeHandleBottomConnector = new THREE.ExtrudeGeometry(handleBottomConnector, extrudeSettings);
+// const bottomConnectorMaterial = new THREE.MeshBasicMaterial({
+//   color: "green",
+//   wireframe: 0,
+//   side: THREE.DoubleSide,
+
+// });
+// const handleBottomConnectorMesh = new THREE.Mesh(extrudeHandleBottomConnector, bottomConnectorMaterial );
+// handleBottomConnectorMesh.position.set(0,0,depth+20)
+
+// handleBottomConnectorMesh.rotation.x = Math.PI/50;
+
+// const handleBottomConnectorEdges = new THREE.EdgesGeometry(extrudeHandleBottomConnector);
+// const handleBottomConnetorLines = new THREE.LineSegments(handleBottomConnectorEdges, linesMaterial);
+// handleBottomConnetorLines.position.x = handleBottomConnectorMesh.position.x;
+// handleBottomConnetorLines.position.y = handleBottomConnectorMesh.position.y;
+// handleBottomConnetorLines.position.z = handleBottomConnectorMesh.position.z;
+// handleBottomConnetorLines.rotation.x = handleBottomConnectorMesh.rotation.x;
+// const parentObject = new THREE.Object3D();
+// parentObject.add(handleBaseMesh);
+// parentObject.add(handleBaseLines);
+// parentObject.add(handleTopConnectorMesh);
+// parentObject.add(handleBottomConnectorMesh);
+// parentObject.add(handleTopConnectorLines);
+// parentObject.add(handleBottomConnetorLines);
+
+// scene.add(parentObject);
+// }
+
+// const widthUp = 100;
+// const heightUp = 250;
+// const heightDown = 300;
+// const depth = 25;
+// const isKeyAvailable = false;
+
+//-----------------------------------------------------------To work on this part Later--------------------------------------------------------------------
+
+// createHandle1(widthUp,heightUp,heightDown,depth, isKeyAvailable);
+
+// function createHandle1(widthUp,heightUp,heightDown,depth, isKeyAvailable){
+//   const widthDown = widthUp/2;
+//   const holeRadius = 15;
+//   heightDown = -heightDown;
+//    const handleBase = new THREE.Shape();
+//    handleBase.moveTo(0,0);
+//    if(isKeyAvailable){
+//     handleBase.lineTo0,heightUp/2-10;
+//     handleBase.quadraticCurveTo(0,heightUp,20,heightUp);
+//     handleBase.lineTo(widthUp, heightUp+20);
+
+//    }
+
+//    else{
+//     handleBase.lineTo(0,heightUp/2-10);
+//    handleBase.quadraticCurveTo(0,heightUp/2,10,heightUp/2);
+//    handleBase.lineTo(widthUp,heightUp/2+10);
+//    }
+
+//   handleBase.lineTo(widthDown*2,heightDown+10) //(heightDown value is -ve)
+//   handleBase.bezierCurveTo(widthDown*2, heightDown+10, widthDown*2, heightDown, widthDown*2-10, heightDown);
+//   handleBase.lineTo(widthDown+10,heightDown);
+//   handleBase.bezierCurveTo(widthDown+10,heightDown,widthDown, heightDown, widthDown, heightDown+10); //(heightDown value is -ve)
+//   handleBase.lineTo(widthDown,-50);
+//   // handleBase.bezierCurveTo(widthDown, -50, widthDown,0, widthDown-50,0);
+//   handleBase.quadraticCurveTo(widthDown,0, widthDown-50,0)
+//   handleBase.lineTo(0,0);
+
+//   if(isKeyAvailable){
+//     const handleBaseKeyHole = new THREE.Path();
+//     handleBaseKeyHole.absarc(widthUp/2, heightUp-heightUp/8,holeRadius,Math.PI+Math.PI/3,0-Math.PI/3,true);
+
+//     handleBaseKeyHole.lineTo(widthUp/2 + holeRadius/2, heightUp/2 + heightUp/8);
+//     handleBaseKeyHole.absarc(widthUp/2, heightUp/2 + heightUp/8, holeRadius/2,0,Math.PI, true)
+//     handleBaseKeyHole.lineTo(widthUp/2 - holeRadius/2, heightUp - heightUp/4);
+
+//     handleBase.holes.push(handleBaseKeyHole);
+//    }
+
+//   const handleBaseHole = new THREE.Path();
+//   if(isKeyAvailable){
+//     handleBaseHole.absarc(
+//       widthUp / 2-10,
+//       heightUp/2 - heightUp/8,
+//       holeRadius,
+//       0,
+//       Math.PI * 2,
+//       true
+//     );
+//   }
+//   else{
+//     handleBaseHole.absarc(
+//       widthUp / 2,
+//       heightUp/2 - heightUp/8,
+//       holeRadius,
+//       0,
+//       Math.PI * 2,
+//       true
+//     );
+//   }
+
+// const handleBaseLowerHole = new THREE.Path();
+
+// if(isKeyAvailable){
+//   handleBaseLowerHole.absarc(
+//     widthUp/2-25,
+//     heightUp/10,
+//     holeRadius/8,
+//     0,
+//     Math.PI * 2,
+//     true
+//   );
+// }
+// else{
+//   handleBaseLowerHole.absarc(
+//     widthUp/2-25,
+//     heightUp/10,
+//     holeRadius/8,
+//     0,
+//     Math.PI * 2,
+//     true
+//   );
+// }
+
+// handleBase.holes.push(handleBaseHole);
+
+// handleBase.holes.push(handleBaseLowerHole);
+
+//    const extrudeSettings = {
+//       steps: 20,
+//       depth: depth,
+//       bevelEnabled: true,
+//       bevelThickness: 4,
+//       bevelSize: 1,
+//       bevelOffset: 10,
+//       bevelSegments: 20,
+//     };
+
+//     const extrudeHandleBase = new THREE.ExtrudeGeometry(handleBase, extrudeSettings);
+//     const figureMaterial = new THREE.MeshBasicMaterial({
+//       color: "red",
+//       wireframe: 0,
+//       side: THREE.DoubleSide,
+//     });
+//     const handleBaseMesh = new THREE.Mesh(extrudeHandleBase, figureMaterial);
+//     handleBaseMesh.position.x -= widthUp / 2;
+
+//     const handdleBaseEdges = new THREE.EdgesGeometry(extrudeHandleBase);
+//     const linesMaterial = new THREE.LineBasicMaterial({ color: "white" });
+//     const handleBaseLines = new THREE.LineSegments(handdleBaseEdges, linesMaterial);
+//     handleBaseLines.position.x = handleBaseMesh.position.x;
+
+// // Parent Object to the Scene
+//     const parentObject = new THREE.Object3D();
+//     parentObject.add(handleBaseMesh);
+//     parentObject.add(handleBaseLines);
+
+//     scene.add(parentObject);
+// }
+// const widthUp = 150;
+// const heightUp = 450;
+// const heightDown = 300;
+// const depth = 25;
+// const isKeyAvailable = true;
+// createHandle1(widthUp,heightUp,heightDown,depth, isKeyAvailable);
 
 //#endregion
+//#endregion
+
+//#region handle- VivoShot handle
+
+function handleBar(widthHandleBar, heightHandleBar, handleBarDepth) {
+  const handleBarWidth = widthHandleBar;
+  const handleBarHeight = heightHandleBar;
+  const handleBarShape = new THREE.Shape();
+  handleBarShape.moveTo(10, 10);
+  handleBarShape.lineTo(0, handleBarHeight - 10);
+  handleBarShape.bezierCurveTo(
+    0,
+    handleBarHeight - 10,
+    handleBarWidth / 2,
+    handleBarHeight,
+    handleBarWidth,
+    handleBarHeight - 10
+  );
+  handleBarShape.lineTo(handleBarWidth - 10, 10);
+  handleBarShape.bezierCurveTo(
+    handleBarWidth - 10,
+    10,
+    handleBarWidth / 2,
+    0,
+    10,
+    10
+  );
+
+  const extrudeHandleBarSettings = {
+    steps: 20,
+    depth: handleBarDepth,
+    bevelEnabled: true,
+    bevelThickness: 4,
+    bevelSize: 1,
+    bevelOffset: 10,
+    bevelSegments: 20,
+  };
+
+  const extrudeHandleBar = new THREE.ExtrudeGeometry(
+    handleBarShape,
+    extrudeHandleBarSettings
+  );
+  const handleBarMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
+  const handleBarMesh = new THREE.Mesh(extrudeHandleBar, handleBarMaterial);
+
+  return handleBarMesh;
+}
+
+function handleBackPlate(
+  widthBackPlate,
+  heightBackPlate,
+  holeRadius,
+  backPlateDepth,
+  isKeyAvailable
+) {
+  const handleBackPlateShape = new THREE.Shape();
+  handleBackPlateShape.moveTo(0, 10);
+  handleBackPlateShape.bezierCurveTo(
+    0,
+    10,
+    widthBackPlate / 2,
+    0,
+    widthBackPlate,
+    10
+  );
+  if (isKeyAvailable) {
+    handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate * 2 - 10);
+    handleBackPlateShape.bezierCurveTo(
+      widthBackPlate,
+      heightBackPlate * 2 - 10,
+      widthBackPlate / 2,
+      heightBackPlate * 2,
+      0,
+      heightBackPlate * 2 - 10
+    );
+  } else {
+    handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - 10);
+    handleBackPlateShape.bezierCurveTo(
+      widthBackPlate,
+      heightBackPlate - 10,
+      widthBackPlate / 2,
+      heightBackPlate,
+      0,
+      heightBackPlate - 10
+    );
+  }
+
+  handleBackPlateShape.lineTo(0, 10);
+
+  if (isKeyAvailable) {
+    const keyHole = new THREE.Path();
+    keyHole.moveTo(
+      widthBackPlate / 2,
+      heightBackPlate * 2 - heightBackPlate / 5
+    );
+    keyHole.absarc(
+      widthBackPlate / 2,
+      heightBackPlate * 2 - heightBackPlate / 5,
+      holeRadius,
+      Math.PI + Math.PI / 3,
+      0 - Math.PI / 3,
+      true
+    );
+    keyHole.lineTo(
+      widthBackPlate / 2 + holeRadius / 2,
+      heightBackPlate * 2 - heightBackPlate / 3
+    );
+
+    keyHole.absarc(
+      widthBackPlate / 2,
+      heightBackPlate + heightBackPlate / 2,
+      holeRadius / 2,
+      0,
+      Math.PI,
+      true
+    );
+    keyHole.lineTo(
+      widthBackPlate / 2 - holeRadius / 2,
+      heightBackPlate + heightBackPlate / 2
+    );
+
+    handleBackPlateShape.holes.push(keyHole);
+  }
+
+  const backPlateHole = new THREE.Path();
+
+  backPlateHole.moveTo(0, 0);
+  backPlateHole.absarc(
+    widthBackPlate / 2,
+    heightBackPlate - heightBackPlate / 6,
+    holeRadius,
+    0,
+    Math.PI * 2,
+    true
+  );
+
+  handleBackPlateShape.holes.push(backPlateHole);
+
+  const extrudeBackPlateSettings = {
+    steps: 20,
+    depth: backPlateDepth,
+    bevelEnabled: true,
+    bevelThickness: 4,
+    bevelSize: 1,
+    bevelOffset: 10,
+    bevelSegments: 20,
+  };
+  const extrudeHandleBackPlate = new THREE.ExtrudeGeometry(
+    handleBackPlateShape,
+    extrudeBackPlateSettings
+  );
+  const backPlateMaterial = new THREE.MeshBasicMaterial({ color: "red" });
+  const backPlateMesh = new THREE.Mesh(
+    extrudeHandleBackPlate,
+    backPlateMaterial
+  );
+  return backPlateMesh;
+}
+
+function createVivoShotHandle(
+  heightHandleBar,
+  widthBackPlate,
+  heightBackPlate,
+  holeRadius,
+  backPlateDepth,
+  isKeyAvailable
+) {
+  const parentObject = new THREE.Object3D();
+
+  const backPlate = handleBackPlate(
+    widthBackPlate,
+    heightBackPlate,
+    holeRadius,
+    backPlateDepth,
+    isKeyAvailable
+  );
+  parentObject.add(backPlate);
+  const widthHandleBar = widthBackPlate;
+
+  const handleBarMesh = handleBar(
+    widthHandleBar,
+    heightHandleBar,
+    handleBarDepth
+  );
+  handleBarMesh.position.set(0, -(heightHandleBar - heightBackPlate / 2), 20);
+  parentObject.add(handleBarMesh);
+
+  scene.add(parentObject);
+}
+const handleBarHeight = 500;
+const backPlateWidth = 100;
+const backPlateHeight = 280;
+const holeRadius = 40;
+const backPlateDepth = 10;
+const handleBarDepth = 30;
+const isKeyAvailable = true;
+
+createVivoShotHandle(
+  handleBarHeight,
+  backPlateWidth,
+  backPlateHeight,
+  holeRadius,
+  backPlateDepth,
+  handleBarDepth,
+  isKeyAvailable
+);
 //#endregion
 
 //#region  Renderer setup
