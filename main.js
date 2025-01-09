@@ -1251,63 +1251,44 @@ function handleBackPlate(
   const handleBackPlateShape = new THREE.Shape();
   const radius = heightBackPlate/10;
   handleBackPlateShape.moveTo(widthBackPlate/2,radius);
-  // handleBackPlateShape.bezierCurveTo(
-  //   0,
-  //   40,
-  //   widthBackPlate / 2,
-  //   0,
-  //   widthBackPlate,
-  //   40
-  // );
-   handleBackPlateShape.absarc(widthBackPlate/2,radius, radius,  Math.PI,0, false )
-    handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - radius);
-   handleBackPlateShape.absarc(widthBackPlate/2,heightBackPlate-radius, radius,  0, Math.PI, false )
-
-    // handleBackPlateShape.bezierCurveTo(
-    //   widthBackPlate,
-    //   heightBackPlate - 40,
-    //   widthBackPlate / 2,
-    //   heightBackPlate,
-    //   0,
-    //   heightBackPlate - 40
-    // );
-  
-
-  handleBackPlateShape.lineTo(-0.1, radius);
+   handleBackPlateShape.absarc(widthBackPlate/2,radius, radius,  Math.PI,0, false );
+    // handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - radius);
+   handleBackPlateShape.absarc(widthBackPlate/2,heightBackPlate-radius, radius,  0, Math.PI, false );
+  // handleBackPlateShape.lineTo(-0.1, radius);
 
   
     const keyHole = new THREE.Path();
     keyHole.moveTo(
       widthBackPlate / 2,
-      heightBackPlate * 2 - heightBackPlate / 5
+      KeyHoleHeight - holeRadius
     );
     keyHole.absarc(
       widthBackPlate / 2,
-      KeyHoleHeight-holeRadius,
+      KeyHoleHeight,
       holeRadius,
       Math.PI + Math.PI / 3,
       0 - Math.PI / 3,
       true
     );
-    keyHole.lineTo(
-      widthBackPlate / 2 + holeRadius / 2,
-      heightBackPlate * 2 - heightBackPlate / 3
-    );
+    // keyHole.lineTo(
+    //   widthBackPlate / 2 + holeRadius / 2,
+    //   holeRadius
+    // );
 
     keyHole.absarc(
       widthBackPlate / 2,
-      heightBackPlate + heightBackPlate / 2,
+      KeyHoleHeight-100,
       holeRadius / 2,
       0,
       Math.PI,
       true
     );
-    keyHole.lineTo(
-      widthBackPlate / 2 - holeRadius / 2,
-      heightBackPlate + heightBackPlate / 2
-    );
+    // keyHole.lineTo(
+    //   widthBackPlate / 2 - holeRadius / 2,
+    //   KeyHoleHeight - holeRadius
+    // );
 
-    // handleBackPlateShape.holes.push(keyHole);
+    handleBackPlateShape.holes.push(keyHole);
   
 
   const extrudeBackPlateSettings = {
@@ -1338,22 +1319,31 @@ function createSweetHandle(widthBackPlate,
   KeyHoleHeight){
 
   const parentObject = new THREE.Object3D();
-  const sweetBackPlate = handleBackPlate(widthBackPlate,
+  const sweetBackPlate1 = handleBackPlate(widthBackPlate,
     heightBackPlate,
     holeRadius,
     backPlateDepth,
-    KeyHoleHeight)
-  parentObject.add(sweetBackPlate);
-  scene.add(sweetBackPlate);
+    KeyHoleHeight);
+    const sweetBackPlate2 = handleBackPlate(widthBackPlate,
+      heightBackPlate,
+      holeRadius,
+      backPlateDepth,
+      KeyHoleHeight);
+  parentObject.add(sweetBackPlate1);
+
+  sweetBackPlate2.position.set(250, 0, 0);
+  parentObject.add(sweetBackPlate2);
+
+  scene.add(parentObject);
   }
 
  
 const backPlateWidth = 100;
-const backPlateHeight = 500;
-const holeRadius = 40;
-const backPlateDepth = 10;
+const backPlateHeight = 700;
+const holeRadius = 50;
+const backPlateDepth = 40;
 
-const KeyHoleHeight = 50;
+const KeyHoleHeight = 200;
 
 
 createSweetHandle(backPlateWidth,
