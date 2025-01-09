@@ -1252,10 +1252,8 @@ function handleBackPlate(
   const radius = heightBackPlate/10;
   handleBackPlateShape.moveTo(widthBackPlate/2,radius);
    handleBackPlateShape.absarc(widthBackPlate/2,radius, radius,  Math.PI,0, false );
-    // handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - radius);
    handleBackPlateShape.absarc(widthBackPlate/2,heightBackPlate-radius, radius,  0, Math.PI, false );
-  // handleBackPlateShape.lineTo(-0.1, radius);
-
+  
   
     const keyHole = new THREE.Path();
     keyHole.moveTo(
@@ -1270,10 +1268,7 @@ function handleBackPlate(
       0 - Math.PI / 3,
       true
     );
-    // keyHole.lineTo(
-    //   widthBackPlate / 2 + holeRadius / 2,
-    //   holeRadius
-    // );
+   
 
     keyHole.absarc(
       widthBackPlate / 2,
@@ -1283,10 +1278,7 @@ function handleBackPlate(
       Math.PI,
       true
     );
-    // keyHole.lineTo(
-    //   widthBackPlate / 2 - holeRadius / 2,
-    //   KeyHoleHeight - holeRadius
-    // );
+   
 
     handleBackPlateShape.holes.push(keyHole);
   
