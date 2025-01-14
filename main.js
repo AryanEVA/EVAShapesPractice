@@ -1524,7 +1524,7 @@ return zConnectorMesh;
 
 }
 
-function topConnector(){
+function topConnector(depthBottomConnector){
   const width = 40;
   const connectorWidth = 14;
   const height = 30;
@@ -1548,11 +1548,11 @@ function topConnector(){
   const connectorMaterial = new THREE.MeshBasicMaterial({color: "pink"});
   const connectorMesh = new THREE.Mesh(connector, connectorMaterial);
   connectorMesh.rotation.x += Math.PI/2;
-  connectorMesh.position.set(width/2 + width/7 + width/150,height/2,connectorWidth/2);
+  connectorMesh.position.set(width/2 + width/7 + width/150,height/2,connectorWidth/6);
 
   const extrudeTopConnectorSettings = {
     steps: 1,
-    depth: 10,
+    depth: depthBottomConnector,
     bevelEnabled: false,
   };
 
@@ -1570,28 +1570,116 @@ function topConnector(){
 
 }
 
+function boltBase(diameter) {
+  const radius = diameter / 2;
+
+  const extrudeBoltSettings = {
+    steps: 1,
+    depth: 5,
+    bevelEnabled: false,
+  };
+
+  const boltFrontPlateShape = new THREE.Shape();
+  boltFrontPlateShape.moveTo(0, 0);
+  boltFrontPlateShape.absarc(radius, radius, radius, 0, Math.PI * 2, true);
+
+  const boltHoles = new THREE.Path();
+  boltHoles.moveTo(diameter / 12, radius - diameter / 8);
+  boltHoles.lineTo(diameter / 12, radius + diameter / 8);
+  boltHoles.lineTo(radius - diameter / 8, radius + diameter / 8);
+  boltHoles.lineTo(radius - diameter / 8, diameter - diameter / 12);
+  boltHoles.lineTo(radius + diameter / 8, diameter - diameter / 12);
+  boltHoles.lineTo(radius + diameter / 8, radius + diameter / 8);
+  boltHoles.lineTo(diameter - diameter / 12, radius + diameter / 8);
+  boltHoles.lineTo(diameter - diameter / 12, radius - diameter / 8);
+  boltHoles.lineTo(radius + diameter / 8, radius - diameter / 8);
+  boltHoles.lineTo(radius + diameter / 8, diameter / 12);
+  boltHoles.lineTo(radius - diameter / 8, diameter / 12);
+  boltHoles.lineTo(radius - diameter / 8, radius - diameter / 8);
+
+  boltFrontPlateShape.holes.push(boltHoles);
+
+  const extrudeBoltFrontPlate = new THREE.ExtrudeGeometry(
+    boltFrontPlateShape,
+    extrudeBoltSettings
+  );
+  const BoltMaterial = new THREE.MeshBasicMaterial({
+    color: "gray",
+    side: THREE.DoubleSide,
+  });
+  const BoltFrontPlateMesh = new THREE.Mesh(
+    extrudeBoltFrontPlate,
+    BoltMaterial
+  );
+
+  return BoltFrontPlateMesh;
+}
+
+function backPlateConnector(){
+  const height = 50;
+  const width = 30;
+  const diameter = 6;
+  const backPlateShape = new THREE.Shape();
+  backPlateShape.moveTo(0,0);
+  backPlateShape.lineTo(0,height);
+  backPlateShape.lineTo(width/2, height);
+  backPlateShape.lineTo(width/2, height - height/4);
+  backPlateShape.bezierCurveTo(width/2, height - height/4, width, height/2, width/2, height/4);
+  backPlateShape.lineTo(width/2, 0);
+  backPlateShape.lineTo(0,0);
+
+  const backPlateHole1 = new THREE.Path();
+  backPlateHole1.absarc(width/4, height - width/4, width/10, 0, Math.PI * 2, false);
+
+  const backPlateHole2 = new THREE.Path();
+  backPlateHole2.absarc(width/4, width/4, width/10, 0, Math.PI * 2, false);
+
+  backPlateShape.holes.push(backPlateHole1);
+  backPlateShape.holes.push(backPlateHole2);
+
+  const bolt1 = boltBase(diameter);
+  const bolt2 = boltBase(diameter);
+  bolt1.position.set(width/6 - width/(diameter * 10),height - width/3 - width/(diameter * 10));
+  bolt2.position.set(width/6 - width/(diameter * 10), width/6 - width/(diameter * 10),0);
+  const extrudeBackPlateSettings = {
+    steps: 1,
+    depth: 5,
+    bevelEnabled: false
+  }
+  const extrudeBackPlate = new THREE.ExtrudeGeometry(backPlateShape, extrudeBackPlateSettings);
+  const material = new THREE.MeshBasicMaterial({color: "purple"});
+  const backPlateMesh = new THREE.Mesh(extrudeBackPlate, material);
+  backPlateMesh.add(bolt1);
+  backPlateMesh.add(bolt2);
+  return backPlateMesh;
+}
+
 function createCockspurHandle(heightBottomConnector, depthBottomConnector){
   const parentObject = new THREE.Object3D();
   const handleBottomConnector = bottomConnector(heightBottomConnector, depthBottomConnector);
   parentObject.add(handleBottomConnector);
 
   const handleZConnector = zConnector(depthBottomConnector);
-  handleZConnector.position.set(0,heightBottomConnector,-depthBottomConnector/2);
+  handleZConnector.position.set(0,heightBottomConnector,-depthBottomConnector);
   handleZConnector.rotation.z -= Math.PI/2;
   handleZConnector.rotation.x -= Math.PI;
   handleZConnector.rotation.y += Math.PI/2;
   parentObject.add(handleZConnector);
 
-  const handleTopConnector = topConnector();
+  const handleTopConnector = topConnector(depthBottomConnector);
   handleTopConnector.position.set(-26,heightBottomConnector + 10,-5)
   parentObject.add(handleTopConnector);
+
+  const handleBackPlate = backPlateConnector();
+  handleBackPlate.position.set(-15,100,-10);
+  parentObject.add(handleBackPlate);
 
   scene.add(parentObject);
 
 }
 
 const heightBottomConnector = 100;
-const depthBottomConnector = 10;
+const depthBottomConnector = 5;
 createCockspurHandle(heightBottomConnector, depthBottomConnector);
 //#endregion
 
