@@ -2,14 +2,13 @@ import "./style.css";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
-import { hue } from "three/tsl";
+import { ThreeMFLoader, Wireframe } from "three/examples/jsm/Addons.js";
 
 // Scene setup
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color( 'white' );
 // Ambient light setup
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
 //#region  Camera Setup
@@ -33,7 +32,7 @@ scene.add(axesHelper);
 //   1000
 // );
 // camera.position.z = 400;
-camera.position.set(0, 2, 500);
+camera.position.set(0, 2, 700);
 
 //#endregion
 //#region DAY-1 of Task based Training (3/1/25)
@@ -904,7 +903,7 @@ camera.position.set(0, 2, 500);
 // const isKeyAvailable = false;
 
 //-----------------------------------------------------------To work on this part Later--------------------------------------------------------------------
-
+//#region To be worked on
 // createHandle1(widthUp,heightUp,heightDown,depth, isKeyAvailable);
 
 // function createHandle1(widthUp,heightUp,heightDown,depth, isKeyAvailable){
@@ -1032,7 +1031,7 @@ camera.position.set(0, 2, 500);
 // const depth = 25;
 // const isKeyAvailable = true;
 // createHandle1(widthUp,heightUp,heightDown,depth, isKeyAvailable);
-
+//#endregion
 //#endregion
 //#endregion
 
@@ -1241,116 +1240,417 @@ camera.position.set(0, 2, 500);
 //   isKeyAvailable
 // );
 
-function handleBackPlate(
-  widthBackPlate,
-  heightBackPlate,
-  holeRadius,
-  backPlateDepth,
-  KeyHoleHeight
-) {
-  const handleBackPlateShape = new THREE.Shape();
-  const radius = heightBackPlate/10;
-  handleBackPlateShape.moveTo(widthBackPlate/2,radius);
-   handleBackPlateShape.absarc(widthBackPlate/2,radius, radius,  Math.PI,0, false );
-    // handleBackPlateShape.lineTo(widthBackPlate, heightBackPlate - radius);
-   handleBackPlateShape.absarc(widthBackPlate/2,heightBackPlate-radius, radius,  0, Math.PI, false );
-  // handleBackPlateShape.lineTo(-0.1, radius);
+//#region Sweet handle backplate
 
-  
-    const keyHole = new THREE.Path();
-    keyHole.moveTo(
-      widthBackPlate / 2,
-      KeyHoleHeight - holeRadius
-    );
-    keyHole.absarc(
-      widthBackPlate / 2,
-      KeyHoleHeight,
-      holeRadius,
-      Math.PI + Math.PI / 3,
-      0 - Math.PI / 3,
-      true
-    );
-    // keyHole.lineTo(
-    //   widthBackPlate / 2 + holeRadius / 2,
-    //   holeRadius
-    // );
+// function handleBackPlate(
+//   widthBackPlate,
+//   heightBackPlate,
+//   holeRadius,
+//   backPlateDepth,
+//   keyHoleYPosition
+// ) {
+//   const handleBackPlateShape = new THREE.Shape();
+//   const radius = heightBackPlate/10;
+//   handleBackPlateShape.moveTo(widthBackPlate/2,radius);
+//    handleBackPlateShape.absarc(widthBackPlate/2,radius, radius,  Math.PI,0, false );
+//     handleBackPlateShape.lineTo(widthBackPlate/2 + radius, heightBackPlate - radius);
+//     handleBackPlateShape.moveTo(widthBackPlate/2,heightBackPlate-radius);
+//    handleBackPlateShape.absarc(widthBackPlate/2,heightBackPlate-radius, radius,  0, Math.PI, false );
+//   handleBackPlateShape.lineTo(widthBackPlate/2 - radius, radius);
 
-    keyHole.absarc(
-      widthBackPlate / 2,
-      KeyHoleHeight-100,
-      holeRadius / 2,
-      0,
-      Math.PI,
-      true
-    );
-    // keyHole.lineTo(
-    //   widthBackPlate / 2 - holeRadius / 2,
-    //   KeyHoleHeight - holeRadius
-    // );
+//     const keyHole = new THREE.Path();
+//     keyHole.moveTo(
+//       widthBackPlate / 2,
+//       keyHoleYPosition - holeRadius
+//     );
+//     keyHole.absarc(
+//       widthBackPlate / 2,
+//       keyHoleYPosition,
+//       holeRadius,
+//       Math.PI + Math.PI / 3,
+//       0 - Math.PI / 3,
+//       true
+//     );
+//     keyHole.lineTo(widthBackPlate/2+ holeRadius/2, keyHoleYPosition-15);
+//     keyHole.absarc(
+//       widthBackPlate / 2,
+//       keyHoleYPosition-15,
+//       holeRadius / 2,
+//       0,
+//       Math.PI,
+//       true
+//     );
+//     keyHole.lineTo(widthBackPlate/2 -  holeRadius/2, keyHoleYPosition- holeRadius);
 
-    handleBackPlateShape.holes.push(keyHole);
-  
+//     handleBackPlateShape.holes.push(keyHole);
 
-  const extrudeBackPlateSettings = {
-    steps: 20,
-    depth: backPlateDepth,
-    bevelEnabled: true,
-    bevelThickness: 4,
-    bevelSize: 1,
-    bevelOffset: 10,
-    bevelSegments: 20,
+//   const extrudeBackPlateSettings = {
+//     steps: 20,
+//     depth: backPlateDepth,
+//     bevelEnabled: false,
+
+//   };
+//   const extrudeHandleBackPlate = new THREE.ExtrudeGeometry(
+//     handleBackPlateShape,
+//     extrudeBackPlateSettings
+//   );
+//   const backPlateMaterial = new THREE.MeshBasicMaterial({ color: "red" });
+//   const backPlateMesh = new THREE.Mesh(
+//     extrudeHandleBackPlate,
+//     backPlateMaterial
+//   );
+//   return backPlateMesh;
+// }
+
+// function createSweetHandle(widthBackPlate,
+//   heightBackPlate,
+//   holeRadius,
+//   backPlateDepth,
+//   keyHoleYPosition){
+
+//   const parentObject = new THREE.Object3D();
+//   const sweetBackPlate1 = handleBackPlate(widthBackPlate,
+//     heightBackPlate,
+//     holeRadius,
+//     backPlateDepth,
+//     keyHoleYPosition);
+//     const sweetBackPlate2 = handleBackPlate(widthBackPlate,
+//       heightBackPlate,
+//       holeRadius,
+//       backPlateDepth,
+//       keyHoleYPosition);
+//   parentObject.add(sweetBackPlate1);
+
+//   sweetBackPlate2.position.set(widthBackPlate + 10, 0, 0);
+//   parentObject.add(sweetBackPlate2);
+
+//   scene.add(parentObject);
+//   }
+
+// const backPlateWidth = 50;
+// const backPlateHeight = 100;
+// const backPlateDepth = 4;
+// const holeRadius = 5; // radius of the Key Hole
+// const keyHoleYPosition = 30; // Position on y axis of Key hole
+
+// createSweetHandle(backPlateWidth,
+//   backPlateHeight,
+//   holeRadius,
+//   backPlateDepth,
+//   keyHoleYPosition);
+//#endregion
+//#endregion
+
+//#region Sweet handle
+
+// function frontConnector(widthFront, heightFront, depthFrontConnector) {
+//   const frontConnectorShape = new THREE.Shape();
+//   frontConnectorShape.moveTo(0, 5);
+//   frontConnectorShape.bezierCurveTo(0, 5, widthFront / 2, 0, widthFront, 5);
+//   frontConnectorShape.lineTo(widthFront, heightFront - 5);
+//   frontConnectorShape.bezierCurveTo(
+//     widthFront,
+//     heightFront - 5,
+//     widthFront / 2,
+//     heightFront,
+//     0,
+//     heightFront - 5
+//   );
+//   frontConnectorShape.lineTo(0, 5);
+
+//   const extrudeFrontConnectorSettings = {
+//     steps: 1,
+//     depth: depthFrontConnector,
+//     bevelEnabled: false,
+//   };
+//   const extrudeFrontConnector = new THREE.ExtrudeGeometry(
+//     frontConnectorShape,
+//     extrudeFrontConnectorSettings
+//   );
+//   const frontConnectorMaterial = new THREE.MeshBasicMaterial({
+//     color: "red",
+
+//     side: THREE.DoubleSide,
+//   });
+//   const frontConnectorMesh = new THREE.Mesh(
+//     extrudeFrontConnector,
+//     frontConnectorMaterial
+//   );
+
+//   const edges = new THREE.EdgesGeometry(extrudeFrontConnector);
+//   const lines = new THREE.LineBasicMaterial({color: "white"});
+//   const edgesFrontConnector = new THREE.LineSegments(edges, lines);
+//  frontConnectorMesh.add(edgesFrontConnector);
+//   return frontConnectorMesh;
+// }
+
+// function handleCurve(widthCurve, heightCurve, heightFront, depthCurve) {
+//   const handleCurveShape = new THREE.Shape();
+//   handleCurveShape.moveTo(widthCurve + 10, 5);
+//   handleCurveShape.bezierCurveTo(widthCurve + 10, 5, 5, 5, 5, widthCurve / 2);
+//   handleCurveShape.lineTo(0, heightCurve);
+//   handleCurveShape.lineTo(widthCurve, heightCurve);
+//   handleCurveShape.bezierCurveTo(
+//     widthCurve,
+//     heightCurve,
+//     widthCurve - 10,
+//     heightCurve / 3,
+//     widthCurve + 10,
+//     heightFront - 5
+//   );
+//   handleCurveShape.lineTo(widthCurve + 10, 5);
+
+//   const extrudeCurveHandleSettings = {
+//     steps: 1,
+//     depth: depthCurve,
+//     bevelEnabled: false,
+//   };
+
+//   const extrudeCurveHandle = new THREE.ExtrudeGeometry(
+//     handleCurveShape,
+//     extrudeCurveHandleSettings
+//   );
+//   const curveHandleMaterial = new THREE.MeshBasicMaterial({
+//     color: "red",
+
+//     side: THREE.DoubleSide,
+//   });
+//   const curveHandleMesh = new THREE.Mesh(
+//     extrudeCurveHandle,
+//     curveHandleMaterial
+//   );
+
+//   const edges = new THREE.EdgesGeometry(extrudeCurveHandle);
+//   const lines = new THREE.LineBasicMaterial({color: "white"});
+//   const edgesCurveHandle = new THREE.LineSegments(edges, lines);
+//   curveHandleMesh.add(edgesCurveHandle);
+
+//   return curveHandleMesh;
+// }
+
+// function createSweetHandle(widthFront, heightFront, depthFrontConnector) {
+//   const parentObject = new THREE.Object3D();
+//   const frontConnectorhandle = frontConnector(
+//     widthFront,
+//     heightFront,
+//     depthFrontConnector
+//   );
+//   parentObject.add(frontConnectorhandle);
+//   const curvehandleConnector = handleCurve(
+//     widthCurve,
+//     heightCurve,
+//     heightFront,
+//     depthCurve
+//   );
+//   curvehandleConnector.position.set(-(widthCurve + 10), 5, depthCurve + 5);
+//   parentObject.add(curvehandleConnector);
+//   curvehandleConnector.rotation.x -= Math.PI / 2;
+//   scene.add(parentObject);
+// }
+// const widthFront = 80;
+// const heightFront = 25;
+// const depthFrontConnector = 15;
+
+// const widthCurve = 25;
+// const heightCurve = 50;
+// const depthCurve = 15;
+
+// createSweetHandle(widthFront, heightFront, depthFrontConnector);
+//#endregion
+
+//#region COCKSPUR HANDLE
+
+function bottomConnector(heightBottomConnector, depthBottomConnector){
+  const widthBottomConnector = 14;
+  const bottomConnectorShape = new THREE.Shape();
+  bottomConnectorShape.moveTo(0,heightBottomConnector);
+  bottomConnectorShape.lineTo(0,widthBottomConnector/2);
+  bottomConnectorShape.absarc(widthBottomConnector/2, widthBottomConnector/2, widthBottomConnector/2,Math.PI, 0, false);
+  bottomConnectorShape.lineTo(widthBottomConnector, heightBottomConnector);
+
+  const extrudeBottomConnectorSettings = {
+    steps: 1,
+    depth: depthBottomConnector,
+    bevelEnabled: false,
   };
-  const extrudeHandleBackPlate = new THREE.ExtrudeGeometry(
-    handleBackPlateShape,
-    extrudeBackPlateSettings
-  );
-  const backPlateMaterial = new THREE.MeshBasicMaterial({ color: "red" });
-  const backPlateMesh = new THREE.Mesh(
-    extrudeHandleBackPlate,
-    backPlateMaterial
-  );
-  return backPlateMesh;
+
+  const extrudeBottomConnector = new THREE.ExtrudeGeometry(bottomConnectorShape, extrudeBottomConnectorSettings);
+  const BottomConnectorMaterial = new THREE.MeshBasicMaterial({color: "red"});
+  const bottomConnectorMesh = new THREE.Mesh(extrudeBottomConnector, BottomConnectorMaterial);
+
+  const edges = new THREE.EdgesGeometry(extrudeBottomConnector);
+  const lines = new THREE.LineBasicMaterial({color: "white"});
+  const edgesBottomConnector = new THREE.LineSegments(edges, lines);
+  bottomConnectorMesh.add(edgesBottomConnector);
+
+  return bottomConnectorMesh;
+
 }
 
-function createSweetHandle(widthBackPlate,
-  heightBackPlate,
-  holeRadius,
-  backPlateDepth,
-  KeyHoleHeight){
+function zConnector(depthBottomConnector){
+const zConnectorShape = new THREE.Shape();
+const heightZConnector = depthBottomConnector;
+const widthZConnector = 10;
 
+
+zConnectorShape.moveTo(0,5);
+
+zConnectorShape.bezierCurveTo(widthZConnector/2 - 5, 5, widthZConnector/2, 0, widthZConnector,  0);
+zConnectorShape.lineTo(widthZConnector,0);
+zConnectorShape.lineTo(widthZConnector,heightZConnector);
+zConnectorShape.lineTo(widthZConnector/2 + 5, heightZConnector);
+zConnectorShape.bezierCurveTo(widthZConnector/2 + 5, heightZConnector, widthZConnector/2, heightZConnector, 0, heightZConnector + 5);
+zConnectorShape.lineTo(0,heightZConnector + 5);
+zConnectorShape.lineTo(0,5);
+
+
+const extrudeZConnectorSettings = {
+  steps: 1,
+  depth: 14,
+  bevelEnabled: false,
+};
+
+const extrudeZConnector = new THREE.ExtrudeGeometry(zConnectorShape, extrudeZConnectorSettings);
+const zConnectorMaterial = new THREE.MeshBasicMaterial({color: "yellow"});
+const zConnectorMesh = new THREE.Mesh(extrudeZConnector, zConnectorMaterial);
+
+const edges = new THREE.EdgesGeometry(extrudeZConnector);
+  const lines = new THREE.LineBasicMaterial({color: "white"});
+  const edgesZConnector = new THREE.LineSegments(edges, lines);
+
+  zConnectorMesh.add(edgesZConnector);
+  
+return zConnectorMesh;
+
+}
+
+function topConnector(){
+  const width = 40;
+  const connectorWidth = 14;
+  const height = 30;
+  const topConnectorShape = new THREE.Shape();
+  topConnectorShape.moveTo(width - connectorWidth, 0);
+  topConnectorShape.bezierCurveTo(width - connectorWidth, 0, width - connectorWidth, height/6,width - connectorWidth - width/4, height/6);
+  topConnectorShape.bezierCurveTo(width - connectorWidth - width/4, height/6, width/3, height/2 - height/3, width/8, height/2 - height/10);
+  topConnectorShape.bezierCurveTo(width/8, height/2 - height/10, 0, height/2, width/8, height/2 + height/10);
+  topConnectorShape.bezierCurveTo(width/8, height/2 + height/10, width/3, height/2 + height/6, width - connectorWidth - width/10, height - height/10);
+  topConnectorShape.bezierCurveTo(width - connectorWidth - width/10, height - height/10, width - connectorWidth, height, width - width/10, height- height/3);
+  topConnectorShape.bezierCurveTo(width - width/10, height- height/3, width, height/2, width, 0)
+  topConnectorShape.lineTo(width - connectorWidth, 0);
+  
+
+  const topConnectorHole = new THREE.Path();
+  topConnectorHole.absarc(width-connectorWidth,height/2, height/4, 0, Math.PI * 2, false);
+
+  topConnectorShape.holes.push(topConnectorHole);
+
+  const connector = new THREE.SphereGeometry(height/4,32,18,0, Math.PI * 2, 0,Math.PI/2);
+  const connectorMaterial = new THREE.MeshBasicMaterial({color: "pink"});
+  const connectorMesh = new THREE.Mesh(connector, connectorMaterial);
+  connectorMesh.rotation.x += Math.PI/2;
+  connectorMesh.position.set(width/2 + width/7 + width/150,height/2,connectorWidth/2);
+
+  const extrudeTopConnectorSettings = {
+    steps: 1,
+    depth: 10,
+    bevelEnabled: false,
+  };
+
+  const extrudeTopConnector = new THREE.ExtrudeGeometry(topConnectorShape, extrudeTopConnectorSettings);
+  const topConnectorMaterial = new THREE.MeshBasicMaterial({color: "green"});
+  const topConnectorMesh = new THREE.Mesh(extrudeTopConnector, topConnectorMaterial);
+
+  topConnectorMesh.add(connectorMesh);
+  const edges = new THREE.EdgesGeometry(extrudeTopConnector);
+  const lines = new THREE.LineBasicMaterial({color: "white"});
+  const edgesTopConnector = new THREE.LineSegments(edges, lines);
+
+  topConnectorMesh.add(edgesTopConnector);
+  return topConnectorMesh;
+
+}
+
+function createCockspurHandle(heightBottomConnector, depthBottomConnector){
   const parentObject = new THREE.Object3D();
-  const sweetBackPlate1 = handleBackPlate(widthBackPlate,
-    heightBackPlate,
-    holeRadius,
-    backPlateDepth,
-    KeyHoleHeight);
-    const sweetBackPlate2 = handleBackPlate(widthBackPlate,
-      heightBackPlate,
-      holeRadius,
-      backPlateDepth,
-      KeyHoleHeight);
-  parentObject.add(sweetBackPlate1);
+  const handleBottomConnector = bottomConnector(heightBottomConnector, depthBottomConnector);
+  parentObject.add(handleBottomConnector);
 
-  sweetBackPlate2.position.set(250, 0, 0);
-  parentObject.add(sweetBackPlate2);
+  const handleZConnector = zConnector(depthBottomConnector);
+  handleZConnector.position.set(0,heightBottomConnector,-depthBottomConnector/2);
+  handleZConnector.rotation.z -= Math.PI/2;
+  handleZConnector.rotation.x -= Math.PI;
+  handleZConnector.rotation.y += Math.PI/2;
+  parentObject.add(handleZConnector);
+
+  const handleTopConnector = topConnector();
+  handleTopConnector.position.set(-26,heightBottomConnector + 10,-5)
+  parentObject.add(handleTopConnector);
 
   scene.add(parentObject);
-  }
 
- 
-const backPlateWidth = 100;
-const backPlateHeight = 700;
-const holeRadius = 50;
-const backPlateDepth = 40;
+}
 
-const KeyHoleHeight = 200;
+const heightBottomConnector = 100;
+const depthBottomConnector = 10;
+createCockspurHandle(heightBottomConnector, depthBottomConnector);
+//#endregion
 
+//#region Nut Bolt
 
-createSweetHandle(backPlateWidth,
-  backPlateHeight,
-  holeRadius,
-  backPlateDepth,
-  KeyHoleHeight);
+// function boltBase(diameter) {
+//   const radius = diameter / 2;
+
+//   const extrudeBoltSettings = {
+//     steps: 1,
+//     depth: 5,
+//     bevelEnabled: false,
+//   };
+
+//   const boltFrontPlateShape = new THREE.Shape();
+//   boltFrontPlateShape.moveTo(0, 0);
+//   boltFrontPlateShape.absarc(radius, radius, radius, 0, Math.PI * 2, true);
+
+//   const boltHoles = new THREE.Path();
+//   boltHoles.moveTo(diameter / 12, radius - diameter / 8);
+//   boltHoles.lineTo(diameter / 12, radius + diameter / 8);
+//   boltHoles.lineTo(radius - diameter / 8, radius + diameter / 8);
+//   boltHoles.lineTo(radius - diameter / 8, diameter - diameter / 12);
+//   boltHoles.lineTo(radius + diameter / 8, diameter - diameter / 12);
+//   boltHoles.lineTo(radius + diameter / 8, radius + diameter / 8);
+//   boltHoles.lineTo(diameter - diameter / 12, radius + diameter / 8);
+//   boltHoles.lineTo(diameter - diameter / 12, radius - diameter / 8);
+//   boltHoles.lineTo(radius + diameter / 8, radius - diameter / 8);
+//   boltHoles.lineTo(radius + diameter / 8, diameter / 12);
+//   boltHoles.lineTo(radius - diameter / 8, diameter / 12);
+//   boltHoles.lineTo(radius - diameter / 8, radius - diameter / 8);
+
+//   boltFrontPlateShape.holes.push(boltHoles);
+
+//   const extrudeBoltFrontPlate = new THREE.ExtrudeGeometry(
+//     boltFrontPlateShape,
+//     extrudeBoltSettings
+//   );
+//   const BoltMaterial = new THREE.MeshBasicMaterial({
+//     color: "red",
+//     side: THREE.DoubleSide,
+//   });
+//   const BoltFrontPlateMesh = new THREE.Mesh(
+//     extrudeBoltFrontPlate,
+//     BoltMaterial
+//   );
+
+//   return BoltFrontPlateMesh;
+// }
+
+// function createBolt(diameter) {
+//   const boltBaseConnector = boltBase(diameter);
+
+//   scene.add(boltBaseConnector);
+// }
+
+// const diameter = 50;
+
+// createBolt(diameter);
 //#endregion
 
 //#region  Renderer setup
