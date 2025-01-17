@@ -2264,7 +2264,7 @@ function backPlate(width, height, isKeyAvailable){
   }
   const material = new THREE.LineBasicMaterial({color: "white"});
   const backPlate = new THREE.LineLoop(shape, material);
-  backPlate.position.set(origin.x, origin.y + height * 1.5);
+  backPlate.position.set(0, height * 1.5);
   //Key hole
   if(isKeyAvailable){
     const keyHeight = 15;
@@ -2298,14 +2298,12 @@ function createVivoShotHandle(widthBottom, heightBottom, isKeyAvailable){
   const bottomHandleConnector = bottomHandle(widthBottom, heightBottom);
   bottomHandleConnector.position.set(-widthBottom/2,-heightBottom,0);
   const handleBackPlate = backPlate(widthBackPlate, heightBackPlate, isKeyAvailable);
-
-  // handleBackPlate.position.set(0, heightBottom - heightBackPlate/2 - heightBackPlate/6,0);
   bottomHandleConnector.add(handleBackPlate);
 
   scene.add(bottomHandleConnector);
 }
 
-const origin = new THREE.Vector2(0,0);
+const origin = new THREE.Vector2(100,200);
 // Bottom handle connector dimentions
 const widthBottom = 25;
 const heightBottom = 160;
