@@ -2,6 +2,7 @@ import "./style.css";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
 import { or, vec2 } from "three/tsl";
 
 
@@ -1241,7 +1242,7 @@ camera.position.set(0, 2, 700);
 //   isKeyAvailable
 // );
 
-//#region Sweet handle backplate
+// #region Sweet handle backplate
 
 // function handleBackPlate(
 //   widthBackPlate,
@@ -1962,139 +1963,139 @@ camera.position.set(0, 2, 700);
 
 //#endregion
 
-//#region cockSpur Lines
+//#region cockSpur Lines Geometry
 
-function bottomConnector(height){
-  const width = 14;
+// function bottomConnector(height){
+//   const width = 14;
   
-  const bottomArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2, width/2, Math.PI, 0, false).getPoints(10);
+//   const bottomArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2, width/2, Math.PI, 0, false).getPoints(10);
   
-  const bottomShapePoints = [
-    new THREE.Vector2(origin.x , origin.y + height),
-    ...bottomArc,
-    new THREE.Vector2(origin.x + width, origin.y + height),
+//   const bottomShapePoints = [
+//     new THREE.Vector2(origin.x , origin.y + height),
+//     ...bottomArc,
+//     new THREE.Vector2(origin.x + width, origin.y + height),
     
-  ];
+//   ];
 
-  const shape = new THREE.BufferGeometry().setFromPoints(bottomShapePoints);
-  const material = new THREE.LineBasicMaterial({color: "white"});
-  const bottomHandle = new THREE.LineLoop(shape, material);
-  return bottomHandle;
-}
+//   const shape = new THREE.BufferGeometry().setFromPoints(bottomShapePoints);
+//   const material = new THREE.LineBasicMaterial({color: "white"});
+//   const bottomHandle = new THREE.LineLoop(shape, material);
+//   return bottomHandle;
+// }
 
-function topConnector(){
-  const height = 40;
-  const width = 40;
-  const smoothnessFactor = 10;
-  const rightCurve = new THREE.CubicBezierCurve(
-    new THREE.Vector2(origin.x + width, origin.y),
-    new THREE.Vector2(origin.x + width, origin.y + height/2),
-    new THREE.Vector2(origin.x + width - width/4, origin.y + height - height/8),
-    new THREE.Vector2(origin.x + width - width/3, origin.y + height - height/10),
-  ).getPoints(smoothnessFactor);
+// function topConnector(){
+//   const height = 40;
+//   const width = 40;
+//   const smoothnessFactor = 10;
+//   const rightCurve = new THREE.CubicBezierCurve(
+//     new THREE.Vector2(origin.x + width, origin.y),
+//     new THREE.Vector2(origin.x + width, origin.y + height/2),
+//     new THREE.Vector2(origin.x + width - width/4, origin.y + height - height/8),
+//     new THREE.Vector2(origin.x + width - width/3, origin.y + height - height/10),
+//   ).getPoints(smoothnessFactor);
 
   
-  const topCurve = new THREE.CubicBezierCurve(
-    new THREE.Vector2(origin.x + width - width/3, origin.y + height - height/10),
-    new THREE.Vector2(origin.x + width - width/2, origin.y + height - height/8 ),
-    new THREE.Vector2(origin.x + width/2, origin.y + height - height/8 ),
-    new THREE.Vector2(origin.x + width/2 - width/12, origin.y + height - height/7 ),
-  ).getPoints(smoothnessFactor);
+//   const topCurve = new THREE.CubicBezierCurve(
+//     new THREE.Vector2(origin.x + width - width/3, origin.y + height - height/10),
+//     new THREE.Vector2(origin.x + width - width/2, origin.y + height - height/8 ),
+//     new THREE.Vector2(origin.x + width/2, origin.y + height - height/8 ),
+//     new THREE.Vector2(origin.x + width/2 - width/12, origin.y + height - height/7 ),
+//   ).getPoints(smoothnessFactor);
 
-  const topLeftCurve = new THREE.CubicBezierCurve(
-    new THREE.Vector2(origin.x + width/2 - width/12, origin.y + height - height/7),
-    new THREE.Vector2(origin.x + width/2 - width/8, origin.y + height - height/6),
-    new THREE.Vector2(origin.x , origin.y + height - height/5),
-    new THREE.Vector2(origin.x + -width/8, origin.y + height - height/3),
-  ).getPoints(smoothnessFactor);
+//   const topLeftCurve = new THREE.CubicBezierCurve(
+//     new THREE.Vector2(origin.x + width/2 - width/12, origin.y + height - height/7),
+//     new THREE.Vector2(origin.x + width/2 - width/8, origin.y + height - height/6),
+//     new THREE.Vector2(origin.x , origin.y + height - height/5),
+//     new THREE.Vector2(origin.x + -width/8, origin.y + height - height/3),
+//   ).getPoints(smoothnessFactor);
 
-  const leftCurve = new THREE.CubicBezierCurve(
-    new THREE.Vector2(origin.x + -width/8, origin.y + height - height/3),
-    new THREE.Vector2(origin.x , origin.y + height/2 - height/10),
-    new THREE.Vector2(origin.x + width/4, origin.y + height/2 - height/8),
-    new THREE.Vector2(origin.x + width/3, origin.y + height/3),
-  ).getPoints(smoothnessFactor);
+//   const leftCurve = new THREE.CubicBezierCurve(
+//     new THREE.Vector2(origin.x + -width/8, origin.y + height - height/3),
+//     new THREE.Vector2(origin.x , origin.y + height/2 - height/10),
+//     new THREE.Vector2(origin.x + width/4, origin.y + height/2 - height/8),
+//     new THREE.Vector2(origin.x + width/3, origin.y + height/3),
+//   ).getPoints(smoothnessFactor);
 
-  const bottomCurve = new THREE.CubicBezierCurve(
-    new THREE.Vector2(origin.x + width/3, origin.y + height/3),
-    new THREE.Vector2(origin.x + (width - 14), origin.y + height/3),
-    new THREE.Vector2(origin.x + (width - 14), origin.y + height/4),
-    new THREE.Vector2(origin.x + (width - 14), origin.y),
-  ).getPoints(smoothnessFactor);
+//   const bottomCurve = new THREE.CubicBezierCurve(
+//     new THREE.Vector2(origin.x + width/3, origin.y + height/3),
+//     new THREE.Vector2(origin.x + (width - 14), origin.y + height/3),
+//     new THREE.Vector2(origin.x + (width - 14), origin.y + height/4),
+//     new THREE.Vector2(origin.x + (width - 14), origin.y),
+//   ).getPoints(smoothnessFactor);
 
-  const topShapePoints = [
-    ...rightCurve,
-    ...topCurve,
-    ...topLeftCurve,
-    ...leftCurve,
-    ...bottomCurve
+//   const topShapePoints = [
+//     ...rightCurve,
+//     ...topCurve,
+//     ...topLeftCurve,
+//     ...leftCurve,
+//     ...bottomCurve
     
-  ];
+//   ];
 
-  const holePoints = new THREE.ArcCurve(origin.x + width/2, origin.y + height/2, height/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
-  const holeShape = new THREE.BufferGeometry().setFromPoints(holePoints);
-  const shape = new THREE.BufferGeometry().setFromPoints(topShapePoints);
-  const material = new THREE.LineBasicMaterial({color: "white"});
-  const topHandle = new THREE.LineLoop(shape, material);
-  const hole = new THREE.Line(holeShape, material);
-  hole.position.set(0 , height/10)
-  topHandle.add(hole);
-  return topHandle;
-}
+//   const holePoints = new THREE.ArcCurve(origin.x + width/2, origin.y + height/2, height/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
+//   const holeShape = new THREE.BufferGeometry().setFromPoints(holePoints);
+//   const shape = new THREE.BufferGeometry().setFromPoints(topShapePoints);
+//   const material = new THREE.LineBasicMaterial({color: "white"});
+//   const topHandle = new THREE.LineLoop(shape, material);
+//   const hole = new THREE.Line(holeShape, material);
+//   hole.position.set(0 , height/10)
+//   topHandle.add(hole);
+//   return topHandle;
+// }
 
-function backPlate(){
-  const width = 30;
-  const height = 50;
-  const platePoints = [
-    new THREE.Vector2(origin.x ,origin.y),
-    new THREE.Vector2(origin.x + width/2,origin.y),
-    new THREE.Vector2(origin.x + width/2, origin.y + height/4),
-    new THREE.Vector2(origin.x + width, origin.y + height/3),
-    new THREE.Vector2(origin.x + width, origin.y + (height - height/3)),
-    new THREE.Vector2(origin.x + width/2, origin.y + (height - height/4)),
-    new THREE.Vector2(origin.x + width/2, origin.y + height),
-    new THREE.Vector2(origin.x , origin.y + height),
-    new THREE.Vector2(origin.x ,origin.y),
-  ];
+// function backPlate(){
+//   const width = 30;
+//   const height = 50;
+//   const platePoints = [
+//     new THREE.Vector2(origin.x ,origin.y),
+//     new THREE.Vector2(origin.x + width/2,origin.y),
+//     new THREE.Vector2(origin.x + width/2, origin.y + height/4),
+//     new THREE.Vector2(origin.x + width, origin.y + height/3),
+//     new THREE.Vector2(origin.x + width, origin.y + (height - height/3)),
+//     new THREE.Vector2(origin.x + width/2, origin.y + (height - height/4)),
+//     new THREE.Vector2(origin.x + width/2, origin.y + height),
+//     new THREE.Vector2(origin.x , origin.y + height),
+//     new THREE.Vector2(origin.x ,origin.y),
+//   ];
 
-  const hole1Points = new THREE.ArcCurve(origin.x + width/4, origin.y + width/4, width/10, 0, Math.PI * 2, false).getPoints(10);
-  const hole2Points = new THREE.ArcCurve(origin.x + width/4, origin.y + (height - width/4), width/10, 0, Math.PI * 2, false).getPoints(10);
+//   const hole1Points = new THREE.ArcCurve(origin.x + width/4, origin.y + width/4, width/10, 0, Math.PI * 2, false).getPoints(10);
+//   const hole2Points = new THREE.ArcCurve(origin.x + width/4, origin.y + (height - width/4), width/10, 0, Math.PI * 2, false).getPoints(10);
    
-  const shape = new THREE.BufferGeometry().setFromPoints(platePoints);
-  const material = new THREE.LineBasicMaterial({color: "white"});
-  const backPlateConnector = new THREE.Line(shape, material);
-  const holeShape1 = new THREE.BufferGeometry().setFromPoints(hole1Points);
-  const holeShape2 = new THREE.BufferGeometry().setFromPoints(hole2Points);
-  const hole1 = new THREE.Line(holeShape1, material);
-  const hole2 = new THREE.Line(holeShape2, material);
+//   const shape = new THREE.BufferGeometry().setFromPoints(platePoints);
+//   const material = new THREE.LineBasicMaterial({color: "white"});
+//   const backPlateConnector = new THREE.Line(shape, material);
+//   const holeShape1 = new THREE.BufferGeometry().setFromPoints(hole1Points);
+//   const holeShape2 = new THREE.BufferGeometry().setFromPoints(hole2Points);
+//   const hole1 = new THREE.Line(holeShape1, material);
+//   const hole2 = new THREE.Line(holeShape2, material);
 
-  backPlateConnector.add(hole1);
-  backPlateConnector.add(hole2);
-  return backPlateConnector;
-}
+//   backPlateConnector.add(hole1);
+//   backPlateConnector.add(hole2);
+//   return backPlateConnector;
+// }
 
-function createCockSpurLines(heightBottom, widthBottom, isRotation){
-  const topHandleConnector = topConnector();
-  const bottomHandleConnector = bottomConnector(heightBottom);
-  const backPlateConnector = backPlate();
-  topHandleConnector.position.set(- widthBottom/2,-widthBottom/2);
-  bottomHandleConnector.position.set((widthBottom - widthBottom/3)-widthBottom/60, -heightBottom, 0);
-  topHandleConnector.add(backPlateConnector);
-  topHandleConnector.add(bottomHandleConnector);
+// function createCockSpurLines(heightBottom, widthBottom, isRotation){
+//   const topHandleConnector = topConnector();
+//   const bottomHandleConnector = bottomConnector(heightBottom);
+//   const backPlateConnector = backPlate();
+//   topHandleConnector.position.set(- widthBottom/2,-widthBottom/2);
+//   bottomHandleConnector.position.set((widthBottom - widthBottom/3)-widthBottom/60, -heightBottom, 0);
+//   topHandleConnector.add(backPlateConnector);
+//   topHandleConnector.add(bottomHandleConnector);
 
-  if(isRotation){
-    topHandleConnector.rotation.y += Math.PI;
-    topHandleConnector.position.set(widthBottom/2, -widthBottom/2,0 );
-  }
-  scene.add(topHandleConnector);
-}
+//   if(isRotation){
+//     topHandleConnector.rotation.y += Math.PI;
+//     topHandleConnector.position.set(widthBottom/2, -widthBottom/2,0 );
+//   }
+//   scene.add(topHandleConnector);
+// }
 
-const origin = new THREE.Vector2(0,0);
-const heightBottom = 100;
-const widthBottom = 40;
-const isRotation = false;
+// const origin = new THREE.Vector2(0,0);
+// const heightBottom = 100;
+// const widthBottom = 40;
+// const isRotation = false;
 
-createCockSpurLines(heightBottom, widthBottom, isRotation);
+// createCockSpurLines(heightBottom, widthBottom, isRotation);
 //#endregion
 
 //#region Sweet Handle Line Geometry"
@@ -2194,6 +2195,129 @@ createCockSpurLines(heightBottom, widthBottom, isRotation);
 // const isRotation = true;
 // createSweetHandle(widthHandle, heightHandle,widthBackPlate, heightBackPlate,isRotation);
 //#endregion
+
+//#region Vivo Shot Lines Geometry
+
+function bottomHandle(widthBottom, heightBottom){
+  const smoothnessFactor = 12;
+  const bottomCurve = new THREE.QuadraticBezierCurve(
+    new THREE.Vector2(origin.x + widthBottom/12, origin.y),
+    new THREE.Vector2(origin.x + widthBottom/2,  origin.y - widthBottom/12),
+    new THREE.Vector2(origin.x + (widthBottom - widthBottom/12), origin.y)
+  ).getPoints(smoothnessFactor);
+
+  const topCurve = new THREE.QuadraticBezierCurve(
+    new THREE.Vector2(origin.x + widthBottom, origin.y + heightBottom),
+    new THREE.Vector2(origin.x + widthBottom/2, origin.y + heightBottom + widthBottom/12),
+    new THREE.Vector2(origin.x , origin.y + heightBottom),
+  ).getPoints(smoothnessFactor);
+  const points = [
+    ...bottomCurve,
+    new THREE.Vector2(origin.x + widthBottom, origin.y + heightBottom),
+    ...topCurve,
+    new THREE.Vector2(origin.x + widthBottom/12, origin.y),
+  ];
+
+  const shape = new THREE.BufferGeometry().setFromPoints(points);
+  const material = new THREE.LineBasicMaterial({color: "white"});
+  const bottomHandle = new THREE.Line(shape, material);
+
+  return bottomHandle;
+
+}
+
+function backPlate(width, height, isKeyAvailable){
+  const smoothnessFactor = 12;
+  const topCurve = new THREE.QuadraticBezierCurve(
+    new THREE.Vector2(origin.x + width, origin.y + height),
+    new THREE.Vector2(origin.x + width/2, origin.y + height + width/6),
+    new THREE.Vector2(origin.x, origin.y + height),
+  ).getPoints(smoothnessFactor);
+  
+  const keyTopCurve = new THREE.QuadraticBezierCurve(
+    new THREE.Vector2(origin.x + width, origin.y + (height * 1.5)),
+    new THREE.Vector2(origin.x + width/2, origin.y + (height * 1.5) + width/6),
+    new THREE.Vector2(origin.x, origin.y + height * 1.5),
+  ).getPoints(smoothnessFactor);
+
+  
+  const points = [
+    new THREE.Vector2(origin.x + width, origin.y),
+    new THREE.Vector2(origin.x + width, origin.y + height),
+    ...topCurve,
+    new THREE.Vector2(origin.x, origin.y)
+  ];
+
+  const withKeyPoints = [
+    new THREE.Vector2(origin.x + width, origin.y),
+    new THREE.Vector2(origin.x + width, origin.y + height),
+    ...keyTopCurve,
+    new THREE.Vector2(origin.x, origin.y)
+  ];
+
+  let shape;
+  if(isKeyAvailable){
+  shape = new THREE.BufferGeometry().setFromPoints(withKeyPoints);
+  }
+  else{
+   shape = new THREE.BufferGeometry().setFromPoints(points);
+  }
+  const material = new THREE.LineBasicMaterial({color: "white"});
+  const backPlate = new THREE.LineLoop(shape, material);
+  backPlate.position.set(origin.x, origin.y + height * 1.5);
+  //Key hole
+  if(isKeyAvailable){
+    const keyHeight = 15;
+  const keyBottomArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2, width/8, Math.PI , 0, false).getPoints(smoothnessFactor);
+  const keyTopArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2 + keyHeight,width/4, -Math.PI/3, Math.PI + Math.PI/3, false).getPoints(smoothnessFactor);
+  const keyHolePoints = [
+    ...keyBottomArc,
+    ...keyTopArc
+  ];
+
+  const KeyHoleShape = new THREE.BufferGeometry().setFromPoints(keyHolePoints);
+  const keyHole = new THREE.LineLoop(KeyHoleShape, material);
+  keyHole.position.set(0, height,0)
+  backPlate.add(keyHole);
+  }
+  
+
+
+  // Back plate hole
+  const holeArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2, width/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
+  const holeShape = new THREE.BufferGeometry().setFromPoints(holeArc);
+  const holeLine = new THREE.Line(holeShape, material);
+  holeLine.position.set(0, height - width,0);
+  backPlate.add(holeLine);
+
+  return backPlate;
+  
+}
+
+function createVivoShotHandle(widthBottom, heightBottom, isKeyAvailable){
+  const bottomHandleConnector = bottomHandle(widthBottom, heightBottom);
+  bottomHandleConnector.position.set(-widthBottom/2,-heightBottom,0);
+  const handleBackPlate = backPlate(widthBackPlate, heightBackPlate, isKeyAvailable);
+
+  // handleBackPlate.position.set(0, heightBottom - heightBackPlate/2 - heightBackPlate/6,0);
+  bottomHandleConnector.add(handleBackPlate);
+
+  scene.add(bottomHandleConnector);
+}
+
+const origin = new THREE.Vector2(0,0);
+// Bottom handle connector dimentions
+const widthBottom = 25;
+const heightBottom = 160;
+
+// BackPlate dimentions
+const widthBackPlate = widthBottom;
+const heightBackPlate = 80;
+const isKeyAvailable = true;
+
+createVivoShotHandle(widthBottom, heightBottom, isKeyAvailable);
+//#endregion
+
 //#endregion
 
 //#region Nut Bolt
