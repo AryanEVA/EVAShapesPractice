@@ -2228,31 +2228,32 @@ function bottomHandle(widthBottom, heightBottom){
 
 function backPlate(width, height, isKeyAvailable){
   const smoothnessFactor = 12;
+  const originNew = new THREE.Vector2(origin.x, origin.y + height * 1.3);
   const topCurve = new THREE.QuadraticBezierCurve(
-    new THREE.Vector2(origin.x + width, origin.y + height),
-    new THREE.Vector2(origin.x + width/2, origin.y + height + width/6),
-    new THREE.Vector2(origin.x, origin.y + height),
+    new THREE.Vector2(originNew.x + width, originNew.y + height),
+    new THREE.Vector2(originNew.x + width/2, originNew.y + height + width/6),
+    new THREE.Vector2(originNew.x, originNew.y + height),
   ).getPoints(smoothnessFactor);
   
   const keyTopCurve = new THREE.QuadraticBezierCurve(
-    new THREE.Vector2(origin.x + width, origin.y + (height * 1.5)),
-    new THREE.Vector2(origin.x + width/2, origin.y + (height * 1.5) + width/6),
-    new THREE.Vector2(origin.x, origin.y + height * 1.5),
+    new THREE.Vector2(originNew.x + width, originNew.y + (height * 1.5)),
+    new THREE.Vector2(originNew.x + width/2, originNew.y + (height * 1.5) + width/6),
+    new THREE.Vector2(originNew.x, originNew.y + height * 1.5),
   ).getPoints(smoothnessFactor);
 
   
   const points = [
-    new THREE.Vector2(origin.x + width, origin.y),
-    new THREE.Vector2(origin.x + width, origin.y + height),
+    new THREE.Vector2(originNew.x + width, originNew.y),
+    new THREE.Vector2(originNew.x + width, originNew.y + height),
     ...topCurve,
-    new THREE.Vector2(origin.x, origin.y)
+    new THREE.Vector2(originNew.x, originNew.y)
   ];
 
   const withKeyPoints = [
-    new THREE.Vector2(origin.x + width, origin.y),
-    new THREE.Vector2(origin.x + width, origin.y + height),
+    new THREE.Vector2(originNew.x + width, originNew.y),
+    new THREE.Vector2(originNew.x + width, originNew.y + height),
     ...keyTopCurve,
-    new THREE.Vector2(origin.x, origin.y)
+    new THREE.Vector2(originNew.x, originNew.y)
   ];
 
   let shape;
@@ -2264,12 +2265,12 @@ function backPlate(width, height, isKeyAvailable){
   }
   const material = new THREE.LineBasicMaterial({color: "white"});
   const backPlate = new THREE.LineLoop(shape, material);
-  backPlate.position.set(0, height * 1.5);
+
   //Key hole
   if(isKeyAvailable){
     const keyHeight = 15;
-  const keyBottomArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2, width/8, Math.PI , 0, false).getPoints(smoothnessFactor);
-  const keyTopArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2 + keyHeight,width/4, -Math.PI/3, Math.PI + Math.PI/3, false).getPoints(smoothnessFactor);
+  const keyBottomArc = new THREE.ArcCurve(originNew.x + width/2, originNew.y + width/2, width/8, Math.PI , 0, false).getPoints(smoothnessFactor);
+  const keyTopArc = new THREE.ArcCurve(originNew.x + width/2, originNew.y + width/2 + keyHeight,width/4, -Math.PI/3, Math.PI + Math.PI/3, false).getPoints(smoothnessFactor);
   const keyHolePoints = [
     ...keyBottomArc,
     ...keyTopArc
@@ -2281,10 +2282,8 @@ function backPlate(width, height, isKeyAvailable){
   backPlate.add(keyHole);
   }
   
-
-
   // Back plate hole
-  const holeArc = new THREE.ArcCurve(origin.x + width/2, origin.y + width/2, width/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
+  const holeArc = new THREE.ArcCurve(originNew.x + width/2, originNew.y + width/2, width/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
   const holeShape = new THREE.BufferGeometry().setFromPoints(holeArc);
   const holeLine = new THREE.Line(holeShape, material);
   holeLine.position.set(0, height - width,0);
@@ -2296,14 +2295,13 @@ function backPlate(width, height, isKeyAvailable){
 
 function createVivoShotHandle(widthBottom, heightBottom, isKeyAvailable){
   const bottomHandleConnector = bottomHandle(widthBottom, heightBottom);
-  bottomHandleConnector.position.set(-widthBottom/2,-heightBottom,0);
   const handleBackPlate = backPlate(widthBackPlate, heightBackPlate, isKeyAvailable);
   bottomHandleConnector.add(handleBackPlate);
 
   scene.add(bottomHandleConnector);
 }
 
-const origin = new THREE.Vector2(100,200);
+const origin = new THREE.Vector2(0,0);
 // Bottom handle connector dimentions
 const widthBottom = 25;
 const heightBottom = 160;
