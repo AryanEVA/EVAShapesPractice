@@ -2510,78 +2510,136 @@ camera.position.set(0, 2, 700);
 
 
 // scene.add(mesh);
-const shape = new THREE.Shape();
-const height = 300;
-const width = 200;
-shape.absarc(0, 0, width/10, 0, Math.PI * 2, false);
+// const shape = new THREE.Shape();
+// const height = 300;
+// const width = 200;
+// shape.absarc(0, 0, width/10, 0, Math.PI * 2, false);
+
+// const path = new THREE.CurvePath();
+
+
+// const bottomLine = new THREE.LineCurve3(
+//   new THREE.Vector3(0,0,0 ),
+//   new THREE.Vector3(0,0,width - width/10),
+// );
+
+// path.add(bottomLine);
+// const bottomCurve = new THREE.QuadraticBezierCurve3(
+// 	new THREE.Vector3( 0, 0, width - width/10 ),
+// 	new THREE.Vector3( 0, 0, width ),
+// 	new THREE.Vector3( 0, height/8, width ),
+// );
+// path.add(bottomCurve);
+// const middleLine = new THREE.LineCurve3(
+//   new THREE.Vector3(0,height/8, width),
+//   new THREE.Vector3(0, height - height/8, width),
+// );
+
+// path.add(middleLine);
+// const topCurve = new THREE.QuadraticBezierCurve3(
+//   new THREE.Vector3(0, height - height/8, width),
+//   new THREE.Vector3(0, height, width),
+//   new THREE.Vector3(0, height, width - width/10)
+// );
+// path.add(topCurve);
+// const topLine = new THREE.LineCurve3(
+//   new THREE.Vector3(0, height, width - width/10),
+//   new THREE.Vector3(0, height, 0),
+// );
+// path.add(topLine);
+// const extrudeSettings = {
+//   steps: 200,
+//   extrudePath: path,
+// };
 
 
 
-const bottomLine = new THREE.LineCurve3(
-  new THREE.Vector3(0,0,0 ),
-  new THREE.Vector3(0,0,width - width/10),
-);
+// const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
 
-const bottomCurve = new THREE.QuadraticBezierCurve3(
-	new THREE.Vector3( 0, 0, width - width/10 ),
-	new THREE.Vector3( 0, 0, width ),
-	new THREE.Vector3( 0, height/8, width ),
-);
+// const material = new THREE.MeshBasicMaterial({ color: "red" });
+// const mesh = new THREE.Mesh(geometry, material);
 
-const middleLine = new THREE.LineCurve3(
-  new THREE.Vector3(0,height/8, width),
-  new THREE.Vector3(0, height- height/8, width),
-);
+// mesh.rotation.y += Math.PI/2;
 
-const topCurve = new THREE.QuadraticBezierCurve3(
-  new THREE.Vector3(0, height - height/8, width),
-  new THREE.Vector3(0, height, width),
-  new THREE.Vector3(0, height, width - width/10)
-);
+// scene.add(mesh);
 
-const topLine = new THREE.LineCurve3(
-  new THREE.Vector3(0, height, width - width/10),
-  new THREE.Vector3(0, height, 0),
-);
-const extrudeSettings = {
-  steps: 10,
-  extrudePath: bottomLine,
-};
-const extrudeSettings2 = {
-  steps: 200,
-  extrudePath: bottomCurve,
+//#endregion
+//#region handle extrusion
+
+function createShape(origin, radius) {
+  const shape = new THREE.Shape();
+  shape.absarc(origin.x, origin.y, radius, 0, Math.PI * 2, false);
+  return shape;
 }
-const extrudeSettings3 = {
-  steps: 200,
-  extrudePath: middleLine,
-}
-const extrudeSettings4 = {
-  steps: 200,
-  extrudePath: topCurve,
-}
-const extrudeSettings5 = {
-  steps: 200,
-  extrudePath: topLine,
+
+function createPath(origin, height, width) {
+  const bottomLine = new THREE.LineCurve3(
+    new THREE.Vector3(origin.x, origin.y, origin.z),
+    new THREE.Vector3(origin.x, origin.y, origin.z + (width - width / 10))
+  );
+
+  const bottomCurve = new THREE.QuadraticBezierCurve3(
+    new THREE.Vector3(origin.x, origin.y, origin.z + (width - width / 10)),
+    new THREE.Vector3(origin.x, origin.y, origin.z + width),
+    new THREE.Vector3(origin.x, origin.y + (height / 4 - width / 10), origin.z + width)
+  );
+
+  const middleLine = new THREE.LineCurve3(
+    new THREE.Vector3(origin.x, origin.y + (height / 4 - width / 10), origin.z + width),
+    new THREE.Vector3(origin.x, origin.y + (height - width / 10), origin.z + width)
+  );
+
+  const topCurve = new THREE.QuadraticBezierCurve3(
+    new THREE.Vector3(origin.x, origin.y + (height - width / 10), origin.z + width),
+    new THREE.Vector3(origin.x, origin.y + height, origin.z + width),
+    new THREE.Vector3(origin.x, origin.y + height, origin.z + (width - width / 10))
+  );
+
+  const topLine = new THREE.LineCurve3(
+    new THREE.Vector3(origin.x, origin.y + height, origin.z + (width - width / 10)),
+    new THREE.Vector3(origin.x, origin.y + height, origin.z)
+  );
+
+  const path = new THREE.CurvePath();
+  path.add(bottomLine);
+  path.add(bottomCurve);
+  path.add(middleLine);
+  path.add(topCurve);
+  path.add(topLine);
+
+  return path;
 }
 
+function handleCurve(origin, height, width, radius) {
+  const shape = createShape(origin, radius);
+  const path = createPath(origin, height, width);
 
-const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-const geometry2 = new THREE.ExtrudeGeometry(shape, extrudeSettings2);
-const geometry3 = new THREE.ExtrudeGeometry(shape, extrudeSettings3);
-const geometry4 = new THREE.ExtrudeGeometry(shape, extrudeSettings4);
-const geometry5 = new THREE.ExtrudeGeometry(shape, extrudeSettings5);
-const material = new THREE.MeshBasicMaterial({ color: "red" });
-const mesh = new THREE.Mesh(geometry, material);
-const mesh2 = new THREE.Mesh(geometry2, material);
-const mesh3 = new THREE.Mesh(geometry3, material);
-const mesh4 = new THREE.Mesh(geometry4, material);
-const mesh5 = new THREE.Mesh(geometry5, material);
-mesh.rotation.y += Math.PI/2;
-mesh.add(mesh2);
-mesh.add(mesh3);
-mesh.add(mesh4);
-mesh.add(mesh5);
-scene.add(mesh);
+  const extrudeSettings = {
+    steps: 300,
+    extrudePath: path,
+  };
+
+  const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  const material = new THREE.MeshBasicMaterial({ color: "red" });
+  const mesh = new THREE.Mesh(extrudeShape, material);
+  mesh.rotation.y += Math.PI / 2;
+  return mesh;
+}
+
+function createHandleExtrusion(scene, origin, height, width, radius) {
+  const handleCurveConnector = handleCurve(origin, height, width, radius);
+  scene.add(handleCurveConnector);
+}
+
+// Scene setup
+const origin = new THREE.Vector3(0, 0, 0);
+const height = 125;
+const width = 55;
+const radius = 15;
+
+createHandleExtrusion(scene, origin, height, width, radius);
+
+
 
 
 
