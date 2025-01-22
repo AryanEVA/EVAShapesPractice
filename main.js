@@ -2,9 +2,6 @@ import "./style.css";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
-import { depth, or, vec2 } from "three/tsl";
-
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -524,7 +521,7 @@ camera.position.set(0, 2, 700);
 
 //#endregion
 
-//#region DAY-3 of Task based Training
+
 
 //#region Handles
 
@@ -607,7 +604,7 @@ camera.position.set(0, 2, 700);
 
 //#region Handle by Shape geometry and Extrude Geometry
 
-//#endregion
+
 
 // function createHandle(width, height, radius, color, steps = 10) {
 //   // Material
@@ -1476,7 +1473,7 @@ camera.position.set(0, 2, 700);
 //     bevelEnabled: false,
 //   };
 
-  // const extrudeBottomConnector = new THREE.ExtrudeGeometry(bottomConnectorShape, extrudeBottomConnectorSettings);
+// const extrudeBottomConnector = new THREE.ExtrudeGeometry(bottomConnectorShape, extrudeBottomConnectorSettings);
 //   const BottomConnectorMaterial = new THREE.MeshBasicMaterial({color: "red"});
 //   const bottomConnectorMesh = new THREE.Mesh(extrudeBottomConnector, BottomConnectorMaterial);
 
@@ -1494,7 +1491,6 @@ camera.position.set(0, 2, 700);
 // const heightZConnector = depthBottomConnector;
 // const widthZConnector = 10;
 
-
 // zConnectorShape.moveTo(0,5);
 
 // zConnectorShape.bezierCurveTo(widthZConnector/2 - 5, 5, widthZConnector/2, 0, widthZConnector,  0);
@@ -1504,7 +1500,6 @@ camera.position.set(0, 2, 700);
 // zConnectorShape.bezierCurveTo(widthZConnector/2 + 5, heightZConnector, widthZConnector/2, heightZConnector, 0, heightZConnector + 5);
 // zConnectorShape.lineTo(0,heightZConnector + 5);
 // zConnectorShape.lineTo(0,5);
-
 
 // const extrudeZConnectorSettings = {
 //   steps: 1,
@@ -1521,7 +1516,7 @@ camera.position.set(0, 2, 700);
 //   const edgesZConnector = new THREE.LineSegments(edges, lines);
 
 //   zConnectorMesh.add(edgesZConnector);
-  
+
 // return zConnectorMesh;
 
 // }
@@ -1539,7 +1534,6 @@ camera.position.set(0, 2, 700);
 //   topConnectorShape.bezierCurveTo(width - connectorWidth - width/10, height - height/10, width - connectorWidth, height, width - width/10, height- height/3);
 //   topConnectorShape.bezierCurveTo(width - width/10, height- height/3, width, height/2, width, 0)
 //   topConnectorShape.lineTo(width - connectorWidth, 0);
-  
 
 //   const topConnectorHole = new THREE.Path();
 //   topConnectorHole.absarc(width-connectorWidth,height/2, height/4, 0, Math.PI * 2, false);
@@ -1701,12 +1695,10 @@ camera.position.set(0, 2, 700);
 //   };
 
 //   const extrudeBottomConnector = new THREE.ExtrudeGeometry(bottomConnectorShape, extrudeBottomConnectorSettings);
-  
 
 //   const edges = new THREE.EdgesGeometry(extrudeBottomConnector);
 //   const lines = new THREE.LineBasicMaterial({color: "white"});
 //   const edgesBottomConnector = new THREE.LineSegments(edges, lines);
-  
 
 //   return edgesBottomConnector;
 
@@ -1716,7 +1708,6 @@ camera.position.set(0, 2, 700);
 // const zConnectorShape = new THREE.Shape();
 // const heightZConnector = depthBottomConnector;
 // const widthZConnector = 10;
-
 
 // zConnectorShape.moveTo(0,5);
 
@@ -1728,7 +1719,6 @@ camera.position.set(0, 2, 700);
 // zConnectorShape.lineTo(0,heightZConnector + 5);
 // zConnectorShape.lineTo(0,5);
 
-
 // const extrudeZConnectorSettings = {
 //   steps: 1,
 //   depth: 14,
@@ -1737,13 +1727,10 @@ camera.position.set(0, 2, 700);
 
 // const extrudeZConnector = new THREE.ExtrudeGeometry(zConnectorShape, extrudeZConnectorSettings);
 
-
 //   const edges = new THREE.EdgesGeometry(extrudeZConnector);
 //   const lines = new THREE.LineBasicMaterial({color: "white"});
 //   const edgesZConnector = new THREE.LineSegments(edges, lines);
 
-  
-  
 // return edgesZConnector;
 
 // }
@@ -1761,7 +1748,6 @@ camera.position.set(0, 2, 700);
 //   topConnectorShape.bezierCurveTo(width - connectorWidth - width/10, height - height/10, width - connectorWidth, height, width - width/10, height- height/3);
 //   topConnectorShape.bezierCurveTo(width - width/10, height- height/3, width, height/2, width, 0)
 //   topConnectorShape.lineTo(width - connectorWidth, 0);
-  
 
 //   const topConnectorHole = new THREE.Path();
 //   topConnectorHole.absarc(width-connectorWidth,height/2, height/4, 0, Math.PI * 2, false);
@@ -1781,14 +1767,12 @@ camera.position.set(0, 2, 700);
 //   };
 
 //   const extrudeTopConnector = new THREE.ExtrudeGeometry(topConnectorShape, extrudeTopConnectorSettings);
-  
 
 //   // topConnectorMesh.add(connectorMesh);
 //   const edges = new THREE.EdgesGeometry(extrudeTopConnector);
 //   const lines = new THREE.LineBasicMaterial({color: "white"});
 //   const edgesTopConnector = new THREE.LineSegments(edges, lines);
 
-  
 //   return edgesTopConnector;
 
 // }
@@ -1826,7 +1810,6 @@ camera.position.set(0, 2, 700);
 //     boltFrontPlateShape,
 //     extrudeBoltSettings
 //   );
-  
 
 //   const edges = new THREE.EdgesGeometry(extrudeBoltFrontPlate);
 //   const lines = new THREE.LineBasicMaterial({color: "white"});
@@ -1884,26 +1867,26 @@ camera.position.set(0, 2, 700);
 //     const parentObject = new THREE.Object3D();
 //     const handleBottomConnector = bottomConnector(heightBottomConnector, depthBottomConnector);
 //     parentObject.add(handleBottomConnector);
-  
+
 //     const handleZConnector = zConnector(depthBottomConnector);
 //     handleZConnector.position.set(0,heightBottomConnector,-depthBottomConnector);
 //     handleZConnector.rotation.z -= Math.PI/2;
 //     handleZConnector.rotation.x -= Math.PI;
 //     handleZConnector.rotation.y += Math.PI/2;
 //     parentObject.add(handleZConnector);
-  
+
 //     const handleTopConnector = topConnector(depthBottomConnector);
 //     handleTopConnector.position.set(-26,heightBottomConnector + 10,-5)
 //     parentObject.add(handleTopConnector);
-  
+
 //     const handleBackPlate = backPlateConnector();
 //     handleBackPlate.position.set(-15,100,-10);
 //     parentObject.add(handleBackPlate);
-  
+
 //     scene.add(parentObject);
-  
+
 //   }
-  
+
 //   const heightBottomConnector = 100;
 //   const depthBottomConnector = 5;
 //   createCockspurHandle(heightBottomConnector, depthBottomConnector);
@@ -1929,7 +1912,6 @@ camera.position.set(0, 2, 700);
 // scene.add(rectAngle)
 //#endregion
 
-
 //#region 2d Capsule
 // const width = 20;
 // const height = 50;
@@ -1941,7 +1923,6 @@ camera.position.set(0, 2, 700);
 // // Bottom arc
 // const bottomArc = new THREE.ArcCurve(radius, radius, radius, Math.PI, 0, false).getPoints(100);
 
-
 // // Combining all points
 // const shapePoints = [
 //   ...topArc,
@@ -1950,16 +1931,13 @@ camera.position.set(0, 2, 700);
 //   new THREE.Vector2(width, radius),
 // ];
 
-
 // const shape = new THREE.BufferGeometry().setFromPoints(shapePoints);
 // const material = new THREE.LineBasicMaterial({ color: "white" });
-
 
 // const capsule2D = new THREE.LineLoop(shape, material);
 
 // // Add to the scene
 // scene.add(capsule2D);
-
 
 //#endregion
 
@@ -1969,7 +1947,6 @@ camera.position.set(0, 2, 700);
 //   const width = widthBottom;
 //   const newOrigin = new THREE.Vector2(origin.x + widthBottom + (widthBottom - widthBottom/7) , origin.y - heightBottom);
 //   const newRotationOrigin = new THREE.Vector2(origin.x + widthBottom + (widthBottom/2 - widthBottom/14), origin.y - heightBottom);
-
 
 //   let bottomArc;
 
@@ -1981,12 +1958,12 @@ camera.position.set(0, 2, 700);
 //     bottomArc = new THREE.ArcCurve(newOrigin.x + width/2, newOrigin.y + width/2, width/2, Math.PI, 0, false).getPoints(10);
 
 //   }
-  
+
 //   const bottomShapePoints = [
 //     new THREE.Vector2(newOrigin.x , newOrigin.y + height),
 //     ...bottomArc,
 //     new THREE.Vector2(newOrigin.x + width, newOrigin.y + height),
-    
+
 //   ];
 
 //   const bottomRotationShapePoints = [
@@ -2005,7 +1982,7 @@ camera.position.set(0, 2, 700);
 //   }
 //   const material = new THREE.LineBasicMaterial({color: "white"});
 //   const bottomHandle = new THREE.LineLoop(shape, material);
- 
+
 //   return bottomHandle;
 // }
 
@@ -2021,7 +1998,6 @@ camera.position.set(0, 2, 700);
 //     new THREE.Vector2(origin.x + width - width/3, origin.y + height - height/10),
 //   ).getPoints(smoothnessFactor);
 
-  
 //   const topCurve = new THREE.CubicBezierCurve(
 //     new THREE.Vector2(origin.x + width - width/3, origin.y + height - height/10),
 //     new THREE.Vector2(origin.x + width - width/2, origin.y + height - height/8 ),
@@ -2076,11 +2052,11 @@ camera.position.set(0, 2, 700);
 //   ).getPoints(smoothnessFactor);
 
 //   const curve5 = new THREE.QuadraticBezierCurve(
-//     new THREE.Vector2(newTopOrigin.x + width/2, newTopOrigin.y + (height/2 - height/6)), 
+//     new THREE.Vector2(newTopOrigin.x + width/2, newTopOrigin.y + (height/2 - height/6)),
 //     new THREE.Vector2(newTopOrigin.x + widthBottom, newTopOrigin.y + (height/2 - height/6)),
 //     new THREE.Vector2(newTopOrigin.x + widthBottom, newTopOrigin.y + 0),
 //   ).getPoints(smoothnessFactor);
-//   //Rotation enabled top connector points 
+//   //Rotation enabled top connector points
 
 //   const topRotationShapePoints = [
 //     ...curve1,
@@ -2096,13 +2072,12 @@ camera.position.set(0, 2, 700);
 //       ...topLeftCurve,
 //       ...leftCurve,
 //       ...bottomCurve
-      
+
 //     ];
-  
-  
+
 //   const newHoleOrigin = new THREE.Vector2(origin.x, origin.y + height/10)
 //   let holePoints;
-  
+
 //   if(isRotation){
 //     holePoints = new THREE.ArcCurve(newHoleOrigin.x + width, newHoleOrigin.y + height/2 + height/20, height/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
 
@@ -2110,7 +2085,7 @@ camera.position.set(0, 2, 700);
 //   else{
 //     holePoints = new THREE.ArcCurve(newHoleOrigin.x + width/2, newHoleOrigin.y + height/2, height/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
 //   }
-  
+
 //   const holeShape = new THREE.BufferGeometry().setFromPoints(holePoints);
 
 //   let shape;
@@ -2162,7 +2137,6 @@ camera.position.set(0, 2, 700);
 //       new THREE.Vector2(backPlateOrigin.x ,backPlateOrigin.y),
 //     ];
 //   }
-   
 
 //   let hole1Points, hole2Points;
 
@@ -2174,8 +2148,7 @@ camera.position.set(0, 2, 700);
 //     hole1Points = new THREE.ArcCurve(backPlateOrigin.x + width/4, backPlateOrigin.y + width/4, width/10, 0, Math.PI * 2, false).getPoints(10);
 //   hole2Points = new THREE.ArcCurve(backPlateOrigin.x + width/4, backPlateOrigin.y + (height - width/4), width/10, 0, Math.PI * 2, false).getPoints(10);
 //   }
-  
-   
+
 //   const shape = new THREE.BufferGeometry().setFromPoints(platePoints);
 //   const material = new THREE.LineBasicMaterial({color: "white"});
 //   const backPlateConnector = new THREE.Line(shape, material);
@@ -2193,7 +2166,7 @@ camera.position.set(0, 2, 700);
 //   const topHandleConnector = topConnector(isRotation,widthBottom);
 //   const bottomHandleConnector = bottomConnector(heightBottom,widthBottom, isRotation);
 //   const backPlateConnector = backPlate(isRotation);
-  
+
 //   topHandleConnector.add(backPlateConnector);
 //   topHandleConnector.add(bottomHandleConnector);
 
@@ -2234,7 +2207,6 @@ camera.position.set(0, 2, 700);
 //     ...topCurve,
 //   ];
 
-  
 //   const shape = new THREE.BufferGeometry().setFromPoints(points);
 //   const material = new THREE.LineBasicMaterial({color: "white"});
 //   const handle = new THREE.LineLoop(shape, material);
@@ -2344,14 +2316,13 @@ camera.position.set(0, 2, 700);
 //     new THREE.Vector2(originNew.x + width/2, originNew.y + height + width/6),
 //     new THREE.Vector2(originNew.x, originNew.y + height),
 //   ).getPoints(smoothnessFactor);
-  
+
 //   const keyTopCurve = new THREE.QuadraticBezierCurve(
 //     new THREE.Vector2(originNew.x + width, originNew.y + (height * 1.5)),
 //     new THREE.Vector2(originNew.x + width/2, originNew.y + (height * 1.5) + width/6),
 //     new THREE.Vector2(originNew.x, originNew.y + height * 1.5),
 //   ).getPoints(smoothnessFactor);
 
-  
 //   const points = [
 //     new THREE.Vector2(originNew.x + width, originNew.y),
 //     new THREE.Vector2(originNew.x + width, originNew.y + height),
@@ -2391,7 +2362,7 @@ camera.position.set(0, 2, 700);
 //   keyHole.position.set(0, height,0)
 //   backPlate.add(keyHole);
 //   }
-  
+
 //   // Back plate hole
 //   const holeArc = new THREE.ArcCurve(originNew.x + width/2, originNew.y + width/2, width/6, 0, Math.PI * 2, false).getPoints(smoothnessFactor);
 //   const holeShape = new THREE.BufferGeometry().setFromPoints(holeArc);
@@ -2400,7 +2371,7 @@ camera.position.set(0, 2, 700);
 //   backPlate.add(holeLine);
 
 //   return backPlate;
-  
+
 // }
 
 // function createVivoShotHandle(widthBottom, heightBottom, isKeyAvailable){
@@ -2489,25 +2460,20 @@ camera.position.set(0, 2, 700);
 // const shape = new THREE.Shape();
 // shape.absarc(0, 0, 10, 0, Math.PI * 2, false);
 
-
 // const path = new THREE.QuadraticBezierCurve(
-//   new THREE.Vector2(0, 0), 
-//   new THREE.Vector2(100, 0), 
-//   new THREE.Vector2(100, 100) 
+//   new THREE.Vector2(0, 0),
+//   new THREE.Vector2(100, 0),
+//   new THREE.Vector2(100, 100)
 // );
-
 
 // const extrudeSettings = {
 //   steps: 1,
 // };
 
-
 // const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-
 
 // const material = new THREE.MeshBasicMaterial({ color: "red"});
 // const mesh = new THREE.Mesh(extrudeShape, material);
-
 
 // scene.add(mesh);
 // const shape = new THREE.Shape();
@@ -2516,7 +2482,6 @@ camera.position.set(0, 2, 700);
 // shape.absarc(0, 0, width/10, 0, Math.PI * 2, false);
 
 // const path = new THREE.CurvePath();
-
 
 // const bottomLine = new THREE.LineCurve3(
 //   new THREE.Vector3(0,0,0 ),
@@ -2552,8 +2517,6 @@ camera.position.set(0, 2, 700);
 //   extrudePath: path,
 // };
 
-
-
 // const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
 
 // const material = new THREE.MeshBasicMaterial({ color: "red" });
@@ -2566,92 +2529,335 @@ camera.position.set(0, 2, 700);
 //#endregion
 //#region handle extrusion
 
-function createShape(origin, radius) {
-  const shape = new THREE.Shape();
-  shape.absarc(origin.x, origin.y, radius, 0, Math.PI * 2, false);
-  return shape;
-}
+// function createShape(origin, radius) {
+//   const shape = new THREE.Shape();
+//   shape.absarc(origin.x, origin.y, radius, 0, Math.PI * 2, false);
+//   return shape;
+// }
 
-function createPath(origin, height, width) {
-  const bottomLine = new THREE.LineCurve3(
-    new THREE.Vector3(origin.x, origin.y, origin.z),
-    new THREE.Vector3(origin.x, origin.y, origin.z + (width - width / 10))
-  );
+// function createPath(origin, height, width) {
+//   const bottomLine = new THREE.LineCurve3(
+//     new THREE.Vector3(origin.x, origin.y, origin.z),
+//     new THREE.Vector3(origin.x, origin.y, origin.z + (width - width / 10))
+//   );
 
-  const bottomCurve = new THREE.QuadraticBezierCurve3(
-    new THREE.Vector3(origin.x, origin.y, origin.z + (width - width / 10)),
-    new THREE.Vector3(origin.x, origin.y, origin.z + width),
-    new THREE.Vector3(origin.x, origin.y + (height / 4 - width / 10), origin.z + width)
-  );
+//   const bottomCurve = new THREE.QuadraticBezierCurve3(
+//     new THREE.Vector3(origin.x, origin.y, origin.z + (width - width / 10)),
+//     new THREE.Vector3(origin.x, origin.y, origin.z + width),
+//     new THREE.Vector3(origin.x, origin.y + (height / 4 - width / 10), origin.z + width)
+//   );
 
-  const middleLine = new THREE.LineCurve3(
-    new THREE.Vector3(origin.x, origin.y + (height / 4 - width / 10), origin.z + width),
-    new THREE.Vector3(origin.x, origin.y + (height - width / 10), origin.z + width)
-  );
+//   const middleLine = new THREE.LineCurve3(
+//     new THREE.Vector3(origin.x, origin.y + (height / 4 - width / 10), origin.z + width),
+//     new THREE.Vector3(origin.x, origin.y + (height - width / 10), origin.z + width)
+//   );
 
-  const topCurve = new THREE.QuadraticBezierCurve3(
-    new THREE.Vector3(origin.x, origin.y + (height - width / 10), origin.z + width),
-    new THREE.Vector3(origin.x, origin.y + height, origin.z + width),
-    new THREE.Vector3(origin.x, origin.y + height, origin.z + (width - width / 10))
-  );
+//   const topCurve = new THREE.QuadraticBezierCurve3(
+//     new THREE.Vector3(origin.x, origin.y + (height - width / 10), origin.z + width),
+//     new THREE.Vector3(origin.x, origin.y + height, origin.z + width),
+//     new THREE.Vector3(origin.x, origin.y + height, origin.z + (width - width / 10))
+//   );
 
-  const topLine = new THREE.LineCurve3(
-    new THREE.Vector3(origin.x, origin.y + height, origin.z + (width - width / 10)),
-    new THREE.Vector3(origin.x, origin.y + height, origin.z)
-  );
+//   const topLine = new THREE.LineCurve3(
+//     new THREE.Vector3(origin.x, origin.y + height, origin.z + (width - width / 10)),
+//     new THREE.Vector3(origin.x, origin.y + height, origin.z)
+//   );
 
-  const path = new THREE.CurvePath();
-  path.add(bottomLine);
-  path.add(bottomCurve);
-  path.add(middleLine);
-  path.add(topCurve);
-  path.add(topLine);
+//   const path = new THREE.CurvePath();
+//   path.add(bottomLine);
+//   path.add(bottomCurve);
+//   path.add(middleLine);
+//   path.add(topCurve);
+//   path.add(topLine);
 
-  return path;
-}
+//   return path;
+// }
 
-function handleCurve(origin, height, width, radius) {
-  const shape = createShape(origin, radius);
-  const path = createPath(origin, height, width);
+// function handleCurve(origin, height, width, radius) {
+//   const shape = createShape(origin, radius);
+//   const path = createPath(origin, height, width);
 
-  const extrudeSettings = {
-    steps: 300,
-    extrudePath: path,
-  };
+//   const extrudeSettings = {
+//     steps: 300,
+//     extrudePath: path,
+//   };
 
-  const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-  const material = new THREE.MeshBasicMaterial({ color: "red" });
-  const mesh = new THREE.Mesh(extrudeShape, material);
-  mesh.rotation.y += Math.PI / 2;
-  return mesh;
-}
+//   const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+//   const material = new THREE.MeshBasicMaterial({ color: "red" });
+//   const mesh = new THREE.Mesh(extrudeShape, material);
+//   mesh.rotation.y += Math.PI / 2;
+//   return mesh;
+// }
 
-function createHandleExtrusion(scene, origin, height, width, radius) {
-  const handleCurveConnector = handleCurve(origin, height, width, radius);
-  scene.add(handleCurveConnector);
-}
+// function createHandleExtrusion(scene, origin, height, width, radius) {
+//   const handleCurveConnector = handleCurve(origin, height, width, radius);
+//   scene.add(handleCurveConnector);
+// }
 
-// Scene setup
-const origin = new THREE.Vector3(0, 0, 0);
-const height = 125;
-const width = 55;
-const radius = 15;
+//
+// const origin = new THREE.Vector3(0, 0, 0);
+// const height = 125;
+// const width = 55;
+// const radius = 15;
 
-createHandleExtrusion(scene, origin, height, width, radius);
-
-
-
-
+// createHandleExtrusion(scene, origin, height, width, radius);
 
 //#endregion
 
+//#region Extrusion cut shapes
 
+// function shape(origin, width, height, cutHeight, cutWidth) {
+//   const shape = new THREE.Shape();
+//   shape.moveTo(origin.x, origin.y);
+//   shape.lineTo(origin.x + width, origin.y);
+//   for(let i = origin.y;i < cutHeight;i++){
+//     shape.lineTo(origin.x + width, origin.y + i);
+//   }
+//   shape.lineTo(origin.x + width, origin.y + cutHeight);
+//   for(let i = origin.y + cutHeight;i< height;i++){
+//     shape.lineTo(origin.x + width, origin.y + i);
+//   }
+//   shape.lineTo(origin.x + width, origin.y + height);
+//   shape.lineTo(origin.x, origin.y + height);
+//   for(let i = height ;i > cutHeight;i--){
+//     shape.lineTo(origin.x, origin.y + i);
+//   }
+//   shape.lineTo(origin.x, origin.y + cutHeight);
+//   for(let i = cutHeight ;i>origin.x;i--){
+//     shape.lineTo(origin.x, origin.y + i);
+//   }
+//   shape.lineTo(origin.x, origin.y);
+//   // shape.moveTo(origin.x + cutWidth, origin.y + cutHeight);
+//   // shape.lineTo(origin.x, origin.y + cutHeight);
+
+//   return shape;
+// }
+
+// function extrusionShape(origin, width, height, extrudeWidth, cutWidth, cutHeight) {
+//   const fig = shape(origin, width, height, cutHeight);
+
+//   const path = new THREE.CurvePath();
+//   const line = new THREE.LineCurve3(
+//     new THREE.Vector3(origin.x, origin.y, origin.z ),
+//     new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z)
+//   );
+//   path.add(line);
+
+//   const extrudeSettings = {
+//     steps: 1,
+//     extrudePath: path,
+//     bevelEnabled: false,
+//   };
+
+//   const extrudeShape = new THREE.ExtrudeGeometry(fig, extrudeSettings);
+
+//   const pos = extrudeShape.getAttribute("position");
+
+//   // Points of the extrudeShape
+//   for (let i = 0; i < pos.count; i++) {
+//     const x = pos.getX(i);
+//     const y = pos.getY(i);
+//     const z = pos.getZ(i);
+
+//     console.log(`i: ${i}, x: ${x}, y: ${y}, z: ${z}`);
+
+//     // if (x === origin.x && y === (origin.y + height)) {
+
+//     //   pos.setX(i, cutWidth); // point on the left side (0, height) based on the cut
+
+//     //   // pos.setZ(i, 25);
+//     // console.log(`(0, height) => i: ${i}, x: ${x}, y: ${y}, z: ${z}
+//     //   new x: ${pos.getX(i)}
+//     //   new y: ${pos.getY(i)}}
+//     //   new z: ${pos.getZ(i)}}
+//     //   `);
+
+//     // }
+
+//     // if (x === origin.x && y === origin.y) {
+
+//     //   pos.setX(i, cutWidth); // point on the left side (0, 0)
+
+//     //   // pos.setZ(i, 25);
+//     //   console.log(` (0, 0) => i: ${i}, x: ${x}, y: ${y}, z: ${z}
+//     //   new x: ${pos.getX(i)}
+//     //   new y: ${pos.getY(i)}}
+//     //   new z: ${pos.getZ(i)}}
+//     //   `);
+
+//     // }
+
+//     // if (x === (origin.x + extrudeWidth) && y === origin.y) {
+
+//     //   pos.setX(i, extrudeWidth - cutWidth); // point on the right side (extrudeWidth, 0)
+//     //   // pos.setZ(i, 25);
+//     //   console.log(` (extrudeWidth, 0) => i: ${i}, x: ${x}, y: ${y}, z: ${z}
+//     //   new x: ${pos.getX(i)}
+//     //   new y: ${pos.getY(i)}}
+//     //   new z: ${pos.getZ(i)}}
+//     //   `);
+//     // }
+
+//     // if (x === (origin.x + extrudeWidth) && y === (origin.y + height)) {
+
+//     //   pos.setX(i, extrudeWidth - cutWidth); // point on the right side (extrudeWidth, height)
+//     //   // pos.setZ(i, 25);
+//     //   console.log(` (extrudeWidth, height) => i: ${i}, x: ${x}, y: ${y}, z: ${z}
+//     //   new x: ${pos.getX(i)}
+//     //   new y: ${pos.getY(i)}}
+//     //   new z: ${pos.getZ(i)}}
+//     //   `);
+//     // }
+
+//     if(x === origin.x && y > origin.y + cutHeight){
+//       const theta = Math.atan(cutWidth/(height - cutHeight));
+//       pos.setX(i, x - theta * (cutHeight - y ));
+//       console.log(` Upper cut => i: ${i}, x: ${x}, y: ${y}, z: ${z}
+//        new x: ${pos.getX(i)}
+//       new y: ${pos.getY(i)}}
+//       new z: ${pos.getZ(i)}}
+//        `);
+//     }
+//     if(x === origin.x && y <= origin.y + cutHeight){
+//     const theta = Math.atan(cutWidth/(cutHeight));
+//       pos.setX(i, x + theta * cutHeight - y );
+//       console.log(` Lower cut => i: ${i}, x: ${x}, y: ${y}, z: ${z}
+//        new x: ${pos.getX(i)}
+//        new y: ${pos.getY(i)}}
+//        new z: ${pos.getZ(i)}}
+//        `);
+
+//     }
+// //#region side slant cut logic+
+//     // if(x === origin.x && y === origin.y){
+//     //   pos.setX(i,cutWidth);
+//     // }
+//     // if(x === origin.x + extrudeWidth && y === origin.y){
+//     //   pos.setX(i,extrudeWidth - cutWidth);
+//     // }
+//     //#endregion
+//   }
+
+//   pos.needsUpdate = true;
+
+//   const material = new THREE.MeshStandardMaterial({
+//     color: "red",
+//     side: THREE.DoubleSide,
+//   });
+//   const mesh = new THREE.Mesh(extrudeShape, material);
+
+//   const edgeShape = new THREE.EdgesGeometry(extrudeShape);
+//   const edgesMaterial = new THREE.LineBasicMaterial({
+//     color: "white",
+//   });
+//   const lines = new THREE.LineSegments(edgeShape, edgesMaterial);
+//   mesh.add(lines);
+
+//   return mesh;
+// }
+
+// function createExtrusionShape(origin, width, height, extrudeWidth, cutWidth, cutHeight) {
+//   const figure = extrusionShape(origin, width, height, extrudeWidth, cutWidth, cutHeight);
+//   scene.add(figure);
+// }
+
+// const origin = new THREE.Vector3(0, 0, 0);
+// const width = 50;
+// const height = 50;
+// const extrudeWidth = 500;
+// const cutWidth = 50;
+// const cutHeight = 25;
+
+// createExtrusionShape(origin, width, height, extrudeWidth, cutWidth, cutHeight);
+
+// ------------------ window upper pane shape -------------------------
+
+// const shape = new THREE.Shape();
+// shape.moveTo(origin.x + width, origin.y);
+// shape.lineTo(origin.x + extrudeWidth - width, origin.y);
+// shape.lineTo(origin.x + extrudeWidth, origin.y + height);
+// shape.lineTo(origin.x , origin.y + height);
+// shape.lineTo(origin.x + width, origin.y);
+
+// const extrudeSettings = {
+//   steps: 1,
+//   depth: 50,
+//   bevelEnabled: false,
+// };
+
+// const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+// const material = new THREE.MeshBasicMaterial({color: "red"});
+// const mesh = new THREE.Mesh(extrudeShape, material);
+
+// scene.add(mesh);
+
+//#endregion
+
+//#region Extrusion shapes Cut by line
+const origin = new THREE.Vector3(0, 0, 0);
+const width = 50;
+const height = 50;
+const extrudeWidth = 500;
+const startPoint = new THREE.Vector2(0,0);
+const endPoint = new THREE.Vector2(0,0);
+const lineObj = [
+  startPoint, endPoint
+];
+const cutWidth = 50;
+const cutHeight = 25;
+const shape = new THREE.Shape();
+shape.moveTo(origin.x, origin.y);
+shape.lineTo(origin.x, origin.y + height);
+shape.lineTo(origin.x + width, origin.y + height);
+shape.lineTo(origin.x + width, origin.y);
+shape.lineTo(origin.x + origin.y);
+const path = new THREE.CurvePath();
+const line = new THREE.LineCurve3(
+  new THREE.Vector3(origin.x, origin.y, origin.z),
+  new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z)
+);
+path.add(line);
+const extrudeSettings = {
+  steps: 1,
+  extrudePath: path,
+};
+const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+const material = new THREE.MeshBasicMaterial({ color: "red" });
+const mesh = new THREE.Mesh(extrudeShape, material);
+
+
+
+const pos = extrudeShape.getAttribute("position");
+for (let i = 0; i < pos.count; i++) {
+  const x = pos.getX(i);
+  const y = pos.getY(i);
+  const z = pos.getZ(i);
+
+  console.log(`i: ${i}, x: ${x}, y: ${y}, z: ${z}`);
+  if(x === origin.x && y === origin.y + height && z === origin.z){
+    pos.setX(i, x + cutWidth);
+  }
+  if(x === origin.x && y === origin.y && z === origin.z){
+    pos.setX(i, x + cutWidth);
+  }
+}
+pos.needsUpdate = true;
+const edgeShape = new THREE.EdgesGeometry(extrudeShape);
+const edgesMaterial = new THREE.LineBasicMaterial({
+  color: "white",
+});
+const lines = new THREE.LineSegments(edgeShape, edgesMaterial);
+mesh.add(lines);
+scene.add(mesh);
+
+//#endregion
+  
 //#region  Renderer setup
 const canvas = document.querySelector("canvas");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-
+renderer.localClippingEnabled = true;
 renderer.render(scene, camera);
 //#endregion
 
