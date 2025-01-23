@@ -2740,7 +2740,7 @@ camera.position.set(0, 2, 700);
 
 //   pos.needsUpdate = true;
 
-//   const material = new THREE.MeshStandardMaterial({
+//   const material = new THREE.MeshStandardMaterial({ 
 //     color: "red",
 //     side: THREE.DoubleSide,
 //   });
@@ -2794,29 +2794,49 @@ camera.position.set(0, 2, 700);
 //#endregion
 
 //#region Extrusion shapes Cut by line
+
+// shape dimentions
 const origin = new THREE.Vector3(0, 0, 0);
 const width = 50;
 const height = 50;
 const extrudeWidth = 500;
-const startPoint = new THREE.Vector2(0,0);
-const endPoint = new THREE.Vector2(0,0);
-const lineObj = [
-  startPoint, endPoint
-];
+// const lineObj = [
+//   startPoint, endPoint
+// ];
 const cutWidth = 50;
 const cutHeight = 25;
+// Enable the plane
+const isXYPlane = true;
+const isXZPlane = false;
+
+const startPoint = new THREE.Vector3(origin.x, origin.y, origin.z);
+const endPoint = new THREE.Vector3(origin.x + cutWidth , origin.y , origin.z + cutWidth);
+
 const shape = new THREE.Shape();
 shape.moveTo(origin.x, origin.y);
-shape.lineTo(origin.x, origin.y + height);
-shape.lineTo(origin.x + width, origin.y + height);
-shape.lineTo(origin.x + width, origin.y);
-shape.lineTo(origin.x + origin.y);
+for(let i = 0;i<=width;i++){
+shape.lineTo(origin.x + i, origin.y);
+}
+  for(let i = 0;i<= height;i++){
+    shape.lineTo(origin.x + width, origin.y + i);
+  }
+  for(let i = width;i>=0;i--){
+    shape.lineTo(origin.x + i, origin.y + height);
+  }
+  for(let i = height;i>=0;i--){
+    shape.lineTo(origin.x , origin.y + i);
+  }
+
+
+
 const path = new THREE.CurvePath();
-const line = new THREE.LineCurve3(
+const linePath = new THREE.LineCurve3(
   new THREE.Vector3(origin.x, origin.y, origin.z),
   new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z)
 );
-path.add(line);
+
+
+path.add(linePath);
 const extrudeSettings = {
   steps: 1,
   extrudePath: path,
@@ -2826,6 +2846,14 @@ const material = new THREE.MeshBasicMaterial({ color: "red" });
 const mesh = new THREE.Mesh(extrudeShape, material);
 
 
+// // Line (cutter)
+// const startPoint = new THREE.Vector3(lineOrgin.x, lineOrgin.y, origin.z);
+// const endPoint = new THREE.Vector3(lineOrgin.x + lineWidth, lineOrgin.y + lineHeight, origin.z);
+// const geometry = new THREE.BufferGeometry().setFromPoints([startPoint, endPoint]);
+// const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+// const line = new THREE.Line(geometry, lineMaterial);
+
+// scene.add(line);
 
 const pos = extrudeShape.getAttribute("position");
 for (let i = 0; i < pos.count; i++) {
@@ -2834,12 +2862,45 @@ for (let i = 0; i < pos.count; i++) {
   const z = pos.getZ(i);
 
   console.log(`i: ${i}, x: ${x}, y: ${y}, z: ${z}`);
-  if(x === origin.x && y === origin.y + height && z === origin.z){
-    pos.setX(i, x + cutWidth);
+
+  if(isXYPlane){
+
   }
-  if(x === origin.x && y === origin.y && z === origin.z){
-    pos.setX(i, x + cutWidth);
-  }
+  // // for cut on xz axis
+  // if(endPoint.x >= origin.x){
+  //   if(x === origin.x && y === origin.y + height && z === origin.z){
+  //     pos.setX(i, x + endPoint.z);
+  //   }
+  //   if(x === origin.x && y === origin.y && z === origin.z){
+  //     pos.setX(i, x + endPoint.z);
+  //   }
+  // }
+  
+  // if(endPoint.z < origin.x){
+  //   if(x === origin.x && y === origin.y + height && z === origin.z){
+  //     pos.setX(i, -(x + endPoint.z));
+  //   }
+  //   if(x === origin.x && y === origin.y && z === origin.z){
+  //     pos.setX(i, -(x + endPoint.z));
+  //   }
+  // }
+
+  // for cut on xy plane
+  // if(endPoint.x >= origin.x){
+  //   if(x === origin.x && y === origin.y + height){
+  //     pos.setX(i,x + endPoint.x);
+  //   }
+  // }
+
+
+
+  // if(x === (origin.x + extrudeWidth) && y === origin.y + height && z === origin.z){
+  //   pos.setX(i, x - (endPoint.x));
+
+  // }
+  // if(x === origin.x + extrudeWidth && y === origin.y && z === origin.z){
+  //   pos.setX(i, x - endPoint.x);
+  // }
 }
 pos.needsUpdate = true;
 const edgeShape = new THREE.EdgesGeometry(extrudeShape);
