@@ -8,9 +8,21 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color( 'white' );
 // Ambient light setup
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const ambientLight = new THREE.AmbientLight("black", 1);
 scene.add(ambientLight);
 
+const directionalLight = new THREE.DirectionalLight( "white", 5 );
+				directionalLight.position.set( 0, 200, 200 );
+				// scene.add( directionalLight );
+        const helper = new THREE.DirectionalLightHelper(  directionalLight, 100 );
+// scene.add( helper );
+
+const pointLight = new THREE.PointLight("red",1);
+pointLight.position.set(200,200,20);
+// scene.add(pointLight);
+
+const hemisphereLight = new THREE.HemisphereLight( "white", "white", 1 );
+// scene.add( hemisphereLight );
 //#region  Camera Setup
 // Camera setup
 const camera = new THREE.OrthographicCamera(
@@ -19,11 +31,11 @@ const camera = new THREE.OrthographicCamera(
   window.innerHeight / 2,
   window.innerHeight / -2,
   1,
-  1200
+  1600
 );
 camera.lookAt(0, 0, 0);
 const axesHelper = new THREE.AxesHelper(500);
-scene.add(axesHelper);
+// scene.add(axesHelper);
 
 // const camera = new THREE.PerspectiveCamera(
 //   495,
@@ -32,7 +44,7 @@ scene.add(axesHelper);
 //   1000
 // );
 // camera.position.z = 400;
-camera.position.set(0, 2, 700);
+camera.position.set(0, 2, 900);
 
 //#endregion
 //#region DAY-1 of Task based Training (3/1/25)
@@ -2473,6 +2485,9 @@ camera.position.set(0, 2, 700);
 // const mesh = new THREE.Mesh(extrudeShape, material);
 
 // scene.add(mesh);
+
+
+//#region Extrusion shape along a path
 // const shape = new THREE.Shape();
 // const height = 300;
 // const width = 200;
@@ -2522,7 +2537,7 @@ camera.position.set(0, 2, 700);
 // mesh.rotation.y += Math.PI/2;
 
 // scene.add(mesh);
-
+//#endregion
 //#endregion
 //#region handle extrusion
 
@@ -2792,9 +2807,6 @@ camera.position.set(0, 2, 700);
 
 //#region Extrusion shapes Cut by line
 
-// shape dimentions
-// Helper function to define a rectangular shape
-// Define rectangular shape directly
 // Function to create a pipe shape with outer and inner square
 function createPipeShape(outerSize, innerSize, origin) {
   const shape = new THREE.Shape();
@@ -2858,65 +2870,114 @@ function createExtrudeGeometry(shape, origin, extrudeWidth) {
 
 // Transform vertex positions based on cutting conditions
 function applyCutTransformations(pos, settings) {
-  const { isBackCut, isXYPlane, isXZPlane, startPoint, endPoint, origin, extrudeWidth, width, height } = settings;
+  const { isBackCut, isXYPlane, isXZPlane,isTwoLine, startPoint, endPoint, startPoint2, endPoint2, origin, extrudeWidth, width, height } = settings;
 
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i);
     const y = pos.getY(i);
     const z = pos.getZ(i);
 
+
     if (isBackCut) {
       // XY Plane (Back Cut)
       if (isXYPlane) {
-        if (endPoint.x === startPoint.x && x === origin.x + extrudeWidth) {
+        if (!isTwoLine && endPoint.x === startPoint.x && x === origin.x + extrudeWidth) {
           pos.setX(i, x - endPoint.x);
-        } else if (startPoint.x < endPoint.x && x === origin.x + extrudeWidth && y >= endPoint.y) {
+        } 
+        else if (!isTwoLine && startPoint.x < endPoint.x && x === origin.x + extrudeWidth && y >= startPoint.y && y <= endPoint.y) {
           const theta = Math.atan((endPoint.x - startPoint.x) / (endPoint.y - startPoint.y));
           if (y >= startPoint.y) {
             pos.setX(i, x + theta * y);
           }
-        } else if (startPoint.x > endPoint.x && x === origin.x + extrudeWidth) {
+        } 
+        else if (!isTwoLine && startPoint.x > endPoint.x && x === origin.x + extrudeWidth && y >= startPoint.y && y <= endPoint.y) {
           const theta = Math.atan((startPoint.x - endPoint.x) / height);
           pos.setX(i, endPoint.x + x - theta * y * 1.26 + startPoint.x);
         }
+        if(isTwoLine && startPoint.x < endPoint.x && startPoint2.x > endPoint2.x && x == origin.x + extrudeWidth){
+          if(startPoint.x < endPoint.x && startPoint.y >= endPoint2.y && y>= startPoint.y && y <= endPoint.y){
+            const theta = Math.atan((endPoint.x - startPoint.x)/(endPoint.y/startPoint.y));
+            pos.setX(i,  (x - endPoint.x) + theta * (y - startPoint.y) + endPoint.x );
+            console.log(`Entering....`);
+            console.log(`
+              x: ${pos.getX(x)}
+              y: ${pos.getY(y)}
+              z: ${pos.getZ(z)}
+              `)
+          
+          }
+          if(startPoint2.x > endPoint2.x && startPoint2.y < startPoint.y && y < endPoint2.y && y >= startPoint2.y){
+            const theta = Math.atan((endPoint2.x - startPoint2.x)/(endPoint2.y - startPoint2.y));
+            pos.setX(i, x + (theta * y - endPoint2.y)  + startPoint2.x/1.2  );
+            console.log(`Entering....hihihh`);
+
+            console.log(`
+              x: ${pos.getX(x)}
+              y: ${pos.getY(y)}
+              z: ${pos.getZ(z)}
+              `)
+          }
+        }
       }
+      
 
       // XZ Plane (Back Cut)
       if (isXZPlane) {
         if (endPoint.x === startPoint.x && x === origin.x + extrudeWidth) {
           pos.setX(i, x - endPoint.x);
-        } else if (startPoint.x > endPoint.x && x === origin.x + extrudeWidth) {
+        } 
+        else if (startPoint.x > endPoint.x && x === origin.x + extrudeWidth) {
           const theta = Math.atan((startPoint.x - endPoint.x) / (width - endPoint.z));
           pos.setX(i, x + theta * z);
-        } else if (startPoint.x < endPoint.x && x === origin.x + extrudeWidth) {
+        } 
+        else if (startPoint.x < endPoint.x && x === origin.x + extrudeWidth) {
           const theta = Math.atan((endPoint.x - startPoint.x) / width);
           pos.setX(i, x - theta * (z - endPoint.z));
         }
+       
       }
     } else {
       // XY Plane (Front Cut)
       if (isXYPlane) {
-        if (endPoint.x === startPoint.x && x === origin.x) {
+        if (!isTwoLine,endPoint.x === startPoint.x && x === origin.x) {
           pos.setX(i, x + endPoint.x);
-        } else if (startPoint.x < endPoint.x && x === origin.x) {
-          const theta = Math.atan((endPoint.x - startPoint.x) / (endPoint.y - startPoint.y));
-          if(startPoint.y == origin.y){
-            // pos.setX(i, (startPoint.x - x) + (theta * y + startPoint.y + startPoint.y/3));
-            
-          }
-            
-          else if(y >= startPoint.y){
-              pos.setX(i, (startPoint.x - x) - (theta * y + startPoint.y + startPoint.y/3));
-          }
-          else{
-            pos.setX(i, origin.x);
+        } 
+        else if (!isTwoLine && startPoint.x < endPoint.x && x === origin.x && y >= startPoint.y && y <= endPoint.y) {
+          const theta = Math.atan((endPoint.x - startPoint.x) / height);
 
-          }
+          pos.setX(i, x + theta * y - startPoint.y/1.3);
           
-          
-        } else if (startPoint.x > endPoint.x && x === origin.x) {
+        } 
+        
+        else if (!isTwoLine && startPoint.x > endPoint.x && x == origin.x && y >= startPoint.y && y <= endPoint.y){
           const theta = Math.atan((startPoint.x - endPoint.x) / height);
-          pos.setX(i, x - theta * y + startPoint.x - y);
+          pos.setX(i, (x - theta * y * 2) + startPoint.x + startPoint.x/1.7);
+          
+        }
+
+        if(isTwoLine && startPoint.x < endPoint.x && startPoint2.x > endPoint2.x && x == origin.x){
+          if(startPoint.x < endPoint.x && startPoint.y >= endPoint2.y && y>= startPoint.y && y <= endPoint.y){
+            const theta = Math.atan((endPoint.x - startPoint.x)/(endPoint.y/startPoint.y));
+            pos.setX(i,  (x - endPoint.x) + theta * (y - startPoint.y) + endPoint.x );
+            console.log(`Entering....`);
+            console.log(`
+              x: ${pos.getX(x)}
+              y: ${pos.getY(y)}
+              z: ${pos.getZ(z)}
+              `)
+          
+          }
+          if(startPoint2.x > endPoint2.x && startPoint2.y < startPoint.y && y < endPoint2.y && y >= startPoint2.y){
+            const theta = Math.atan((endPoint2.x - startPoint2.x)/(endPoint2.y - startPoint2.y));
+            pos.setX(i, (x + (theta * y - endPoint2.y)  + startPoint2.x/1.2  ));
+            console.log(`Entering....hihihh`);
+
+            console.log(`
+              x: ${pos.getX(x)}
+              y: ${pos.getY(y)}
+              z: ${pos.getZ(z)}
+              `)
+          }
         }
       }
 
@@ -2924,37 +2985,88 @@ function applyCutTransformations(pos, settings) {
       if (isXZPlane) {
         if (endPoint.x === startPoint.x && x === origin.x) {
           pos.setX(i, x + endPoint.x);
-        } else if (startPoint.z > endPoint.z && x === origin.x) {
+        } 
+        else if (startPoint.z > endPoint.z && x === origin.x) {
           const theta = Math.atan((startPoint.x - endPoint.x) / (width - endPoint.z));
           pos.setX(i, endPoint.z + z + theta * x * 1.26 + startPoint.x);
-        } else if (startPoint.z < endPoint.z && x === origin.x) {
+        } 
+        else if (startPoint.z < endPoint.z && x === origin.x) {
           const theta = Math.atan((endPoint.x - startPoint.x) / width);
           pos.setX(i, startPoint.z - z - theta * x);
         }
       }
+
+      
     }
   }
 
   pos.needsUpdate = true;
 }
 
+
 // Setup the geometry and scene
 function setupGeometry(scene) {
   const origin = new THREE.Vector3(0, 0, 0);
-  const outerSize = 100, innerSize = 60, extrudeWidth = 500;
-  const isXYPlane = true, isXZPlane = false, isBackCut = false;
-  const startPoint = new THREE.Vector3(origin.x , origin.y + 20 , origin.z);
-  const endPoint = new THREE.Vector3(origin.x + 100, origin.y , origin.z);
+  const outerSize = 100, innerSize = 80, extrudeWidth = 500;
+  const isXYPlane = true, isXZPlane = false, isBackCut = false, isTwoLine = true;
+
+
+  // Line dimentions...
+
+  //Line - 1
+  const startPoint = new THREE.Vector3(origin.x , origin.y + 40, origin.z);
+  const endPoint = new THREE.Vector3(origin.x + 200, origin.y + 100 , origin.z);
+
+  //Line - 2
+  const startPoint2 = new THREE.Vector3(origin.x + 100 , origin.y , origin.z);
+  const endPoint2 = new THREE.Vector3(origin.x , origin.y + 40 , origin.z);
+  
 
   const pipeShape = createPipeShape(outerSize, innerSize, origin);
   const extrudeShape = createExtrudeGeometry(pipeShape, origin, extrudeWidth);
   const pos = extrudeShape.getAttribute("position");
 
-  const settings = { isBackCut, isXYPlane, isXZPlane, startPoint, endPoint, origin, extrudeWidth, width: outerSize, height: outerSize };
+  const settings = { isBackCut, isXYPlane, isXZPlane,isTwoLine, startPoint, endPoint, startPoint2, endPoint2, origin, extrudeWidth, width: outerSize, height: outerSize };
   applyCutTransformations(pos, settings);
 
+  const windowMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xf5f6fa,
+    emissive:"gray",
+    // transparent: true, 
+    // opacity: 0.8, 
+    roughness: 0.5,
+    transmission: 50, 
+    metalness: 0.1,
+    // reflectivity: 0.9,     
+    clearcoat: 0.92,
+    clearcoatRoughness: 0.1, 
+  });
+  const windowMaterial2 = new THREE.MeshStandardMaterial({
+    color: 0xf5f6fa,
+    
+    roughness: 0.2,
+   
+    metalness: 0.2,
+    emissive: "white",
+    side: THREE.DoubleSide,
+   
+  });
+  const windowMaterial3 = new THREE.MeshPhongMaterial({
+    color: 0xf5f6fa,
+    emissive:"white",
+    specular: 0xd6c2c2,
+    shininess: 70,
+    
+    
+    reflectivity: 0.9,     
+   
+  });
+
+  
+  
+  // const mat = new THREE
   const material = new THREE.MeshBasicMaterial({ color: "green" });
-  const mesh = new THREE.Mesh(extrudeShape, material);
+  const mesh = new THREE.Mesh(extrudeShape, windowMaterial);
   const edges = new THREE.LineSegments(new THREE.EdgesGeometry(extrudeShape), new THREE.LineBasicMaterial({ color: "white" }));
 
   mesh.add(edges);
@@ -2970,10 +3082,11 @@ setupGeometry(scene);
 
 //#region  Renderer setup
 const canvas = document.querySelector("canvas");
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.localClippingEnabled = true;
+
 renderer.render(scene, camera);
 //#endregion
 
@@ -2992,3 +3105,8 @@ function animate() {
 }
 animate();
 //#endregion
+
+
+
+
+
