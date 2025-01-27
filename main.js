@@ -3,26 +3,9 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-
 // Scene setup
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color( 'white' );
-// Ambient light setup
-const ambientLight = new THREE.AmbientLight("black", 1);
-scene.add(ambientLight);
-
-const directionalLight = new THREE.DirectionalLight( "white", 5 );
-				directionalLight.position.set( 0, 200, 200 );
-				// scene.add( directionalLight );
-        const helper = new THREE.DirectionalLightHelper(  directionalLight, 100 );
-// scene.add( helper );
-
-const pointLight = new THREE.PointLight("red",1);
-pointLight.position.set(200,200,20);
-// scene.add(pointLight);
-
-const hemisphereLight = new THREE.HemisphereLight( "white", "white", 1 );
-// scene.add( hemisphereLight );
 //#region  Camera Setup
 // Camera setup
 const camera = new THREE.OrthographicCamera(
@@ -31,11 +14,46 @@ const camera = new THREE.OrthographicCamera(
   window.innerHeight / 2,
   window.innerHeight / -2,
   1,
-  1600
+  2500
 );
-camera.lookAt(0, 0, 0);
+// camera.lookAt(100, 0, 0);
+
+// camera.add(pointLight);
+// camera.add(pointLightHelper);
+
+//#endregion
+// Ambient light setup
+const ambientLight = new THREE.AmbientLight("white",1);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight( "white", 0.4 );
+				directionalLight.position.set( 150, 150, 100 );
+        // directionalLight.target();
+        const targetObject = new THREE.Object3D(); 
+        targetObject.position.set(100,-100, -100);       
+        directionalLight.add(targetObject);                 
+
+        directionalLight.target = targetObject;  
+        directionalLight.target.updateMatrixWorld();
+
+        // directionalLight.lookAt(100,100,200);
+				// scene.add( directionalLight );
+
+        const helper = new THREE.DirectionalLightHelper(  directionalLight, 100 );
+        // scene.add( helper );
+
+const pointLight = new THREE.PointLight(0xffffff, 0.2, Infinity, 0.1);
+pointLight.position.set(-200,-10);
+// pointLight.lookAt(500,100);
+camera.add(pointLight);
+const pointLightHelper = new THREE.PointLightHelper( pointLight, 20 );
+camera.add( pointLightHelper );
+// scene.add(pointLight);
+const hemisphereLight = new THREE.HemisphereLight( "white", "white", 1 );
+// scene.add( hemisphereLight );
+
 const axesHelper = new THREE.AxesHelper(500);
-// scene.add(axesHelper);
+scene.add(axesHelper);
 
 // const camera = new THREE.PerspectiveCamera(
 //   495,
@@ -44,9 +62,7 @@ const axesHelper = new THREE.AxesHelper(500);
 //   1000
 // );
 // camera.position.z = 400;
-camera.position.set(0, 2, 900);
 
-//#endregion
 //#region DAY-1 of Task based Training (3/1/25)
 //#region Shapes setups
 // Box setup
@@ -2808,274 +2824,511 @@ camera.position.set(0, 2, 900);
 //#region Extrusion shapes Cut by line
 
 // Function to create a pipe shape with outer and inner square
-function createPipeShape(outerSize, innerSize, origin) {
-  const shape = new THREE.Shape();
+// function createPipeShape(outerSize, innerSize, origin) {
+//   const shape = new THREE.Shape();
 
-  // Outer square
-  shape.moveTo(origin.x, origin.y);
+//   // Outer square
+//   shape.moveTo(origin.x, origin.y);
 
-  for(let i = 0;i<=outerSize;i++){
-    shape.lineTo(origin.x + i, origin.y);
+//   for(let i = 0;i<=outerSize;i++){
+//     shape.lineTo(origin.x + i, origin.y);
 
-  }
-  for(let i = 0;i<=outerSize;i++){
-    shape.lineTo(origin.x + outerSize, origin.y + i);
-  }
-  for(let i = outerSize;i>=0;i--){
-    shape.lineTo(origin.x + i, origin.y + outerSize);
+//   }
+//   for(let i = 0;i<=outerSize;i++){
+//     shape.lineTo(origin.x + outerSize, origin.y + i);
+//   }
+//   for(let i = outerSize;i>=0;i--){
+//     shape.lineTo(origin.x + i, origin.y + outerSize);
 
-  }
-  for(let i = outerSize;i>=0;i--){
-    shape.lineTo(origin.x, origin.y + i);
-  }
-  shape.lineTo(origin.x, origin.y);
+//   }
+//   for(let i = outerSize;i>=0;i--){
+//     shape.lineTo(origin.x, origin.y + i);
+//   }
+//   shape.lineTo(origin.x, origin.y);
 
-  // Inner square
-  const innerOffset = (outerSize - innerSize) / 2; 
-  shape.moveTo(origin.x + innerOffset, origin.y + innerOffset);
-  for(let i = 0;i<=innerSize;i++){
-    shape.lineTo(origin.x + innerOffset, origin.y + innerOffset + i);
+//   // Inner square
+//   const innerOffset = (outerSize - innerSize) / 2; 
+//   shape.moveTo(origin.x + innerOffset, origin.y + innerOffset);
+//   for(let i = 0;i<=innerSize;i++){
+//     shape.lineTo(origin.x + innerOffset, origin.y + innerOffset + i);
 
-  }
-  for(let i = 0;i<=innerSize;i++){
-    shape.lineTo(origin.x + innerOffset + i, origin.y + innerOffset + innerSize);
+//   }
+//   for(let i = 0;i<=innerSize;i++){
+//     shape.lineTo(origin.x + innerOffset + i, origin.y + innerOffset + innerSize);
 
-  }
-  for(let i = innerSize;i>=innerOffset;i--){
-    shape.lineTo(origin.x + innerOffset + innerSize, origin.y + i);
+//   }
+//   for(let i = innerSize;i>=innerOffset;i--){
+//     shape.lineTo(origin.x + innerOffset + innerSize, origin.y + i);
 
-  }
-  for(let i = innerSize;i>=innerOffset;i--){
-    shape.lineTo(origin.x + i , origin.y + innerOffset);
-  }
-  shape.lineTo(origin.x + innerOffset, origin.y + innerOffset);
+//   }
+//   for(let i = innerSize;i>=innerOffset;i--){
+//     shape.lineTo(origin.x + i , origin.y + innerOffset);
+//   }
+//   shape.lineTo(origin.x + innerOffset, origin.y + innerOffset);
 
-  return shape;
-}
+//   return shape;
+// }
 
-// Create extrude geometry
-function createExtrudeGeometry(shape, origin, extrudeWidth) {
-  const path = new THREE.CurvePath();
-  const linePath = new THREE.LineCurve3(
-    new THREE.Vector3(origin.x, origin.y, origin.z),
-    new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z)
-  );
-  path.add(linePath);
-  const extrudeSettings = { 
-      steps: 1,
-      extrudePath: path
-     };
-  return new THREE.ExtrudeGeometry(shape, extrudeSettings);
-}
+// // Create extrude geometry
+// function createExtrudeGeometry(shape, origin, extrudeWidth) {
+//   const path = new THREE.CurvePath();
+//   const linePath = new THREE.LineCurve3(
+//     new THREE.Vector3(origin.x, origin.y, origin.z),
+//     new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z)
+//   );
+//   path.add(linePath);
+//   const extrudeSettings = { 
+//       steps: 1,
+//       extrudePath: path
+//      };
+//   return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+// }
 
-// Transform vertex positions based on cutting conditions
-function applyCutTransformations(pos, settings) {
-  const { isBackCut, isXYPlane, isXZPlane,isTwoLine, startPoint, endPoint, startPoint2, endPoint2, origin, extrudeWidth, width, height } = settings;
+// // Transform vertex positions based on cutting conditions
+// function applyCutTransformations(pos, settings) {
+//   const { isBackCut, isXYPlane, isXZPlane,isTwoLine, startPoint, endPoint, startPoint2, endPoint2, origin, extrudeWidth, width, height } = settings;
 
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const y = pos.getY(i);
-    const z = pos.getZ(i);
+//   for (let i = 0; i < pos.count; i++) {
+//     const x = pos.getX(i);
+//     const y = pos.getY(i);
+//     const z = pos.getZ(i);
 
 
-    if (isBackCut) {
-      // XY Plane (Back Cut)
-      if (isXYPlane) {
-        if (!isTwoLine && endPoint.x === startPoint.x && x === origin.x + extrudeWidth) {
-          pos.setX(i, x - endPoint.x);
-        } 
-        else if (!isTwoLine && startPoint.x < endPoint.x && x === origin.x + extrudeWidth && y >= startPoint.y && y <= endPoint.y) {
-          const theta = Math.atan((endPoint.x - startPoint.x) / (endPoint.y - startPoint.y));
-          if (y >= startPoint.y) {
-            pos.setX(i, x + theta * y);
-          }
-        } 
-        else if (!isTwoLine && startPoint.x > endPoint.x && x === origin.x + extrudeWidth && y >= startPoint.y && y <= endPoint.y) {
-          const theta = Math.atan((startPoint.x - endPoint.x) / height);
-          pos.setX(i, endPoint.x + x - theta * y * 1.26 + startPoint.x);
-        }
-        if(isTwoLine && startPoint.x < endPoint.x && startPoint2.x > endPoint2.x && x == origin.x + extrudeWidth){
-          if(startPoint.x < endPoint.x && startPoint.y >= endPoint2.y && y>= startPoint.y && y <= endPoint.y){
-            const theta = Math.atan((endPoint.x - startPoint.x)/(endPoint.y/startPoint.y));
-            pos.setX(i,  (x - endPoint.x) + theta * (y - startPoint.y) + endPoint.x );
-            console.log(`Entering....`);
-            console.log(`
-              x: ${pos.getX(x)}
-              y: ${pos.getY(y)}
-              z: ${pos.getZ(z)}
-              `)
+//     if (isBackCut) {
+//       // XY Plane (Back Cut)
+//       if (isXYPlane) {
+//         if (!isTwoLine && endPoint.x === startPoint.x && x === origin.x + extrudeWidth) {
+//           pos.setX(i, x - endPoint.x);
+//         } 
+//         else if (!isTwoLine && startPoint.x < endPoint.x && x === origin.x + extrudeWidth && y >= startPoint.y && y <= endPoint.y) {
+//           const theta = Math.atan((endPoint.x - startPoint.x) / (endPoint.y - startPoint.y));
+//           if (y >= startPoint.y) {
+//             pos.setX(i, x + theta * y);
+//           }
+//         } 
+//         else if (!isTwoLine && startPoint.x > endPoint.x && x === origin.x + extrudeWidth && y >= startPoint.y && y <= endPoint.y) {
+//           const theta = Math.atan((startPoint.x - endPoint.x) / height);
+//           pos.setX(i, endPoint.x + x - theta * y * 1.26 + startPoint.x);
+//         }
+//         if(isTwoLine && startPoint.x < endPoint.x && startPoint2.x > endPoint2.x && x == origin.x + extrudeWidth){
+//           if(startPoint.x < endPoint.x && startPoint.y >= endPoint2.y && y>= startPoint.y && y <= endPoint.y){
+//             const theta = Math.atan((endPoint.x - startPoint.x)/(endPoint.y/startPoint.y));
+//             pos.setX(i,  (x - endPoint.x) + theta * (y - startPoint.y) + endPoint.x );
+//             console.log(`Entering....`);
+//             console.log(`
+//               x: ${pos.getX(x)}
+//               y: ${pos.getY(y)}
+//               z: ${pos.getZ(z)}
+//               `)
           
-          }
-          if(startPoint2.x > endPoint2.x && startPoint2.y < startPoint.y && y < endPoint2.y && y >= startPoint2.y){
-            const theta = Math.atan((endPoint2.x - startPoint2.x)/(endPoint2.y - startPoint2.y));
-            pos.setX(i, x + (theta * y - endPoint2.y)  + startPoint2.x/1.2  );
-            console.log(`Entering....hihihh`);
+//           }
+//           if(startPoint2.x > endPoint2.x && startPoint2.y < startPoint.y && y < endPoint2.y && y >= startPoint2.y){
+//             const theta = Math.atan((endPoint2.x - startPoint2.x)/(endPoint2.y - startPoint2.y));
+//             pos.setX(i, x + (theta * y - endPoint2.y)  + startPoint2.x/1.2  );
+//             console.log(`Entering....hihihh`);
 
-            console.log(`
-              x: ${pos.getX(x)}
-              y: ${pos.getY(y)}
-              z: ${pos.getZ(z)}
-              `)
-          }
-        }
-      }
+//             console.log(`
+//               x: ${pos.getX(x)}
+//               y: ${pos.getY(y)}
+//               z: ${pos.getZ(z)}
+//               `)
+//           }
+//         }
+//       }
       
 
-      // XZ Plane (Back Cut)
-      if (isXZPlane) {
-        if (endPoint.x === startPoint.x && x === origin.x + extrudeWidth) {
-          pos.setX(i, x - endPoint.x);
-        } 
-        else if (startPoint.x > endPoint.x && x === origin.x + extrudeWidth) {
-          const theta = Math.atan((startPoint.x - endPoint.x) / (width - endPoint.z));
-          pos.setX(i, x + theta * z);
-        } 
-        else if (startPoint.x < endPoint.x && x === origin.x + extrudeWidth) {
-          const theta = Math.atan((endPoint.x - startPoint.x) / width);
-          pos.setX(i, x - theta * (z - endPoint.z));
-        }
+//       // XZ Plane (Back Cut)
+//       if (isXZPlane) {
+//         if (endPoint.x === startPoint.x && x === origin.x + extrudeWidth) {
+//           pos.setX(i, x - endPoint.x);
+//         } 
+//         else if (startPoint.x > endPoint.x && x === origin.x + extrudeWidth) {
+//           const theta = Math.atan((startPoint.x - endPoint.x) / (width - endPoint.z));
+//           pos.setX(i, x + theta * z);
+//         } 
+//         else if (startPoint.x < endPoint.x && x === origin.x + extrudeWidth) {
+//           const theta = Math.atan((endPoint.x - startPoint.x) / width);
+//           pos.setX(i, x - theta * (z - endPoint.z));
+//         }
        
-      }
-    } else {
-      // XY Plane (Front Cut)
-      if (isXYPlane) {
-        if (!isTwoLine,endPoint.x === startPoint.x && x === origin.x) {
-          pos.setX(i, x + endPoint.x);
-        } 
-        else if (!isTwoLine && startPoint.x < endPoint.x && x === origin.x && y >= startPoint.y && y <= endPoint.y) {
-          const theta = Math.atan((endPoint.x - startPoint.x) / height);
+//       }
+//     } else {
+//       // XY Plane (Front Cut)
+//       if (isXYPlane) {
+//         if (!isTwoLine,endPoint.x === startPoint.x && x === origin.x) {
+//           pos.setX(i, x + endPoint.x);
+//         } 
+//         else if (!isTwoLine && startPoint.x < endPoint.x && x === origin.x && y >= startPoint.y && y <= endPoint.y) {
+//           const theta = Math.atan((endPoint.x - startPoint.x) / height);
 
-          pos.setX(i, x + theta * y - startPoint.y/1.3);
+//           pos.setX(i, x + theta * y - startPoint.y/1.3);
           
-        } 
+//         } 
         
-        else if (!isTwoLine && startPoint.x > endPoint.x && x == origin.x && y >= startPoint.y && y <= endPoint.y){
-          const theta = Math.atan((startPoint.x - endPoint.x) / height);
-          pos.setX(i, (x - theta * y * 2) + startPoint.x + startPoint.x/1.7);
+//         else if (!isTwoLine && startPoint.x > endPoint.x && x == origin.x && y >= startPoint.y && y <= endPoint.y){
+//           const theta = Math.atan((startPoint.x - endPoint.x) / height);
+//           pos.setX(i, (x - theta * y * 2) + startPoint.x + startPoint.x/1.7);
           
-        }
+//         }
 
-        if(isTwoLine && startPoint.x < endPoint.x && startPoint2.x > endPoint2.x && x == origin.x){
-          if(startPoint.x < endPoint.x && startPoint.y >= endPoint2.y && y>= startPoint.y && y <= endPoint.y){
-            const theta = Math.atan((endPoint.x - startPoint.x)/(endPoint.y/startPoint.y));
-            pos.setX(i,  (x - endPoint.x) + theta * (y - startPoint.y) + endPoint.x );
-            console.log(`Entering....`);
-            console.log(`
-              x: ${pos.getX(x)}
-              y: ${pos.getY(y)}
-              z: ${pos.getZ(z)}
-              `)
+//         if(isTwoLine && startPoint.x < endPoint.x && startPoint2.x > endPoint2.x && x == origin.x){
+//           if(startPoint.x < endPoint.x && startPoint.y >= endPoint2.y && y>= startPoint.y && y <= endPoint.y){
+//             const theta = Math.atan((endPoint.x - startPoint.x)/(endPoint.y/startPoint.y));
+//             pos.setX(i,  (x - endPoint.x) + theta * (y - startPoint.y) + endPoint.x );
+//             console.log(`Entering....`);
+//             console.log(`
+//               x: ${pos.getX(x)}
+//               y: ${pos.getY(y)}
+//               z: ${pos.getZ(z)}
+//               `)
           
-          }
-          if(startPoint2.x > endPoint2.x && startPoint2.y < startPoint.y && y < endPoint2.y && y >= startPoint2.y){
-            const theta = Math.atan((endPoint2.x - startPoint2.x)/(endPoint2.y - startPoint2.y));
-            pos.setX(i, (x + (theta * y - endPoint2.y)  + startPoint2.x/1.2  ));
-            console.log(`Entering....hihihh`);
+//           }
+//           if(startPoint2.x > endPoint2.x && startPoint2.y < startPoint.y && y < endPoint2.y && y >= startPoint2.y){
+//             const theta = Math.atan((endPoint2.x - startPoint2.x)/(endPoint2.y - startPoint2.y));
+//             pos.setX(i, (x + (theta * y - endPoint2.y)  + startPoint2.x/1.2  ));
+//             console.log(`Entering....hihihh`);
 
-            console.log(`
-              x: ${pos.getX(x)}
-              y: ${pos.getY(y)}
-              z: ${pos.getZ(z)}
-              `)
-          }
-        }
-      }
+//             console.log(`
+//               x: ${pos.getX(x)}
+//               y: ${pos.getY(y)}
+//               z: ${pos.getZ(z)}
+//               `)
+//           }
+//         }
+//       }
 
-      // XZ Plane (Front Cut)
-      if (isXZPlane) {
-        if (endPoint.x === startPoint.x && x === origin.x) {
-          pos.setX(i, x + endPoint.x);
-        } 
-        else if (startPoint.z > endPoint.z && x === origin.x) {
-          const theta = Math.atan((startPoint.x - endPoint.x) / (width - endPoint.z));
-          pos.setX(i, endPoint.z + z + theta * x * 1.26 + startPoint.x);
-        } 
-        else if (startPoint.z < endPoint.z && x === origin.x) {
-          const theta = Math.atan((endPoint.x - startPoint.x) / width);
-          pos.setX(i, startPoint.z - z - theta * x);
-        }
-      }
+//       // XZ Plane (Front Cut)
+//       if (isXZPlane) {
+//         if (endPoint.x === startPoint.x && x === origin.x) {
+//           pos.setX(i, x + endPoint.x);
+//         } 
+//         else if (startPoint.z > endPoint.z && x === origin.x) {
+//           const theta = Math.atan((startPoint.x - endPoint.x) / (width - endPoint.z));
+//           pos.setX(i, endPoint.z + z + theta * x * 1.26 + startPoint.x);
+//         } 
+//         else if (startPoint.z < endPoint.z && x === origin.x) {
+//           const theta = Math.atan((endPoint.x - startPoint.x) / width);
+//           pos.setX(i, startPoint.z - z - theta * x);
+//         }
+//       }
 
       
+//     }
+//   }
+
+//   pos.needsUpdate = true;
+// }
+
+
+// // Setup the geometry and scene
+// function setupGeometry(scene) {
+//   const origin = new THREE.Vector3(0, 0, 0);
+//   const outerSize = 100, innerSize = 80, extrudeWidth = 500;
+//   const isXYPlane = true, isXZPlane = false, isBackCut = false, isTwoLine = true;
+
+
+//   // Line dimentions...
+
+//   //Line - 1
+//   const startPoint = new THREE.Vector3(origin.x , origin.y + 40, origin.z);
+//   const endPoint = new THREE.Vector3(origin.x + 200, origin.y + 100 , origin.z);
+
+//   //Line - 2
+//   const startPoint2 = new THREE.Vector3(origin.x + 100 , origin.y , origin.z);
+//   const endPoint2 = new THREE.Vector3(origin.x , origin.y + 40 , origin.z);
+  
+
+//   const pipeShape = createPipeShape(outerSize, innerSize, origin);
+//   const extrudeShape = createExtrudeGeometry(pipeShape, origin, extrudeWidth);
+//   const pos = extrudeShape.getAttribute("position");
+
+//   const settings = { isBackCut, isXYPlane, isXZPlane,isTwoLine, startPoint, endPoint, startPoint2, endPoint2, origin, extrudeWidth, width: outerSize, height: outerSize };
+//   applyCutTransformations(pos, settings);
+
+//   const windowMaterial = new THREE.MeshPhysicalMaterial({
+//     color: "white",
+//     // emissive:"gray",
+//     // transparent: true, 
+//     // opacity: 0.8, 
+//     roughness: 0.4,
+//     // transmission: 5, 
+//     metalness: 0.6,
+//     // reflectivity: 2,  w
+//     // flatShading:true,
+//     // clearcoat: 0.92,
+//     // clearcoatRoughness: 0.1, 
+//   });
+//   const windowMaterial2 = new THREE.MeshStandardMaterial({
+//     color: 0xf5f6fa,
+    
+//     roughness: 0.2,
+   
+//     metalness: 0.2,
+//     emissive: "white",
+//     side: THREE.DoubleSide,
+   
+//   });
+//   const windowMaterial3 = new THREE.MeshPhongMaterial({
+//     color: 0xf5f6fa,
+//     emissive:"white",
+//     specular: 0xd6c2c2,
+//     shininess: 70,
+    
+    
+//     reflectivity: 0.9,     
+   
+//   });
+
+  
+  
+//   // const mat = new THREE
+//   // const material = new THREE.MeshBasicMaterial({ color: "green" });
+//   window.addEventListener('keydown', (event) => {
+//     if(event.key === 'w'){
+//       windowMaterial.color.set("#7C4720");
+//       windowMaterial.roughness.set(1);
+//       windowMaterial.metalness.set(0);
+//       camera.remove(pointLight);
+//       mesh.position.set(0,150,10);
+//     }
+//     else if(event.key === 'p'){
+//       windowMaterial.color.set("#CE8E50");
+//       windowMaterial.roughness.set(1);
+//       windowMaterial.metalness.set(0.9);
+//     }
+//     else if(event.key === 'a'){
+//       windowMaterial.color.set("#C4C4C4");
+//       windowMaterial.roughness.set(0.1);
+//       windowMaterial.metalness.set(1);
+//     }
+//   });
+  
+//   const mesh = new THREE.Mesh(extrudeShape, windowMaterial);
+//   const edges = new THREE.LineSegments(new THREE.EdgesGeometry(extrudeShape), new THREE.LineBasicMaterial({ color: "white" }));
+//   scene.add(camera);
+//   mesh.add(edges);
+//   scene.add(mesh);
+// }
+
+// function keyEventTexture(event){
+// let key = event.key;
+// document.getE
+// }
+
+
+
+// setupGeometry(scene);
+
+//#endregion
+
+//#region Window project ..................
+
+
+function Pane(extrudeWidth, origin){
+  const line1 = new THREE.Vector2(origin.x, origin.y);
+const line2 = new THREE.Vector2(origin.x + extrudeWidth, origin.y);
+const line3 = new THREE.Vector2(origin.x + extrudeWidth, origin.y + extrudeWidth);
+const line4 = new THREE.Vector2(origin.x, origin.y + extrudeWidth);
+  const Shape = new THREE.Shape();
+  Shape.moveTo(0,0);
+  Shape.lineTo(50,0);
+  Shape.lineTo(50,50);
+  Shape.lineTo(0,50);
+  Shape.lineTo(0,0);
+  
+  const bottomLine = new THREE.LineCurve3(
+        new THREE.Vector3(origin.x, origin.y, origin.z),
+        new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z)
+      );
+  const rightLine = new THREE.LineCurve3(
+    new THREE.Vector3(origin.x + extrudeWidth , origin.y , origin.z),
+    new THREE.Vector3(origin.x + extrudeWidth, origin.y + extrudeWidth , origin.z)
+  );
+  const topLine = new THREE.LineCurve3(
+    new THREE.Vector3(origin.x+ extrudeWidth , origin.y + extrudeWidth , origin.z),
+    new THREE.Vector3(origin.x , origin.y + extrudeWidth, origin.z)
+  );
+
+  const leftLine = new THREE.LineCurve3(
+    new THREE.Vector3(origin.x, origin.y + extrudeWidth , origin.z),
+    new THREE.Vector3(origin.x, origin.y , origin.z)
+  )
+
+  const allLines = [];
+  allLines.push(bottomLine, topLine, leftLine, rightLine);
+  const finalObj = new THREE.Object3D();
+
+  const Material = new THREE.MeshPhysicalMaterial({
+    color: "white", 
+    emissive: "#E4E4E4", 
+    roughness: 0, 
+    metalness: 1, 
+    reflectivity: 0.9,
+  });
+  let posz = 0;
+  for(const line of allLines){
+    const extrudeSettings = {
+      steps: 1 ,
+      depth: 1,
+      extrudePath: line,
     }
+    const extrudeShape = new THREE.ExtrudeGeometry(Shape, extrudeSettings);
+    const mesh = new THREE.Mesh(extrudeShape, Material);
+    mesh.position.z = posz;
+    finalObj.add(mesh);
+    posz += 0;
+
+
+    // window pan cuts.....
+    const pos = extrudeShape.getAttribute("position");
+    for (let i = 0; i < pos.count; i++) {
+          const x = pos.getX(i);
+          const y = pos.getY(i);
+          const z = pos.getZ(i);
+          console.log(`
+          i: ${i},
+          x: ${x},
+          y: ${y},
+          z: ${z}`)
+
+          if(line1){
+            if(x === origin.x && y === origin.y + 50){
+              pos.setX(i, line1.x + 50);
+            }
+            else if(x === origin.x + 50 && y === origin.y ){
+              pos.setY(i, line1.y + 50);
+            }
+          }
+          if(line2){
+            if(x === origin.x + extrudeWidth && y === origin.y + 50){
+              pos.setX(i, line2.x - 50);
+            }
+            else if(x === origin.x + extrudeWidth - 50 && y === origin.y){
+              pos.setY(i, line2.y + 50);
+            }
+          }
+          if(line3){
+            if(x === origin.x + extrudeWidth - 50 && y === origin.y + extrudeWidth){
+              pos.setY(i, line3.y - 50);
+            }
+            else if(x === origin.x + extrudeWidth && y === origin.y + extrudeWidth - 50){
+              pos.setX(i, line3.x - 50);
+            }
+          }
+          if(line4){
+            if(x === origin.x && y === origin.y + extrudeWidth - 50){
+              pos.setX(i,line4.x + 50)
+            }
+            else if(x === origin.x + 50 && y === origin.y + extrudeWidth){
+              pos.setY(i, line4.y - 50)
+            }
+          }
+          // if(x === origin.x && y === origin.y + 50){
+            
+          //   pos.setX(i,x + 50);
+          // }
+          // else if(x === origin.x + extrudeWidth && y === origin.y + 50){
+          //   const theta = Math.sin(45);
+          //   pos.setX(i,x - 50);
+          // }
+          // else if(x === origin.x + extrudeWidth && y === origin.y + 51){
+          //   pos.setY(i,origin.y);
+          // }
+          // else if(x === origin.x + extrudeWidth - 50 && y === extrudeWidth){
+          //   pos.setY(i, y - 50);
+          // }
+          // else if(x === origin.x + extrudeWidth - 51 && y === extrudeWidth){
+          //   pos.setX(i, x + 50);
+          // }
+          // else if(x === origin.x && y === extrudeWidth - 50){
+          //   pos.setX(i, x + 50);
+          // }
+          // else if(x === origin.x && y === extrudeWidth - 51){
+          //   pos.setY(i, y + 50);
+          // }
+          // else if(x === origin.x && y === 51){
+          //   pos.setY(i, origin.y)
+          // }
+    }
+
+
+    const edges = new THREE.EdgesGeometry(extrudeShape);
+    const edgeMaterial = new THREE.LineBasicMaterial({color:"white"});
+    const lines = new THREE.LineSegments(edges, edgeMaterial);
+    finalObj.add(lines);
   }
 
-  pos.needsUpdate = true;
+  const glassShape = new THREE.Shape();
+  glassShape.moveTo(50,50);
+  glassShape.lineTo(extrudeWidth - 50,50);
+  glassShape.lineTo(extrudeWidth - 50, extrudeWidth - 50);
+  glassShape.lineTo(50,extrudeWidth - 50);
+
+  const glassExtrudeSettings = {
+    steps: 1,
+    depth: 5,
+    bevelEnabled: false,
+  }
+
+  const extrudeGlassShape = new THREE.ExtrudeGeometry(glassShape, glassExtrudeSettings);
+  const glassMaterial = new THREE.MeshPhysicalMaterial({
+    // color: "white", 
+    // emissive: "gray", 
+    transparent: true, 
+    opacity: 0.9, 
+    roughness: 0, 
+    transmission: 0.9, 
+    metalness: 0.1, 
+    reflectivity: 0.9,
+  });
+  
+  const glassMesh = new THREE.Mesh(extrudeGlassShape, glassMaterial);
+  glassMesh.position.set(0,0,-(25));
+  finalObj.add(glassMesh);
+camera.position.set(extrudeWidth/2, extrudeWidth/2, 500);
+
+scene.add(camera);
+
+return finalObj;
+
 }
-
-
-// Setup the geometry and scene
-function setupGeometry(scene) {
-  const origin = new THREE.Vector3(0, 0, 0);
-  const outerSize = 100, innerSize = 80, extrudeWidth = 500;
-  const isXYPlane = true, isXZPlane = false, isBackCut = false, isTwoLine = true;
-
-
-  // Line dimentions...
-
-  //Line - 1
-  const startPoint = new THREE.Vector3(origin.x , origin.y + 40, origin.z);
-  const endPoint = new THREE.Vector3(origin.x + 200, origin.y + 100 , origin.z);
-
-  //Line - 2
-  const startPoint2 = new THREE.Vector3(origin.x + 100 , origin.y , origin.z);
-  const endPoint2 = new THREE.Vector3(origin.x , origin.y + 40 , origin.z);
+// function rightPane(extrudeWidth){
+//   const rightShape = new THREE.Shape();
+//   rightShape.moveTo(extrudeWidth + 0,0);
+//   rightShape.lineTo(extrudeWidth + 50,0);
+//   rightShape.lineTo(extrudeWidth + 50,50);
+//   rightShape.lineTo(extrudeWidth + 0,50);
+//   rightShape.lineTo(extrudeWidth + 0,0);
+//   const rightLine = new THREE.LineCurve3(
+//     new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z),
+//     new THREE.Vector3(origin.x  + extrudeWidth, origin.y + extrudeWidth, origin.z)
+//   );
+//   const rightPath = new THREE.CurvePath();
+//   rightPath.add(rightLine);
+//   const extrudeRightSettings = {
+//     steps: 1,
+//     depth: 1,
+//     extrudePath: rightPath,
+//   }
   
+//   const extrudeRightShape = new THREE.ExtrudeGeometry(rightShape, extrudeRightSettings);
+//   const rightMaterial = new THREE.MeshBasicMaterial({color: "red"});
+//   const rightMesh = new THREE.Mesh(extrudeRightShape, rightMaterial);
+//   return rightMesh;
+// }
 
-  const pipeShape = createPipeShape(outerSize, innerSize, origin);
-  const extrudeShape = createExtrudeGeometry(pipeShape, origin, extrudeWidth);
-  const pos = extrudeShape.getAttribute("position");
 
-  const settings = { isBackCut, isXYPlane, isXZPlane,isTwoLine, startPoint, endPoint, startPoint2, endPoint2, origin, extrudeWidth, width: outerSize, height: outerSize };
-  applyCutTransformations(pos, settings);
+function createWindow(extrudeWidth, origin){
+const parentObj = new THREE.Object3D();
+const Mesh = Pane(extrudeWidth, origin);
+parentObj.add(Mesh);
 
-  const windowMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xf5f6fa,
-    emissive:"gray",
-    // transparent: true, 
-    // opacity: 0.8, 
-    roughness: 0.5,
-    transmission: 50, 
-    metalness: 0.1,
-    // reflectivity: 0.9,     
-    clearcoat: 0.92,
-    clearcoatRoughness: 0.1, 
-  });
-  const windowMaterial2 = new THREE.MeshStandardMaterial({
-    color: 0xf5f6fa,
-    
-    roughness: 0.2,
-   
-    metalness: 0.2,
-    emissive: "white",
-    side: THREE.DoubleSide,
-   
-  });
-  const windowMaterial3 = new THREE.MeshPhongMaterial({
-    color: 0xf5f6fa,
-    emissive:"white",
-    specular: 0xd6c2c2,
-    shininess: 70,
-    
-    
-    reflectivity: 0.9,     
-   
-  });
-
-  
-  
-  // const mat = new THREE
-  const material = new THREE.MeshBasicMaterial({ color: "green" });
-  const mesh = new THREE.Mesh(extrudeShape, windowMaterial);
-  const edges = new THREE.LineSegments(new THREE.EdgesGeometry(extrudeShape), new THREE.LineBasicMaterial({ color: "white" }));
-
-  mesh.add(edges);
-  scene.add(mesh);
+scene.add(parentObj);
 }
+const origin = new THREE.Vector3(0,0,0);
+const extrudeWidth = 350;
 
-setupGeometry(scene);
-
-
+createWindow(extrudeWidth, origin);
 
 
 //#endregion
