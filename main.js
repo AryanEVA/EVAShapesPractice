@@ -58,12 +58,12 @@ const helper = new THREE.DirectionalLightHelper(directionalLight, 100);
 const pointLight = new THREE.PointLight(0xffffff, 0.2, Infinity, 0.1);
 pointLight.position.set(-200, -10);
 // pointLight.lookAt(500,100);
-// camera.add(pointLight);
+camera.add(pointLight);
 const pointLightHelper = new THREE.PointLightHelper(pointLight, 20);
 // camera.add(pointLightHelper);
 // scene.add(pointLight);
 const hemisphereLight = new THREE.HemisphereLight("white", "white", 1);
-// scene.add( hemisphereLight );
+scene.add( hemisphereLight );
 
 const axesHelper = new THREE.AxesHelper(500);
 // scene.add(axesHelper);
@@ -2750,7 +2750,7 @@ const axesHelper = new THREE.AxesHelper(500);
 //     //   `);
 //     // }
 
-//     if(x === origin.x && y > origin.y + cutHeight){
+//     if(x === origin.x && y > origin.y ){
 //       const theta = Math.atan(cutWidth/(height - cutHeight));
 //       pos.setX(i, x - theta * (cutHeight - y ));
 //       console.log(` Upper cut => i: ${i}, x: ${x}, y: ${y}, z: ${z}
@@ -2759,16 +2759,16 @@ const axesHelper = new THREE.AxesHelper(500);
 //       new z: ${pos.getZ(i)}}
 //        `);
 //     }
-//     if(x === origin.x && y <= origin.y + cutHeight){
-//     const theta = Math.atan(cutWidth/(cutHeight));
-//       pos.setX(i, x + theta * cutHeight - y );
-//       console.log(` Lower cut => i: ${i}, x: ${x}, y: ${y}, z: ${z}
-//        new x: ${pos.getX(i)}
-//        new y: ${pos.getY(i)}}
-//        new z: ${pos.getZ(i)}}
-//        `);
+//     // if(x === origin.x && y <= origin.y + cutHeight){
+//     // const theta = Math.atan(cutWidth/(cutHeight));
+//     //   pos.setX(i, x + theta * cutHeight - y );
+//     //   console.log(` Lower cut => i: ${i}, x: ${x}, y: ${y}, z: ${z}
+//     //    new x: ${pos.getX(i)}
+//     //    new y: ${pos.getY(i)}}
+//     //    new z: ${pos.getZ(i)}}
+//     //    `);
 
-//     }
+//     // }
 // //#region side slant cut logic+
 //     // if(x === origin.x && y === origin.y){
 //     //   pos.setX(i,cutWidth);
@@ -2836,7 +2836,7 @@ const axesHelper = new THREE.AxesHelper(500);
 
 //#region Extrusion shapes Cut by line
 
-// Function to create a pipe shape with outer and inner square
+// // Function to create a pipe shape with outer and inner square
 // function createPipeShape(outerSize, innerSize, origin) {
 //   const shape = new THREE.Shape();
 
@@ -2900,7 +2900,7 @@ const axesHelper = new THREE.AxesHelper(500);
 // // Transform vertex positions based on cutting conditions
 // function applyCutTransformations(pos, settings) {
 //   const { isBackCut, isXYPlane, isXZPlane,isTwoLine, startPoint, endPoint, startPoint2, endPoint2, origin, extrudeWidth, width, height } = settings;
-
+  
 //   for (let i = 0; i < pos.count; i++) {
 //     const x = pos.getX(i);
 //     const y = pos.getY(i);
@@ -3024,8 +3024,10 @@ const axesHelper = new THREE.AxesHelper(500);
 //       }
 
 //     }
+   
+  
 //   }
-
+ 
 //   pos.needsUpdate = true;
 // }
 
@@ -3033,12 +3035,12 @@ const axesHelper = new THREE.AxesHelper(500);
 // function setupGeometry(scene) {
 //   const origin = new THREE.Vector3(0, 0, 0);
 //   const outerSize = 100, innerSize = 80, extrudeWidth = 500;
-//   const isXYPlane = true, isXZPlane = false, isBackCut = false, isTwoLine = true;
+//   const isXYPlane = true, isXZPlane = false, isBackCut = false, isTwoLine = false;
 
 //   // Line dimentions...
 
 //   //Line - 1
-//   const startPoint = new THREE.Vector3(origin.x , origin.y + 40, origin.z);
+//   const startPoint = new THREE.Vector3(origin.x , origin.y , origin.z);
 //   const endPoint = new THREE.Vector3(origin.x + 200, origin.y + 100 , origin.z);
 
 //   //Line - 2
@@ -3053,7 +3055,7 @@ const axesHelper = new THREE.AxesHelper(500);
 //   applyCutTransformations(pos, settings);
 
 //   const windowMaterial = new THREE.MeshPhysicalMaterial({
-//     color: "white",
+//     color: "red",
 //     // emissive:"gray",
 //     // transparent: true,
 //     // opacity: 0.8,
@@ -3205,7 +3207,6 @@ const axesHelper = new THREE.AxesHelper(500);
 //           const x = pos.getX(i);
 //           const y = pos.getY(i);
 //           const z = pos.getZ(i);
-   
 //           if(line1){
 //             if(x === origin.x && y === origin.y + 50){
 //               pos.setX(i, line1.x + 50);
@@ -3344,8 +3345,6 @@ const axesHelper = new THREE.AxesHelper(500);
 // const extrudeWidth = 350;
 
 // createWindow(extrudeWidth, origin);
-
-
 
 
 //#endregion
@@ -3700,75 +3699,103 @@ const axesHelper = new THREE.AxesHelper(500);
 
 //#region 
 // Shape 1.............
+const origin = new THREE.Vector2(0,0,0);
+const shapeWidth = 50;
+const extrudeWidth = 200;
+const shape = new THREE.Shape();
+shape.moveTo(origin.x, origin.y);
+shape.lineTo(origin.x + shapeWidth, origin.y);
+shape.lineTo(origin.x + shapeWidth, origin.y + shapeWidth);
+shape.lineTo(origin.x, origin.y + shapeWidth);
+shape.lineTo(origin.x, origin.y);
 
+const bottomLine = new THREE.LineCurve3(
+          new THREE.Vector3(origin.x, origin.y, origin.z),
+          new THREE.Vector3(origin.x + extrudeWidth, origin.y, origin.z)
+        );
+const extrudeSettings = {
+  steps: 1,
+  extrudePath: bottomLine,
+}
 
-function createShape(origin, width, height, depthShape){
-  const shape = new THREE.Shape();
-  shape.moveTo(origin.x , origin.y);
-  shape.lineTo(origin.x + width, origin.y );
-  shape.lineTo(origin.x + width, origin.y + height);
-  shape.lineTo(origin.x, origin.y + height);
-  shape.lineTo(origin.x , origin.y);
+const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+const material = new THREE.MeshBasicMaterial({color: "red"});
+const mesh = new THREE.Mesh(extrudeShape, material);
 
-  const extrudeSettings = {
-    steps: 1, 
-    depth: depthShape,
+const cutLineStartPoint = new THREE.Vector2(extrudeWidth - 100, shapeWidth);
+const cutLineEndPoint = new THREE.Vector2(extrudeWidth,0);
+
+const extrudeLineStartPoint = new THREE.Vector2(bottomLine.v1.x, shapeWidth);
+const extrudeLineEndPoint = new THREE.Vector2(bottomLine.v2.x, shapeWidth);
+
+const interSectionPointsXY = getInterSectionPoint(cutLineStartPoint, cutLineEndPoint, extrudeLineStartPoint, extrudeLineEndPoint);
+const pos = extrudeShape.getAttribute('position');
+for(let i = 0;i<pos.count;i++){
+  const x = pos.getX(i);
+  const y = pos.getY(i);
+  const z = pos.getZ(i);
+  console.log(x,y,z);
+  if(x >= interSectionPointsXY.x && y> 0){
+    pos.setX(i, interSectionPointsXY.x);
   }
-const geometry = new THREE.BoxGeometry(width,height,depthShape);
-  const extrudeShape = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-  const material = new THREE.MeshPhysicalMaterial({
-    color: "white",
-    roughness: 1,
-
-  });
-  const mesh = new THREE.Mesh(extrudeShape, material);
-  return mesh;
 }
-function createTextureProject(origin, widthShape1, heightShape1, widthShape2, heightShape2, depthShape){
-  const parentObj = new THREE.Object3D();
+scene.add(mesh);
 
-  
-  const texture1 = new THREE.TextureLoader().load("./image.png");
-  texture1.wrapS = THREE.RepeatWrapping;
-  texture1.wrapT = THREE.RepeatWrapping;
-  texture1.repeat.set(1/200, 1/200); 
+function getInterSectionPoint(p1,p2,p3,p4){
+  const denominator = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
+  if(denominator === 0){
+    return null;
+  }
 
-  const texture2 = new THREE.TextureLoader().load("./imageUV.png");
-  texture2.wrapS = THREE.RepeatWrapping;
-  texture2.wrapT = THREE.RepeatWrapping;
-  texture2.repeat.set(1/widthShape2, 1/heightShape2); 
+  const interSectX = ((p1.x * p2.y - p1.y * p2.x) * (p3.x - p4.x) - (p1.x - p2.x) * (p3.x * p4.y - p3.y * p4.x))/ denominator;
+  const interSectY = ((p1.x * p2.y - p1.y * p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x * p4.y - p3.y * p4.x))/ denominator;
+  const intPointXY = new THREE.Vector2(interSectX, interSectY);
+ 
+  const minX = Math.min(p1.x, p2.x);
+  const minY = Math.min(p1.y, p2.y);
+  const maxX = Math.max(p1.x, p2.x);
+  const maxY = Math.max(p1.y, p2.y);
 
-  const shape1 = createShape(origin, widthShape1, heightShape1, depthShape);
-  shape1.position.set(-widthShape1 , -heightShape1/2);
-shape1.material.map = texture1;
-  parentObj.add(shape1);
-
-  const shape2 = createShape(origin, widthShape2, heightShape2, depthShape);
-  shape2.position.set(widthShape2, - heightShape2/2);
-  // shape2.material.map = texture2;
-  shape2.material.reflectivity = 0.9;
-  shape2.material.metalness = 1;
-  parentObj.add(shape2);
-
-  scene.add(parentObj);
+  if(intPointXY.x >= minX && intPointXY.x <= maxX && intPointXY.y >= minY && intPointXY.y <= maxY){
+    return intPointXY;
+  }
+  else{
+    return null;
+  }
 }
-const origin = new THREE.Vector2(0,0);
-const widthShape1 = 300;
-const heightShape1 = 200;
-const widthShape2 = widthShape1;
-const heightShape2 = heightShape1;
-const depthShape = 100;
 
+function getAngleBetweenLines(p1,p2,p3,p4){
+  let v1 = new THREE.Vector2(p2.x - p1.x, p2.y - p1.y);
+  let v2 = new THREE.Vector2(p4.x - p3.x, p4.y - p3.y);
 
-createTextureProject(origin, widthShape1, heightShape1, widthShape2, heightShape2, depthShape);
+  let dotProduct = v1.dot(v2);
+
+  let magnitude1 = v1.length();
+  let magnitude2 = v2.length();
+
+  let angleRad = Math.acos(dotProduct / (magnitude1 * magnitude2));
+
+  let angleDeg = 180 - THREE.MathUtils.radToDeg(angleRad);
+
+  return angleDeg;
+}
+
+const startPointLine1 = new THREE.Vector2(0,0);
+const endPointLine1 = new THREE.Vector2(200,0);
+const startPointLine2 = new THREE.Vector2(200,0);
+const endPointLine2 = new THREE.Vector2(0,200);
+
+const angle = getAngleBetweenLines(startPointLine1, endPointLine1, startPointLine2, endPointLine2);
+console.log("angle: ", angle);
+
 //#endregion
 
-const rgbeLoader = new RGBELoader();
-rgbeLoader.load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/brown_photostudio_05_1k.hdr', function(texture){
-  texture.mapping = THREE.EquirectangularReflectionMapping;
-  scene.environment = texture;
-  scene.background = texture;
-})
+// const rgbeLoader = new RGBELoader();
+// rgbeLoader.load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/brown_photostudio_05_1k.hdr', function(texture){
+//   texture.mapping = THREE.EquirectangularReflectionMapping;
+//   scene.environment = texture;
+//   scene.background = texture;
+// })
 
 //#region  Renderer setup
 const canvas = document.querySelector("canvas");
